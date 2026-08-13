@@ -1,0 +1,9 @@
+{% block subject %}{{ 'identity.email.confirm.subject'|trans }}{% endblock %}
+
+{% block body %}
+    <p>{{ 'identity.email.confirm.greeting'|trans }}</p>
+    <p>
+        <a href="{{ signedVerificationUrl }}">{{ 'identity.email.confirm.cta'|trans }}</a>
+    </p>
+    <p>{{ 'identity.email.confirm.expiry_notice'|trans }}</p>
+{% endblock %}

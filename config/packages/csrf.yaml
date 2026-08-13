@@ -1,0 +1,6 @@
+# SmartGPX renders forms via server-side Twig (see ADR-004), not via Symfony UX/Stimulus, so
+# stateless CSRF tokens (which need a "csrf-protection" Stimulus controller to compute the real
+# token client-side) would never resolve for real users. Classic synchronous CSRF tokens —
+# rendered directly in the HTML, no JS runtime required — are used instead.
+framework:
+    csrf_protection: ~

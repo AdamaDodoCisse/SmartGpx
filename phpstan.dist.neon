@@ -1,0 +1,25 @@
+includes:
+    - vendor/phpstan/phpstan-symfony/extension.neon
+    - vendor/phpstan/phpstan-doctrine/extension.neon
+
+parameters:
+    level: 8
+    bootstrapFiles:
+        - phpstan-bootstrap.php
+    paths:
+        - bin/
+        - config/
+        - public/
+        - src/
+        - tests/
+    symfony:
+        containerXmlPath: var/cache/dev/App_KernelDevDebugContainer.xml
+    doctrine:
+        objectManagerLoader: tests/object-manager.php
+
+    # src/Kernel.php est généré tel quel par le squelette officiel Symfony : getAllowedEnvs()
+    # est lu par réflexion par MicroKernelTrait (garde-fou sur APP_ENV), pas appelée directement.
+    ignoreErrors:
+        -
+            message: '#^Method App\\Kernel::getAllowedEnvs\(\) is unused\.$#'
+            path: src/Kernel.php

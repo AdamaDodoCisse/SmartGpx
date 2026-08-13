@@ -1,0 +1,19 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'identity.register.title'|trans }} — SmartGPX{% endblock %}
+
+{% block body %}
+    <main>
+        <h1>{{ 'identity.register.title'|trans }}</h1>
+
+        {{ form_start(registrationForm) }}
+            {{ form_row(registrationForm.email) }}
+            {{ form_row(registrationForm.plainPassword) }}
+            <button type="submit" name="registration_submit">{{ 'identity.register.submit'|trans }}</button>
+        {{ form_end(registrationForm) }}
+
+        <p>
+            <a href="{{ path('app_login') }}">{{ 'identity.register.already_have_account'|trans }}</a>
+        </p>
+    </main>
+{% endblock %}

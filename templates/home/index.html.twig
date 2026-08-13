@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}SmartGPX — {{ 'home.hero.title'|trans }}{% endblock %}
+{% block meta_description %}{{ 'home.hero.subtitle'|trans }}{% endblock %}
+
+{% block body %}
+    <div class="mx-auto max-w-4xl px-4 py-16 text-center">
+        <h1 class="text-4xl font-semibold tracking-tight sm:text-5xl">SmartGPX</h1>
+        <p class="mt-4 text-xl text-muted-foreground">{{ 'home.hero.title'|trans }}</p>
+        <p class="mt-2 text-muted-foreground">{{ 'home.hero.subtitle'|trans }}</p>
+
+        <form class="mx-auto mt-8 flex max-w-xl flex-col gap-3 sm:flex-row" aria-disabled="true">
+            <label for="maps-url" class="sr-only">{{ 'home.hero.input_label'|trans }}</label>
+            <input
+                id="maps-url"
+                type="text"
+                disabled
+                placeholder="{{ 'home.hero.input_placeholder'|trans }}"
+                class="flex-1 rounded-md border border-border bg-background px-4 py-2 text-sm disabled:cursor-not-allowed disabled:opacity-60"
+            >
+            <button type="button" disabled title="{{ 'home.hero.coming_soon'|trans }}" class="rounded-md bg-primary px-6 py-2 text-sm font-medium text-primary-foreground disabled:cursor-not-allowed disabled:opacity-60">
+                {{ 'home.hero.cta'|trans }}
+            </button>
+        </form>
+        <p class="mt-3 text-xs text-muted-foreground">{{ 'home.hero.coming_soon'|trans }}</p>
+
+        <p class="mt-12 text-sm text-muted-foreground">{{ 'home.compatibility'|trans }}</p>
+    </div>
+
+    <div class="mx-auto max-w-6xl px-4 pb-16">
+        <h2 class="text-center text-2xl font-semibold">{{ 'home.free_tools.title'|trans }}</h2>
+        <ul class="mt-6 grid grid-cols-2 gap-3 text-center text-sm text-muted-foreground sm:grid-cols-3 md:grid-cols-4">
+            {% for tool in [
+                'gpx_to_google_maps', 'gpx_simplify', 'gpx_merge',
+                'kml_to_gpx', 'kmz_to_gpx',
+                'tcx_to_gpx', 'gpx_to_tcx',
+                'fit_to_gpx', 'gpx_to_fit',
+                'geojson_to_gpx', 'gpx_to_geojson',
+                'gpx_viewer',
+            ] %}
+                <li class="rounded-md border border-border px-3 py-4">{{ ('home.free_tools.' ~ tool)|trans }}</li>
+            {% endfor %}
+        </ul>
+        <p class="mt-4 text-center text-xs text-muted-foreground">{{ 'home.free_tools.coming_soon'|trans }}</p>
+    </div>
+{% endblock %}

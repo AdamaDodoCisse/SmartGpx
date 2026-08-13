@@ -1,0 +1,49 @@
+security:
+    password_hashers:
+        App\Identity\Entity\User: auto
+
+    providers:
+        app_user_provider:
+            entity:
+                class: App\Identity\Entity\User
+                property: email
+
+    firewalls:
+        dev:
+            # Ensure dev tools and static assets are always allowed
+            pattern: ^/(_profiler|_wdt|assets|build)/
+            security: false
+        main:
+            lazy: true
+            provider: app_user_provider
+            form_login:
+                login_path: app_login
+                check_path: app_login
+                enable_csrf: true
+                default_target_path: app_home
+            logout:
+                path: app_logout
+                target: app_home
+            login_throttling:
+                max_attempts: 5
+                interval: '15 minutes'
+
+    # Note: Only the *first* matching rule is applied.
+    # Patterns tolerate the optional /fr locale prefix used by the French route variants.
+    access_control:
+        - { path: ^/(fr/)?login, roles: PUBLIC_ACCESS }
+        - { path: ^/(fr/)?register, roles: PUBLIC_ACCESS }
+        - { path: ^/(fr/)?verify/email, roles: PUBLIC_ACCESS }
+        - { path: ^/(fr/)?forgot-password, roles: PUBLIC_ACCESS }
+        - { path: ^/(fr/)?reset-password, roles: PUBLIC_ACCESS }
+
+when@test:
+    security:
+        password_hashers:
+            # Password hashers are resource-intensive by design to ensure security.
+            # In tests, it's safe to reduce their cost to improve performance.
+            App\Identity\Entity\User:
+                algorithm: auto
+                cost: 4 # Lowest possible value for bcrypt
+                time_cost: 3 # Lowest possible value for argon
+                memory_cost: 10 # Lowest possible value for argon

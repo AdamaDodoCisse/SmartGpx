@@ -1,0 +1,13 @@
+framework:
+    cache:
+        prefix_seed: smartgpx/app
+        app: cache.adapter.redis
+        default_redis_provider: '%env(resolve:REDIS_URL)%'
+
+when@test:
+    framework:
+        cache:
+            # Redis reste utilisé en test (et non un cache mémoire) : le rate limiter (login
+            # throttling notamment) doit persister son état entre les requêtes HTTP successives
+            # d'un même test, alors que le kernel est rebooté à chaque requête du client de test.
+            prefix_seed: smartgpx/app-test

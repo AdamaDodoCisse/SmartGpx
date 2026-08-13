@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'identity.login.title'|trans }} — SmartGPX{% endblock %}
+
+{% block body %}
+    <main>
+        <h1>{{ 'identity.login.title'|trans }}</h1>
+
+        {% if error %}
+            <p role="alert" class="flash flash-error">{{ error.messageKey|trans(error.messageData, 'security') }}</p>
+        {% endif %}
+
+        <form method="post">
+            <label for="inputEmail">{{ 'identity.form.email'|trans }}</label>
+            <input type="email" value="{{ last_username }}" name="_username" id="inputEmail" autocomplete="email" required autofocus>
+
+            <label for="inputPassword">{{ 'identity.form.password'|trans }}</label>
+            <input type="password" name="_password" id="inputPassword" autocomplete="current-password" required>
+
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+
+            <button type="submit" name="login_submit">{{ 'identity.login.submit'|trans }}</button>
+        </form>
+
+        <p>
+            <a href="{{ path('app_forgot_password_request') }}">{{ 'identity.login.forgot_password'|trans }}</a>
+        </p>
+        <p>
+            <a href="{{ path('app_register') }}">{{ 'identity.login.no_account'|trans }}</a>
+        </p>
+    </main>
+{% endblock %}

@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'pricing.title'|trans }} — SmartGPX{% endblock %}
+
+{% block body %}
+    <div class="mx-auto max-w-6xl px-4 py-12">
+        <h1 class="text-3xl font-semibold">{{ 'pricing.title'|trans }}</h1>
+        <p class="mt-2 text-muted-foreground">{{ 'pricing.subtitle'|trans }}</p>
+
+        <div class="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {% for pack in [
+                { credits: 10, price: '4.99', perConversion: '0.499' },
+                { credits: 100, price: '9.99', perConversion: '0.100', badge: 'pricing.badge.most_popular' },
+                { credits: 200, price: '16.99', perConversion: '0.085' },
+                { credits: 500, price: '39.99', perConversion: '0.080', badge: 'pricing.badge.best_value' },
+                { credits: 1000, price: '79.99', perConversion: '0.080' },
+                { credits: 10000, price: '699.99', perConversion: '0.070' },
+            ] %}
+                <div class="rounded-lg border border-border p-6">
+                    {% if pack.badge is defined %}
+                        <span class="inline-block rounded-full bg-accent px-3 py-1 text-xs font-medium text-accent-foreground">{{ pack.badge|trans }}</span>
+                    {% endif %}
+                    <p class="mt-3 text-2xl font-semibold">${{ pack.price }}</p>
+                    <p class="text-muted-foreground">{{ 'pricing.credits_count'|trans({ '%count%': pack.credits }) }}</p>
+                    <p class="mt-1 text-sm text-muted-foreground">${{ pack.perConversion }} {{ 'pricing.per_conversion'|trans }}</p>
+                    <button type="button" disabled class="mt-4 w-full rounded-md border border-border px-4 py-2 text-sm font-medium text-muted-foreground" title="{{ 'pricing.coming_soon'|trans }}">
+                        {{ 'pricing.buy'|trans({ '%count%': pack.credits }) }}
+                    </button>
+                </div>
+            {% endfor %}
+        </div>
+
+        <div class="mt-10 space-y-1 text-sm text-muted-foreground">
+            <p>{{ 'pricing.one_credit_equals'|trans }}</p>
+            <p>{{ 'pricing.credits_never_expire'|trans }}</p>
+        </div>
+    </div>
+{% endblock %}

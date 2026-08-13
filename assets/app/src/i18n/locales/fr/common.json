@@ -1,0 +1,12 @@
+{
+    "nav": {
+        "open_menu": "Ouvrir le menu",
+        "close_menu": "Fermer le menu",
+        "convert": "Convertir Maps en GPX",
+        "tools": "Outils",
+        "pricing": "Tarifs",
+        "chrome_extension": "Extension Chrome",
+        "guides": "Guides",
+        "login": "Connexion"
+    }
+}

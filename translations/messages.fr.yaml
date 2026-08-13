@@ -1,0 +1,105 @@
+layout:
+    skip_to_content: 'Aller au contenu'
+    main_navigation: 'Navigation principale'
+    default_meta_description: "SmartGPX convertit vos itinéraires Google Maps en GPX en quelques secondes, avec une boîte à outils complète de convertisseurs GPS gratuits — GPX, KML, KMZ, TCX, FIT, GeoJSON."
+    nav:
+        pricing: 'Tarifs'
+        login: 'Connexion'
+    footer:
+        privacy: 'Confidentialité'
+        terms: 'Conditions'
+
+home:
+    hero:
+        title: 'Google Maps vers GPX en quelques secondes.'
+        subtitle: "Collez votre itinéraire Google Maps et exportez-le au format GPX standard."
+        input_label: 'URL de l’itinéraire Google Maps'
+        input_placeholder: 'Collez votre itinéraire Google Maps'
+        cta: 'Convertir en GPX'
+        coming_soon: 'Bientôt disponible — le convertisseur n’est pas encore actif.'
+    compatibility: 'Compatible avec Garmin, Wahoo, OsmAnd, Locus Map, Strava et d’autres applications GPS.'
+    free_tools:
+        title: 'Outils GPS gratuits'
+        coming_soon: 'Ces outils arrivent bientôt — revenez prochainement.'
+        gpx_to_google_maps: 'GPX → Google Maps'
+        gpx_simplify: 'Simplifier un GPX'
+        gpx_merge: 'Fusionner des GPX'
+        kml_to_gpx: 'KML → GPX'
+        kmz_to_gpx: 'KMZ → GPX'
+        tcx_to_gpx: 'TCX → GPX'
+        gpx_to_tcx: 'GPX → TCX'
+        fit_to_gpx: 'FIT → GPX'
+        gpx_to_fit: 'GPX → FIT'
+        geojson_to_gpx: 'GeoJSON → GPX'
+        gpx_to_geojson: 'GPX → GeoJSON'
+        gpx_viewer: 'Visionneuse GPX'
+
+pricing:
+    title: 'Tarifs'
+    subtitle: '1 crédit = 1 conversion Google Maps vers GPX. Les crédits n’expirent jamais.'
+    badge:
+        most_popular: 'Le plus populaire'
+        best_value: 'Meilleure offre'
+    credits_count: '{1}%count% crédit|]1,Inf[%count% crédits'
+    per_conversion: '/ conversion'
+    buy: 'Acheter {1}%count% crédit|]1,Inf[%count% crédits'
+    coming_soon: "Les achats ne sont pas encore disponibles."
+    one_credit_equals: '1 crédit = 1 conversion Google Maps vers GPX.'
+    credits_never_expire: 'Les crédits n’expirent jamais.'
+
+legal:
+    draft_notice: 'Brouillon — en attente de relecture juridique avant mise en production.'
+    privacy:
+        title: 'Politique de confidentialité'
+        placeholder: "Cette page décrira les données collectées par SmartGPX, la manière dont les données d'itinéraire Google Maps sont traitées, et comment demander la suppression du compte ou de l'historique."
+    terms:
+        title: "Conditions d'utilisation"
+        placeholder: "Cette page décrira les conditions d'utilisation de SmartGPX, des crédits et des achats."
+
+error:
+    404:
+        title: 'Page introuvable'
+        description: "La page que vous cherchez n'existe pas ou a été déplacée."
+        back_home: "Retour à l'accueil"
+
+identity:
+    form:
+        email: 'Adresse e-mail'
+        password: 'Mot de passe'
+        new_password: 'Nouveau mot de passe'
+        email_already_used: 'Un compte existe déjà pour cette adresse e-mail.'
+    register:
+        title: 'Créer votre compte'
+        submit: 'Créer le compte'
+        already_have_account: 'Vous avez déjà un compte ? Connectez-vous.'
+    login:
+        title: 'Connexion'
+        submit: 'Se connecter'
+        forgot_password: 'Mot de passe oublié ?'
+        no_account: "Vous n'avez pas de compte ? Créez-en un."
+    forgot_password:
+        title: 'Réinitialiser votre mot de passe'
+        instructions: "Indiquez votre adresse e-mail et nous vous enverrons un lien pour réinitialiser votre mot de passe."
+        submit: 'Envoyer le lien'
+    reset_password:
+        title: 'Choisissez un nouveau mot de passe'
+        submit: 'Réinitialiser le mot de passe'
+    flash:
+        registration_success: 'Votre compte a été créé. Vérifiez votre boîte de réception pour confirmer votre adresse e-mail.'
+        verify_email_error: 'Ce lien de vérification est invalide ou a expiré.'
+        verify_email_success: 'Votre adresse e-mail a été vérifiée. Vous pouvez maintenant vous connecter.'
+        too_many_attempts: 'Trop de tentatives. Merci de réessayer plus tard.'
+        password_reset_requested: "Si un compte existe pour cette adresse e-mail, vous recevrez sous peu un lien de réinitialisation."
+        reset_password_invalid: 'Ce lien de réinitialisation est invalide ou a expiré.'
+        reset_password_success: 'Votre mot de passe a été modifié. Vous pouvez maintenant vous connecter.'
+    email:
+        confirm:
+            subject: 'Merci de confirmer votre adresse e-mail'
+            greeting: 'Bienvenue sur SmartGPX ! Merci de confirmer votre adresse e-mail pour activer votre compte.'
+            cta: 'Confirmer mon adresse e-mail'
+            expiry_notice: "Ce lien expirera bientôt. Si vous n'êtes pas à l'origine de cette demande, vous pouvez ignorer cet e-mail."
+        reset_password:
+            subject: 'Réinitialisez votre mot de passe SmartGPX'
+            greeting: 'Vous avez demandé la réinitialisation du mot de passe de votre compte SmartGPX.'
+            cta: 'Réinitialiser mon mot de passe'
+            expiry_notice: "Ce lien expirera bientôt. Si vous n'êtes pas à l'origine de cette demande, vous pouvez ignorer cet e-mail."
