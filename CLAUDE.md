@@ -28,6 +28,9 @@ there before re-deciding something already settled.
   not speculatively. `RoutingProviderInterface` (implemented, Phase 2 — see
   `documentation/decisions/ADR-001-routing-provider.md`) and `BillingProviderInterface`
   (Phase 4) are the only ones planned/existing.
+- **The Chrome extension is a separate npm project** (`chrome-extension/`), not part of
+  `assets/app/` — see `documentation/decisions/ADR-005-extension-authentication.md`. It
+  authenticates via a revocable opaque token (`ExtensionAuthorization`), never a session cookie.
 - **Free format-conversion tools run entirely client-side**, never touching the Symfony backend
   — see `documentation/decisions/ADR-003-browser-conversions.md`. Only Google Maps → GPX talks
   to the backend, because only it needs a routing-provider secret.
@@ -73,6 +76,12 @@ cd assets/app
 npm run dev            # Vite dev server
 npm run build           # production build → public/build/
 npm run typecheck        # tsc --noEmit
+
+cd chrome-extension
+npm run dev            # Vite dev server (extension HMR)
+npm run build           # production build → dist/ (load unpacked from here)
+npm run typecheck        # tsc --noEmit
+npm run test             # vitest unit tests
 ```
 
 ## Where things live
@@ -83,14 +92,20 @@ src/
   Routing/         # RoutingProviderInterface + GoogleRoutesProvider/FakeRoutingProvider (Phase 2)
   Conversion/       # Google Maps URL parsing, GPX generation, Conversion entity/API (Phase 2)
   Usage/            # credit ledger (CreditAccount/CreditTransaction), reserve/consume/release (Phase 2)
+  Extension/        # ExtensionAuthorization, token authenticator, /api/extension/* (Phase 3)
   Shared/          # genuinely cross-domain code only (e.g. TimestampableTrait)
   Controller/       # top-level pages with no dedicated domain yet (Home, Pricing, Legal)
-  # Billing/, Extension/, Admin/ — Phase 3+
+  # Billing/, Admin/ — Phase 4+
 
 assets/app/src/
   entries/         # Vite entry points (one per React island)
-  components/       # shadcn/ui primitives + layout components + conversion/ (ConvertHero)
+  components/       # shadcn/ui primitives + layout components + conversion/ (ConvertHero), extension/ (ExtensionConnect)
   gps/              # shared client-side conversion engine (stubs until Phase 5/6)
+
+chrome-extension/    # separate npm project — Manifest V3 extension (Phase 3)
+  src/popup/         # popup UI (React)
+  src/background/    # service worker — the only code that reads the stored token
+  src/lib/           # env, auth, api, mapsUrl, messages, i18n
 
 templates/         # Twig — every public page
 translations/       # Twig i18n catalogs (messages.{en,fr}.yaml)
@@ -98,7 +113,7 @@ migrations/         # Doctrine migrations
 documentation/      # fonctionnel/ (product), technique/ (implementation), decisions/ (ADRs)
 ```
 
-## Current architectural state (through Phase 2)
+## Current architectural state (through Phase 3)
 
 **Phase 1 — Foundation**: Symfony backend skeleton, MySQL/Doctrine, full email+password auth
 (registration, email verification, login with throttling, forgot/reset password),
@@ -113,6 +128,18 @@ and JSON API (`src/Conversion/`), and a concurrency-safe credit ledger with welc
 a live `ConvertHero` island. See `documentation/decisions/ADR-001-routing-provider.md` and
 `documentation/technique/google-maps-to-gpx.md`.
 
-Everything else (Chrome extension, Stripe payments, free format tools, SEO content, admin) is
-out of scope until later phases — see the implementation order in the product brief and the
-phase notes scattered through `documentation/fonctionnel/*.md`.
+**Phase 3 — Chrome extension**: a dedicated, stateless `api_extension` firewall
+authenticates the extension via a revocable opaque token (`ExtensionAuthorization`,
+`src/Extension/`), never a session cookie — see
+`documentation/decisions/ADR-005-extension-authentication.md`. `/account/extensions` lets a user
+connect a browser (handoff via `externally_connectable` + `chrome.runtime.sendMessage`, no
+copy-paste) and revoke it at any time. The extension itself (`chrome-extension/`, a separate npm
+project, Manifest V3) reuses `ConvertGoogleMapsToGpxAction` unchanged via
+`ExtensionConversionController`; its background service worker is the only code that ever reads
+the stored token. See `documentation/technique/chrome-extension.md`. **Manual end-to-end
+verification (real Chrome, real Google Maps route) is still pending** — see
+`chrome-extension/RELEASE_CHECKLIST.md`.
+
+Everything else (Stripe payments, free format tools, SEO content, admin) is out of scope until
+later phases — see the implementation order in the product brief and the phase notes scattered
+through `documentation/fonctionnel/*.md`.

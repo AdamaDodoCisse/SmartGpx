@@ -40,5 +40,12 @@
         "error": {
             "generic": "Une erreur est survenue. Merci de réessayer."
         }
+    },
+    "extension": {
+        "connect": {
+            "instructions": "En attente de confirmation de l'extension SmartGPX…",
+            "success": "Votre navigateur est maintenant connecté. Vous pouvez fermer cet onglet.",
+            "failure": "Impossible de contacter l'extension SmartGPX. Vérifiez qu'elle est installée, puis réessayez."
+        }
     }
 }

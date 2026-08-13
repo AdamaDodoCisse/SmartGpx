@@ -14,6 +14,10 @@ node_modules/
 /public/build/
 ###< pentatrion/vite-bundle ###
 
+###> smartgpx/chrome-extension ###
+/chrome-extension/dist/
+###< smartgpx/chrome-extension ###
+
 ###> friendsofphp/php-cs-fixer ###
 /.php-cs-fixer.php
 /.php-cs-fixer.cache

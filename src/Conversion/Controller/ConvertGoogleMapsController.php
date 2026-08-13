@@ -8,6 +8,7 @@ use App\Conversion\Action\ConvertGoogleMapsToGpxAction;
 use App\Conversion\Exception\InvalidGoogleMapsUrlException;
 use App\Conversion\Exception\UnsupportedGoogleMapsUrlException;
 use App\Conversion\Gpx\GpxGenerator;
+use App\Conversion\Http\ConversionJsonPresenter;
 use App\Conversion\Repository\ConversionRepository;
 use App\Conversion\Request\ConvertGoogleMapsUrlRequest;
 use App\Identity\Entity\User;
@@ -35,6 +36,7 @@ final class ConvertGoogleMapsController extends AbstractController
         private readonly RateLimiterFactory $conversionLimiterFactory,
         private readonly ValidatorInterface $validator,
         private readonly TranslatorInterface $translator,
+        private readonly ConversionJsonPresenter $presenter,
     ) {
     }
 
@@ -88,20 +90,11 @@ final class ConvertGoogleMapsController extends AbstractController
             return $this->errorResponse('conversion.error.provider_unavailable', $user, Response::HTTP_SERVICE_UNAVAILABLE);
         }
 
-        return $this->json([
+        $downloadUrl = $urlGenerator->generate('app_api_conversion_download', [
             'publicId' => (string) $conversion->getPublicId(),
-            'origin' => $conversion->getOriginLabel(),
-            'destination' => $conversion->getDestinationLabel(),
-            'stops' => $conversion->getStops(),
-            'distanceMeters' => $conversion->getDistanceMeters(),
-            'durationSeconds' => $conversion->getDurationSeconds(),
-            'travelMode' => $conversion->getTravelMode()->value,
-            'travelModeInferred' => $conversion->isTravelModeInferred(),
-            'trackPointCount' => $conversion->getTrackPointCount(),
-            'downloadUrl' => $urlGenerator->generate('app_api_conversion_download', [
-                'publicId' => (string) $conversion->getPublicId(),
-            ]),
         ]);
+
+        return $this->json($this->presenter->toArray($conversion, $downloadUrl));
     }
 
     #[Route('/api/conversions/{publicId}/gpx', name: 'app_api_conversion_download', methods: ['GET'])]

@@ -8,6 +8,27 @@ conversion:
         route_not_found: 'No route could be found between these locations.'
         provider_unavailable: 'The routing service is temporarily unavailable. Please try again shortly.'
 
+extension:
+    error:
+        invalid_token: 'Invalid or expired authorization. Please reconnect the extension from your account.'
+    account:
+        title: 'Connected browsers'
+        connect: 'Connect a browser'
+        empty: "You haven't connected any browser extension yet."
+        label: 'Device'
+        created_at: 'Connected on'
+        last_used_at: 'Last used'
+        revoked_at: 'Revoked on'
+        revoke: 'Revoke'
+        never_used: 'Never used'
+        flash:
+            revoked: 'Access has been revoked.'
+    connect:
+        title: 'Connect your browser'
+        instructions: 'Waiting for the SmartGPX extension to confirm the connection…'
+        success: 'Your browser is now connected. You can close this tab.'
+        failure: "We couldn't reach the SmartGPX extension. Make sure it's installed, then try again."
+
 layout:
     skip_to_content: 'Skip to content'
     main_navigation: 'Main navigation'

@@ -13,6 +13,7 @@ export default defineConfig({
                 app: './src/entries/app.css',
                 nav: './src/entries/nav.tsx',
                 convertHero: './src/entries/convertHero.tsx',
+                extensionConnect: './src/entries/extensionConnect.tsx',
             },
         },
     },

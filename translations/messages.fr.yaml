@@ -8,6 +8,27 @@ conversion:
         route_not_found: 'Aucun itinéraire trouvé entre ces emplacements.'
         provider_unavailable: 'Le service de calcul d’itinéraire est temporairement indisponible. Merci de réessayer sous peu.'
 
+extension:
+    error:
+        invalid_token: "Autorisation invalide ou expirée. Merci de reconnecter l'extension depuis votre compte."
+    account:
+        title: 'Navigateurs connectés'
+        connect: 'Connecter un navigateur'
+        empty: "Vous n'avez encore connecté aucune extension de navigateur."
+        label: 'Appareil'
+        created_at: 'Connecté le'
+        last_used_at: 'Dernière utilisation'
+        revoked_at: 'Révoqué le'
+        revoke: 'Révoquer'
+        never_used: 'Jamais utilisé'
+        flash:
+            revoked: "L'accès a été révoqué."
+    connect:
+        title: 'Connecter votre navigateur'
+        instructions: "En attente de confirmation de l'extension SmartGPX…"
+        success: 'Votre navigateur est maintenant connecté. Vous pouvez fermer cet onglet.'
+        failure: "Impossible de contacter l'extension SmartGPX. Vérifiez qu'elle est installée, puis réessayez."
+
 layout:
     skip_to_content: 'Aller au contenu'
     main_navigation: 'Navigation principale'

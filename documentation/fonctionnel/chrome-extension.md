@@ -1,8 +1,7 @@
 # Extension Chrome
 
-**Statut : Phase 3, non implémentée.** Ce document décrit l'intention produit ; le détail
-technique sera rédigé dans `documentation/technique/chrome-extension.md` au moment de
-l'implémentation.
+**Statut : implémenté (Phase 3).** Détail technique dans
+`documentation/technique/chrome-extension.md`.
 
 ## Pourquoi
 

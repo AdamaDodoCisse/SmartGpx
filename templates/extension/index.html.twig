@@ -1,0 +1,57 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'extension.account.title'|trans }} — SmartGPX{% endblock %}
+
+{% block body %}
+    <div class="mx-auto max-w-3xl px-4 py-12">
+        <div class="flex items-center justify-between">
+            <h1 class="text-2xl font-semibold">{{ 'extension.account.title'|trans }}</h1>
+            <form method="post" action="{{ path('app_account_extensions_connect') }}">
+                <input type="hidden" name="_token" value="{{ csrf_token('extension_connect') }}">
+                <button type="submit" name="connect_submit" class="rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground">
+                    {{ 'extension.account.connect'|trans }}
+                </button>
+            </form>
+        </div>
+
+        {% if authorizations is empty %}
+            <p class="mt-8 text-sm text-muted-foreground">{{ 'extension.account.empty'|trans }}</p>
+        {% else %}
+            <table class="mt-8 w-full text-left text-sm">
+                <thead>
+                    <tr class="border-b border-border text-muted-foreground">
+                        <th class="py-2 font-medium">{{ 'extension.account.label'|trans }}</th>
+                        <th class="py-2 font-medium">{{ 'extension.account.created_at'|trans }}</th>
+                        <th class="py-2 font-medium">{{ 'extension.account.last_used_at'|trans }}</th>
+                        <th class="py-2 font-medium"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for authorization in authorizations %}
+                        <tr class="border-b border-border">
+                            <td class="py-3">{{ authorization.label ?? '—' }}</td>
+                            <td class="py-3">{{ authorization.createdAt|date('Y-m-d') }}</td>
+                            <td class="py-3">
+                                {{ authorization.lastUsedAt ? authorization.lastUsedAt|date('Y-m-d H:i') : 'extension.account.never_used'|trans }}
+                            </td>
+                            <td class="py-3 text-right">
+                                {% if authorization.revoked %}
+                                    <span class="text-xs text-muted-foreground">
+                                        {{ 'extension.account.revoked_at'|trans }} {{ authorization.revokedAt|date('Y-m-d') }}
+                                    </span>
+                                {% else %}
+                                    <form method="post" action="{{ path('app_account_extensions_revoke', { publicId: authorization.publicId }) }}">
+                                        <input type="hidden" name="_token" value="{{ csrf_token('extension_revoke') }}">
+                                        <button type="submit" class="text-sm text-red-600 hover:underline">
+                                            {{ 'extension.account.revoke'|trans }}
+                                        </button>
+                                    </form>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% endif %}
+    </div>
+{% endblock %}

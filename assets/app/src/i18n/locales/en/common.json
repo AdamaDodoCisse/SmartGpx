@@ -40,5 +40,12 @@
         "error": {
             "generic": "Something went wrong. Please try again."
         }
+    },
+    "extension": {
+        "connect": {
+            "instructions": "Waiting for the SmartGPX extension to confirm the connection…",
+            "success": "Your browser is now connected. You can close this tab.",
+            "failure": "We couldn't reach the SmartGPX extension. Make sure it's installed, then try again."
+        }
     }
 }

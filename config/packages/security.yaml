@@ -13,6 +13,15 @@ security:
             # Ensure dev tools and static assets are always allowed
             pattern: ^/(_profiler|_wdt|assets|build)/
             security: false
+        # Stateless : jamais de session ni de CSRF pour les requêtes authentifiées par jeton de
+        # l'extension Chrome — voir documentation/decisions/ADR-005-extension-authentication.md.
+        # Doit être déclaré avant "main" (le premier motif de pattern qui correspond gagne).
+        api_extension:
+            pattern: ^/api/extension/
+            stateless: true
+            provider: app_user_provider
+            custom_authenticators:
+                - App\Extension\Security\ExtensionTokenAuthenticator
         main:
             lazy: true
             provider: app_user_provider

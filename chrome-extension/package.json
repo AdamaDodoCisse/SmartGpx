@@ -1,0 +1,25 @@
+{
+    "name": "smartgpx-chrome-extension",
+    "type": "module",
+    "private": true,
+    "scripts": {
+        "dev": "vite",
+        "build": "vite build",
+        "typecheck": "tsc --noEmit",
+        "test": "vitest run --config vitest.config.ts"
+    },
+    "dependencies": {
+        "react": "^19.2.8",
+        "react-dom": "^19.2.8"
+    },
+    "devDependencies": {
+        "@crxjs/vite-plugin": "^2.7.1",
+        "@types/chrome": "^0.1.30",
+        "@types/react": "^19.2.18",
+        "@types/react-dom": "^19.2.4",
+        "@vitejs/plugin-react": "^6.0.5",
+        "typescript": "^7.0.2",
+        "vite": "^8.2.1",
+        "vitest": "^3.2.4"
+    }
+}
