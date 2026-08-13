@@ -4,13 +4,15 @@
 
 L'utilisateur colle un lien Google Maps (`google.com/maps/dir/...` ou `maps.app.goo.gl/...`).
 SmartGPX prend en charge origine, destination, étapes intermédiaires, adresses ou coordonnées
-GPS, et les modes de transport (voiture, marche, vélo, etc.). Un GPX 1.1 standard est généré,
-avec les étapes intermédiaires préservées comme waypoints significatifs quand les données le
-permettent. **Statut : Phase 2, non implémenté.**
+GPS, et les modes de transport (voiture, marche, vélo, transports en commun). Un GPX 1.1 standard
+est généré, avec les étapes intermédiaires préservées comme waypoints significatifs quand les
+données le permettent. **Statut : implémenté (Phase 2), vérifié contre l'API Google Routes
+réelle.**
 
 Règle critique de non-régression : une chaîne comme `49.051624,2.0093594` est reconnue comme des
 coordonnées, jamais envoyée comme une adresse littérale au fournisseur de routing (voir
-`documentation/technique/google-maps-to-gpx.md`, à rédiger en Phase 2).
+`documentation/technique/google-maps-to-gpx.md` et
+[ADR-001](../decisions/ADR-001-routing-provider.md)).
 
 ## Outils gratuits (aucun ne consomme de crédit)
 
@@ -37,8 +39,11 @@ migration destructive).
 ## Crédits et paiement
 
 1 conversion Google Maps → GPX gratuite à l'inscription, puis 1 crédit par conversion réussie
-(jamais en cas d'échec). Packs de crédits payants sans abonnement. **Statut : Phase 4, non
-implémenté** — voir `documentation/fonctionnel/pricing.md` pour la grille tarifaire exacte.
+(jamais en cas d'échec) — **le crédit de bienvenue et le décompte par conversion sont
+implémentés et vérifiés (Phase 2)**, voir [ADR-002](../decisions/ADR-002-credit-ledger.md).
+L'achat de packs de crédits payants (Stripe, sans abonnement) reste **Phase 4, non implémenté**
+— voir `documentation/fonctionnel/pricing.md` pour la grille tarifaire exacte, déjà affichée à
+titre informatif sur `/pricing`.
 
 ## Admin
 

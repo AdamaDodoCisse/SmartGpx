@@ -4,15 +4,32 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Identity\Entity\User;
+use App\Usage\Repository\CreditAccountRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
 final class HomeController extends AbstractController
 {
+    public function __construct(
+        private readonly CreditAccountRepository $creditAccountRepository,
+    ) {
+    }
+
     #[Route(['en' => '/', 'fr' => '/fr/'], name: 'app_home')]
     public function index(): Response
     {
-        return $this->render('home/index.html.twig');
+        $user = $this->getUser();
+        $creditBalance = 0;
+
+        if ($user instanceof User) {
+            $account = $this->creditAccountRepository->findOneByUser($user);
+            $creditBalance = $account?->getBalance() ?? 0;
+        }
+
+        return $this->render('home/index.html.twig', [
+            'creditBalance' => $creditBalance,
+        ]);
     }
 }

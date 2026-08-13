@@ -8,5 +8,37 @@
         "chrome_extension": "Extension Chrome",
         "guides": "Guides",
         "login": "Connexion"
+    },
+    "convert": {
+        "input_label": "URL de l'itinéraire Google Maps",
+        "input_placeholder": "Collez votre itinéraire Google Maps",
+        "travel_mode_label": "Mode de transport",
+        "travel_mode": {
+            "drive": "Voiture",
+            "walk": "À pied",
+            "bicycle": "Vélo",
+            "transit": "Transports en commun"
+        },
+        "cta": "Convertir en GPX",
+        "cta_loading": "Conversion…",
+        "sign_in_cta": "Connectez-vous pour convertir",
+        "sign_in_required": "Créez un compte gratuit pour convertir votre premier itinéraire Google Maps.",
+        "credit_balance_one": "{{count}} crédit restant",
+        "credit_balance_other": "{{count}} crédits restants",
+        "result": {
+            "title": "Votre itinéraire est prêt",
+            "origin": "Origine",
+            "destination": "Destination",
+            "stops": "Étapes",
+            "distance": "Distance",
+            "duration": "Durée",
+            "track_points": "Points de trace",
+            "travel_mode_inferred_notice": "Nous n'avons pas pu détecter le mode de transport à partir de ce lien : nous avons supposé la voiture — vérifiez qu'il correspond à votre itinéraire.",
+            "download": "Télécharger le GPX",
+            "convert_another": "Convertir un autre itinéraire"
+        },
+        "error": {
+            "generic": "Une erreur est survenue. Merci de réessayer."
+        }
     }
 }

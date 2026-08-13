@@ -23,15 +23,19 @@ débit, cas d'erreur).
   → nouveau mot de passe → /login
 ```
 
-## Première conversion gratuite (Phase 2, non implémenté)
+## Première conversion gratuite (implémenté, Phase 2)
 
 ```
-utilisateur connecté, jamais converti
-  → colle un lien Google Maps sur la page d'accueil
-  → conversion effectuée sans consommer de crédit (1 crédit de bienvenue)
+utilisateur connecté, jamais converti (solde affiché sur la page d'accueil)
+  → colle un lien Google Maps sur la page d'accueil (mode de transport pré-rempli, modifiable)
+  → conversion effectuée sans consommer de crédit supplémentaire (1 crédit de bienvenue)
+  → résultat affiché (origine, destination, étapes, distance, durée, nombre de points)
   → GPX téléchargeable
-  → prochaine conversion : -1 crédit
+  → prochaine conversion : -1 crédit ; solde à 0 → message clair, aucune conversion débitée
 ```
+
+Voir `documentation/technique/google-maps-to-gpx.md` et
+[ADR-002](../decisions/ADR-002-credit-ledger.md).
 
 ## Achat de crédits (Phase 4, non implémenté)
 

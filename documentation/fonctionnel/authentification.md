@@ -46,8 +46,17 @@ qu'il ne se retrouve dans l'historique du navigateur.
 destructive, via un `Authenticator` Symfony additionnel enregistré sur le même firewall — voir
 `documentation/technique/architecture.md` (section « Interfaces aux frontières externes »).
 
+## Utilisation par d'autres domaines
+
+Depuis la Phase 2, `RegisterUserAction` émet `Identity\Event\UserRegisteredEvent` après la
+création du compte, pour que d'autres domaines puissent réagir à une inscription sans
+qu'`Identity` ait besoin de les connaître — voir
+[ADR-002](../decisions/ADR-002-credit-ledger.md) (crédit de bienvenue). L'API de conversion
+Google Maps → GPX (`POST /api/conversions/google-maps`) exige une session authentifiée — voir
+`documentation/technique/api.md`.
+
 ## Ce qui n'est pas encore fait
 
 - Suppression de compte / historique (prévue par le brief produit, §71) — pas encore de route
   dédiée.
-- Interface de gestion du compte (changement d'e-mail, etc.) — hors périmètre Phase 1.
+- Interface de gestion du compte (changement d'e-mail, etc.) — hors périmètre Phase 1/2.

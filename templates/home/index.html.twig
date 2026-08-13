@@ -9,23 +9,18 @@
         <p class="mt-4 text-xl text-muted-foreground">{{ 'home.hero.title'|trans }}</p>
         <p class="mt-2 text-muted-foreground">{{ 'home.hero.subtitle'|trans }}</p>
 
-        <form class="mx-auto mt-8 flex max-w-xl flex-col gap-3 sm:flex-row" aria-disabled="true">
-            <label for="maps-url" class="sr-only">{{ 'home.hero.input_label'|trans }}</label>
-            <input
-                id="maps-url"
-                type="text"
-                disabled
-                placeholder="{{ 'home.hero.input_placeholder'|trans }}"
-                class="flex-1 rounded-md border border-border bg-background px-4 py-2 text-sm disabled:cursor-not-allowed disabled:opacity-60"
-            >
-            <button type="button" disabled title="{{ 'home.hero.coming_soon'|trans }}" class="rounded-md bg-primary px-6 py-2 text-sm font-medium text-primary-foreground disabled:cursor-not-allowed disabled:opacity-60">
-                {{ 'home.hero.cta'|trans }}
-            </button>
-        </form>
-        <p class="mt-3 text-xs text-muted-foreground">{{ 'home.hero.coming_soon'|trans }}</p>
+        <div
+            id="convert-hero-root"
+            data-is-authenticated="{{ app.user ? '1' : '' }}"
+            data-csrf-token="{{ csrf_token('convert_google_maps') }}"
+            data-credit-balance="{{ creditBalance }}"
+            data-locale="{{ app.request.locale }}"
+        ></div>
 
         <p class="mt-12 text-sm text-muted-foreground">{{ 'home.compatibility'|trans }}</p>
     </div>
+
+    {{ vite_entry_script_tags('convertHero', { dependency: 'react' }) }}
 
     <div class="mx-auto max-w-6xl px-4 pb-16">
         <h2 class="text-center text-2xl font-semibold">{{ 'home.free_tools.title'|trans }}</h2>

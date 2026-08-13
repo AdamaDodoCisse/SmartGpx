@@ -1,3 +1,13 @@
+conversion:
+    error:
+        invalid_csrf: 'Jeton de sécurité invalide. Merci de recharger la page et de réessayer.'
+        too_many_requests: 'Trop de demandes de conversion. Merci de réessayer plus tard.'
+        invalid_url: 'Merci de saisir un lien Google Maps valide.'
+        unsupported_url: "Ce lien Google Maps n'est pas pris en charge. Merci d'utiliser un lien d'itinéraire."
+        insufficient_credits: "Vous n'avez pas assez de crédits pour cette conversion."
+        route_not_found: 'Aucun itinéraire trouvé entre ces emplacements.'
+        provider_unavailable: 'Le service de calcul d’itinéraire est temporairement indisponible. Merci de réessayer sous peu.'
+
 layout:
     skip_to_content: 'Aller au contenu'
     main_navigation: 'Navigation principale'

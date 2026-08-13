@@ -1,0 +1,16 @@
+framework:
+    http_client:
+        scoped_clients:
+            # Autowirable as HttpClientInterface $googleRoutesClient (Symfony derives the
+            # autowiring alias from the scoped client name).
+            google.routes.client:
+                base_uri: 'https://routes.googleapis.com'
+                timeout: 5
+                max_duration: 15
+
+            # Resolves maps.app.goo.gl / legacy goo.gl short links before URL parsing.
+            # Autowirable as HttpClientInterface $googleMapsShortlinkClient.
+            google.maps.shortlink.client:
+                scope: '^https://(maps\.app\.goo\.gl|goo\.gl)/'
+                timeout: 5
+                max_duration: 10

@@ -29,8 +29,11 @@ src/<Domaine>/
   Controller/      # pont HTTP, aucune logique métier
 ```
 
-`src/Identity/` (Phase 1) suit cette forme et sert de référence pour les domaines à venir :
-`Conversion/`, `Routing/`, `Usage/`, `Billing/`, `Extension/`, `Admin/` (Phases 2 à 8).
+`src/Identity/` (Phase 1) suit cette forme et sert de référence pour les domaines suivants ;
+`src/Routing/`, `src/Conversion/` et `src/Usage/` (Phase 2) l'adaptent avec quelques sous-dossiers
+techniques supplémentaires propres à leur usage (`ValueObject/`, `Provider/`, `Result/`,
+`Parser/`, `Gpx/`, `EventListener/`) — même esprit que `Identity/Mailer/`. `Billing/`,
+`Extension/`, `Admin/` restent à construire (Phases 3 à 8).
 
 `src/Shared/` contient uniquement du code réellement transverse à tous les domaines (ex.
 `Shared/Doctrine/TimestampableTrait.php`) — à ne pas utiliser comme fourre-tout.
@@ -60,12 +63,12 @@ extraire.
 ## Interfaces aux frontières externes uniquement
 
 Une interface + implémentation(s) n'est créée qu'à une véritable frontière externe (API tierce,
-prestataire de paiement). En Phase 1, aucune frontière de ce type n'existe encore. Les futures
-frontières identifiées par le brief produit :
+prestataire de paiement). Frontières identifiées par le brief produit :
 
-- `RoutingProviderInterface` (Phase 2) — abstraction du fournisseur de routing (Google Routes en
-  premier, puis OpenRouteService/GraphHopper/OSRM/Valhalla possibles sans réécrire le moteur de
-  conversion) ;
+- `RoutingProviderInterface` (implémentée, Phase 2 — voir
+  [ADR-001](../decisions/ADR-001-routing-provider.md)) — abstraction du fournisseur de routing
+  (Google Routes en premier, puis OpenRouteService/GraphHopper/OSRM/Valhalla possibles sans
+  réécrire le moteur de conversion) ;
 - `BillingProviderInterface` (Phase 4) — abstraction du prestataire de paiement (Stripe).
 
 Ne pas créer d'interface spéculative « au cas où » pour un composant qui n'a qu'une seule

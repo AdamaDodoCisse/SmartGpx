@@ -1,3 +1,13 @@
+conversion:
+    error:
+        invalid_csrf: 'Invalid security token. Please reload the page and try again.'
+        too_many_requests: 'Too many conversion requests. Please try again later.'
+        invalid_url: 'Please enter a valid Google Maps link.'
+        unsupported_url: 'This Google Maps link is not supported. Please use a directions link.'
+        insufficient_credits: "You don't have enough credits for this conversion."
+        route_not_found: 'No route could be found between these locations.'
+        provider_unavailable: 'The routing service is temporarily unavailable. Please try again shortly.'
+
 layout:
     skip_to_content: 'Skip to content'
     main_navigation: 'Main navigation'

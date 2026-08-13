@@ -25,8 +25,9 @@ there before re-deciding something already settled.
   (`execute(...): Result`), never in controllers. Controllers are a thin HTTP bridge: Request →
   DTO → Validation → Action → Response. No `XxxManager` god classes.
 - **Interfaces only at true external boundaries** (a real third-party API, a payment provider) —
-  not speculatively. `RoutingProviderInterface` (Phase 2) and `BillingProviderInterface`
-  (Phase 4) are the only ones currently planned.
+  not speculatively. `RoutingProviderInterface` (implemented, Phase 2 — see
+  `documentation/decisions/ADR-001-routing-provider.md`) and `BillingProviderInterface`
+  (Phase 4) are the only ones planned/existing.
 - **Free format-conversion tools run entirely client-side**, never touching the Symfony backend
   — see `documentation/decisions/ADR-003-browser-conversions.md`. Only Google Maps → GPX talks
   to the backend, because only it needs a routing-provider secret.
@@ -79,13 +80,16 @@ npm run typecheck        # tsc --noEmit
 ```
 src/
   Identity/       # auth (Phase 1) — reference domain shape for what follows
+  Routing/         # RoutingProviderInterface + GoogleRoutesProvider/FakeRoutingProvider (Phase 2)
+  Conversion/       # Google Maps URL parsing, GPX generation, Conversion entity/API (Phase 2)
+  Usage/            # credit ledger (CreditAccount/CreditTransaction), reserve/consume/release (Phase 2)
   Shared/          # genuinely cross-domain code only (e.g. TimestampableTrait)
   Controller/       # top-level pages with no dedicated domain yet (Home, Pricing, Legal)
-  # Conversion/, Routing/, Usage/, Billing/, Extension/, Admin/ — Phase 2+
+  # Billing/, Extension/, Admin/ — Phase 3+
 
 assets/app/src/
   entries/         # Vite entry points (one per React island)
-  components/       # shadcn/ui primitives + layout components
+  components/       # shadcn/ui primitives + layout components + conversion/ (ConvertHero)
   gps/              # shared client-side conversion engine (stubs until Phase 5/6)
 
 templates/         # Twig — every public page
@@ -94,12 +98,21 @@ migrations/         # Doctrine migrations
 documentation/      # fonctionnel/ (product), technique/ (implementation), decisions/ (ADRs)
 ```
 
-## Current architectural state (Phase 1 — Foundation)
+## Current architectural state (through Phase 2)
 
-Implemented: Symfony backend skeleton, MySQL/Doctrine, full email+password auth (registration,
-email verification, login with throttling, forgot/reset password), React/Vite/Tailwind/shadcn
-frontend scaffold with one working island (mobile nav menu), homepage/pricing/legal page shells,
-`/fr` locale routing, CI. Everything else (the actual Maps → GPX converter, Chrome extension,
-payments, free format tools, SEO content, admin) is out of scope until later phases — see the
-implementation order in the product brief and the phase notes scattered through
-`documentation/fonctionnel/*.md`.
+**Phase 1 — Foundation**: Symfony backend skeleton, MySQL/Doctrine, full email+password auth
+(registration, email verification, login with throttling, forgot/reset password),
+React/Vite/Tailwind/shadcn frontend scaffold, homepage/pricing/legal page shells, `/fr` locale
+routing, CI.
+
+**Phase 2 — Google Maps → GPX**: the revenue engine, implemented and verified against the real
+Google Routes API. `RoutingProviderInterface`/`GoogleRoutesProvider`/`FakeRoutingProvider`
+(`src/Routing/`), Google Maps URL parsing + GPX 1.1 generation + the `Conversion` history entity
+and JSON API (`src/Conversion/`), and a concurrency-safe credit ledger with welcome credit
+(`src/Usage/` — see `documentation/decisions/ADR-002-credit-ledger.md`). The homepage hero is now
+a live `ConvertHero` island. See `documentation/decisions/ADR-001-routing-provider.md` and
+`documentation/technique/google-maps-to-gpx.md`.
+
+Everything else (Chrome extension, Stripe payments, free format tools, SEO content, admin) is
+out of scope until later phases — see the implementation order in the product brief and the
+phase notes scattered through `documentation/fonctionnel/*.md`.

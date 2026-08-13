@@ -12,6 +12,11 @@ parameters:
         - public/
         - src/
         - tests/
+    # config/reference.php est un stub auto-généré par Symfony pour l'auto-complétion IDE
+    # ("This file is auto-generated and is for apps only"), jamais exécuté — non pertinent
+    # à l'analyse statique de notre code applicatif.
+    excludePaths:
+        - config/reference.php
     symfony:
         containerXmlPath: var/cache/dev/App_KernelDevDebugContainer.xml
     doctrine:

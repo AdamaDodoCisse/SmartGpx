@@ -8,5 +8,37 @@
         "chrome_extension": "Chrome Extension",
         "guides": "Guides",
         "login": "Login"
+    },
+    "convert": {
+        "input_label": "Google Maps route URL",
+        "input_placeholder": "Paste your Google Maps route",
+        "travel_mode_label": "Travel mode",
+        "travel_mode": {
+            "drive": "Driving",
+            "walk": "Walking",
+            "bicycle": "Cycling",
+            "transit": "Transit"
+        },
+        "cta": "Convert to GPX",
+        "cta_loading": "Converting…",
+        "sign_in_cta": "Sign in to convert",
+        "sign_in_required": "Create a free account to convert your first Google Maps route.",
+        "credit_balance_one": "{{count}} credit remaining",
+        "credit_balance_other": "{{count}} credits remaining",
+        "result": {
+            "title": "Your route is ready",
+            "origin": "Origin",
+            "destination": "Destination",
+            "stops": "Stops",
+            "distance": "Distance",
+            "duration": "Duration",
+            "track_points": "Track points",
+            "travel_mode_inferred_notice": "We couldn't detect the travel mode from this link, so we assumed driving — double-check it matches your route.",
+            "download": "Download GPX",
+            "convert_another": "Convert another route"
+        },
+        "error": {
+            "generic": "Something went wrong. Please try again."
+        }
     }
 }
