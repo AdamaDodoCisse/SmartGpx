@@ -219,4 +219,64 @@ body {
     );
 }
 
+/*
+ * Typographie des pages de contenu long (guides, privacy/terms) : la classe `.prose` était
+ * utilisée dans les templates sans qu'aucune règle ne la définisse nulle part (pas de plugin
+ * @tailwindcss/typography installé) — h2/p/a s'affichaient donc tous identiques, sans hiérarchie
+ * ni espacement. Règles maison plutôt qu'une dépendance, pour rester sur les tokens du projet.
+ */
+.prose h2 {
+    margin-top: 2rem;
+    margin-bottom: 0.75rem;
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    letter-spacing: -0.01em;
+    text-wrap: balance;
+}
+
+.prose h2:first-child {
+    margin-top: 0;
+}
+
+.prose p {
+    margin-bottom: 1rem;
+    max-width: 65ch;
+    line-height: 1.7;
+    color: var(--foreground);
+}
+
+.prose ul,
+.prose ol {
+    margin: 0 0 1rem;
+    max-width: 65ch;
+    padding-left: 1.25rem;
+    line-height: 1.7;
+}
+
+.prose ul {
+    list-style: disc;
+}
+
+.prose ol {
+    list-style: decimal;
+}
+
+.prose li + li {
+    margin-top: 0.25rem;
+}
+
+.prose a {
+    color: var(--primary);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+}
+
+.prose a:hover {
+    opacity: 0.85;
+}
+
+.prose > h1 {
+    margin-bottom: 1rem;
+}
+
 @source "../../../../templates";
