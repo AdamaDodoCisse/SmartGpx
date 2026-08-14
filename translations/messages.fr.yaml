@@ -292,7 +292,7 @@ pricing:
         best_value: 'Meilleure offre'
     credits_count: '{1}%count% crédit|]1,Inf[%count% crédits'
     per_conversion: '/ conversion'
-    buy: 'Acheter {1}%count% crédit|]1,Inf[%count% crédits'
+    buy: 'Acheter {1}%count% crédit|]1,Inf[Acheter %count% crédits'
     sign_in_to_buy: 'Connectez-vous pour acheter'
     one_credit_equals: '1 crédit = 1 conversion Google Maps vers GPX.'
     credits_never_expire: 'Les crédits n’expirent jamais.'
