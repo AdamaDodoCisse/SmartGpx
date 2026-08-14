@@ -37,5 +37,6 @@ final class SitemapControllerTest extends WebTestCase
         self::assertStringStartsWith('text/plain', (string) $client->getResponse()->headers->get('Content-Type'));
         self::assertStringContainsString('Sitemap: http://localhost/sitemap.xml', (string) $client->getResponse()->getContent());
         self::assertStringContainsString('Disallow: /account/', (string) $client->getResponse()->getContent());
+        self::assertStringContainsString('Disallow: /admin', (string) $client->getResponse()->getContent());
     }
 }

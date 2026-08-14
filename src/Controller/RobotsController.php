@@ -28,6 +28,7 @@ final class RobotsController extends AbstractController
 
         $body = <<<TXT
             User-agent: *
+            Disallow: /admin
             Disallow: /account/
             Disallow: /api/
             Disallow: /billing/
