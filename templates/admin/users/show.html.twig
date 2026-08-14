@@ -42,28 +42,30 @@
     {% if ledger is null or ledger.items is empty %}
         <p class="mt-2 text-sm text-muted-foreground">No credit account or no transactions yet.</p>
     {% else %}
-        <table class="mt-4 w-full text-left text-sm">
-            <thead>
-                <tr class="border-b border-border text-muted-foreground">
-                    <th class="py-2 font-medium">Type</th>
-                    <th class="py-2 font-medium">Amount</th>
-                    <th class="py-2 font-medium">Balance after</th>
-                    <th class="py-2 font-medium">Date</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for transaction in ledger.items %}
-                    <tr class="border-b border-border">
-                        <td class="py-3">{{ admin.pill(transaction.type.value|replace({'_': ' '}), transaction.amount > 0 ? 'success' : 'neutral') }}</td>
-                        <td class="py-3 [font-variant-numeric:tabular-nums] {{ transaction.amount > 0 ? 'text-[var(--success-fg)]' : '' }}">
-                            {{ transaction.amount > 0 ? '+' ~ transaction.amount : transaction.amount }}
-                        </td>
-                        <td class="py-3 [font-variant-numeric:tabular-nums]">{{ transaction.balanceAfter }}</td>
-                        <td class="py-3 text-muted-foreground [font-variant-numeric:tabular-nums]">{{ transaction.createdAt|date('Y-m-d H:i') }}</td>
+        <div class="overflow-x-auto">
+            <table class="mt-4 w-full text-left text-sm">
+                <thead>
+                    <tr class="border-b border-border text-muted-foreground">
+                        <th class="whitespace-nowrap py-2 pr-6 font-medium">Type</th>
+                        <th class="whitespace-nowrap py-2 pr-6 font-medium">Amount</th>
+                        <th class="whitespace-nowrap py-2 pr-6 font-medium">Balance after</th>
+                        <th class="whitespace-nowrap py-2 font-medium">Date</th>
                     </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    {% for transaction in ledger.items %}
+                        <tr class="border-b border-border">
+                            <td class="whitespace-nowrap py-3 pr-6">{{ admin.pill(transaction.type.value|replace({'_': ' '}), transaction.amount > 0 ? 'success' : 'neutral') }}</td>
+                            <td class="whitespace-nowrap py-3 pr-6 [font-variant-numeric:tabular-nums] {{ transaction.amount > 0 ? 'text-[var(--success-fg)]' : '' }}">
+                                {{ transaction.amount > 0 ? '+' ~ transaction.amount : transaction.amount }}
+                            </td>
+                            <td class="whitespace-nowrap py-3 pr-6 [font-variant-numeric:tabular-nums]">{{ transaction.balanceAfter }}</td>
+                            <td class="whitespace-nowrap py-3 text-muted-foreground [font-variant-numeric:tabular-nums]">{{ transaction.createdAt|date('Y-m-d H:i') }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
 
         {% if ledger.total > ledger.perPage %}
             <div class="mt-4 flex items-center gap-4 text-sm">

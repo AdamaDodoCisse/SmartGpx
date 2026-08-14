@@ -3,7 +3,7 @@
 {% import 'admin/_macros.html.twig' as admin %}
 {% block title %}Credit Packs — Admin — SmartGPX{% endblock %}
 {% block admin_body %}
-    <div class="flex items-center justify-between">
+    <div class="flex flex-wrap items-center justify-between gap-3">
         <h1 class="text-2xl font-semibold">Credit Packs</h1>
         <a
             href="{{ path('app_admin_credit_packs_new') }}"
@@ -14,30 +14,32 @@
         </a>
     </div>
 
-    <table class="mt-6 w-full text-left text-sm">
-        <thead>
-            <tr class="border-b border-border text-muted-foreground">
-                <th class="py-2 font-medium">Credits</th>
-                <th class="py-2 font-medium">Price</th>
-                <th class="py-2 font-medium">Badge</th>
-                <th class="py-2 font-medium">Order</th>
-                <th class="py-2 font-medium">Status</th>
-                <th class="py-2 font-medium"></th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for pack in packs %}
-                <tr class="border-b border-border">
-                    <td class="py-3 [font-variant-numeric:tabular-nums]">{{ pack.credits }}</td>
-                    <td class="py-3 [font-variant-numeric:tabular-nums]">{{ (pack.priceCents / 100)|number_format(2) }} {{ pack.currency|upper }}</td>
-                    <td class="py-3">{{ pack.badge ? admin.pill(pack.badge.value|replace({'_': ' '}), 'neutral') : '—' }}</td>
-                    <td class="py-3 [font-variant-numeric:tabular-nums] text-muted-foreground">{{ pack.displayOrder }}</td>
-                    <td class="py-3">{{ admin.pill(pack.active ? 'Active' : 'Inactive', pack.active ? 'success' : 'neutral') }}</td>
-                    <td class="py-3 text-right">
-                        <a href="{{ path('app_admin_credit_packs_edit', { publicId: pack.publicId }) }}" class="font-medium hover:underline">Edit</a>
-                    </td>
+    <div class="mt-6 overflow-x-auto">
+        <table class="w-full text-left text-sm">
+            <thead>
+                <tr class="border-b border-border text-muted-foreground">
+                    <th class="whitespace-nowrap py-2 pr-6 font-medium">Credits</th>
+                    <th class="whitespace-nowrap py-2 pr-6 font-medium">Price</th>
+                    <th class="whitespace-nowrap py-2 pr-6 font-medium">Badge</th>
+                    <th class="whitespace-nowrap py-2 pr-6 font-medium">Order</th>
+                    <th class="whitespace-nowrap py-2 pr-6 font-medium">Status</th>
+                    <th class="whitespace-nowrap py-2 font-medium"></th>
                 </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                {% for pack in packs %}
+                    <tr class="border-b border-border">
+                        <td class="whitespace-nowrap py-3 pr-6 [font-variant-numeric:tabular-nums]">{{ pack.credits }}</td>
+                        <td class="whitespace-nowrap py-3 pr-6 [font-variant-numeric:tabular-nums]">{{ (pack.priceCents / 100)|number_format(2) }} {{ pack.currency|upper }}</td>
+                        <td class="whitespace-nowrap py-3 pr-6">{{ pack.badge ? admin.pill(pack.badge.value|replace({'_': ' '}), 'neutral') : '—' }}</td>
+                        <td class="whitespace-nowrap py-3 pr-6 [font-variant-numeric:tabular-nums] text-muted-foreground">{{ pack.displayOrder }}</td>
+                        <td class="whitespace-nowrap py-3 pr-6">{{ admin.pill(pack.active ? 'Active' : 'Inactive', pack.active ? 'success' : 'neutral') }}</td>
+                        <td class="whitespace-nowrap py-3 text-right">
+                            <a href="{{ path('app_admin_credit_packs_edit', { publicId: pack.publicId }) }}" class="font-medium hover:underline">Edit</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 {% endblock %}

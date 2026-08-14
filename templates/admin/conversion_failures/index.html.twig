@@ -4,30 +4,32 @@
 {% block title %}Failed Conversions — Admin — SmartGPX{% endblock %}
 {% block admin_body %}
     <h1 class="text-2xl font-semibold">Failed Conversions</h1>
-    <table class="mt-6 w-full text-left text-sm">
-        <thead>
-            <tr class="border-b border-border text-muted-foreground">
-                <th class="py-2 font-medium">User</th>
-                <th class="py-2 font-medium">URL</th>
-                <th class="py-2 font-medium">Reason</th>
-                <th class="py-2 font-medium">Date</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for failure in result.items %}
-                <tr class="border-b border-border">
-                    <td class="py-3">
-                        <a href="{{ path('app_admin_users_show', { publicId: failure.user.publicId }) }}" class="font-medium hover:underline">
-                            {{ failure.user.email }}
-                        </a>
-                    </td>
-                    <td class="max-w-xs truncate py-3 font-mono text-xs text-muted-foreground" title="{{ failure.sourceUrl }}">{{ failure.sourceUrl }}</td>
-                    <td class="py-3">{{ admin.pill(failure.reason.value|replace({'_': ' '}), 'error') }}</td>
-                    <td class="py-3 text-muted-foreground [font-variant-numeric:tabular-nums]">{{ failure.createdAt|date('Y-m-d H:i') }}</td>
+    <div class="mt-6 overflow-x-auto">
+        <table class="w-full text-left text-sm">
+            <thead>
+                <tr class="border-b border-border text-muted-foreground">
+                    <th class="whitespace-nowrap py-2 pr-6 font-medium">User</th>
+                    <th class="whitespace-nowrap py-2 pr-6 font-medium">URL</th>
+                    <th class="whitespace-nowrap py-2 pr-6 font-medium">Reason</th>
+                    <th class="whitespace-nowrap py-2 font-medium">Date</th>
                 </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                {% for failure in result.items %}
+                    <tr class="border-b border-border">
+                        <td class="whitespace-nowrap py-3 pr-6">
+                            <a href="{{ path('app_admin_users_show', { publicId: failure.user.publicId }) }}" class="font-medium hover:underline">
+                                {{ failure.user.email }}
+                            </a>
+                        </td>
+                        <td class="max-w-xs truncate py-3 pr-6 font-mono text-xs text-muted-foreground" title="{{ failure.sourceUrl }}">{{ failure.sourceUrl }}</td>
+                        <td class="whitespace-nowrap py-3 pr-6">{{ admin.pill(failure.reason.value|replace({'_': ' '}), 'error') }}</td>
+                        <td class="whitespace-nowrap py-3 text-muted-foreground [font-variant-numeric:tabular-nums]">{{ failure.createdAt|date('Y-m-d H:i') }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 
     {% if result.total > result.perPage %}
         <div class="mt-6 flex items-center gap-4 text-sm">
