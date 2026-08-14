@@ -86,6 +86,13 @@ lien vers `/pricing`.
 
 `npm run typecheck` (même niveau de rigueur que `assets/app`, `strict: true`). `vitest` :
 `lib/mapsUrl.test.ts` (détection/aperçu sur formats réels et rejetés), `lib/auth.test.ts`
-(helpers de stockage contre un mock de `chrome.storage.local`). Pas d'automatisation navigateur
-de bout en bout (Puppeteer/Playwright) — hors périmètre ; la vérification manuelle est couverte
-par `chrome-extension/RELEASE_CHECKLIST.md`.
+(helpers de stockage contre un mock de `chrome.storage.local`). Aucun test Playwright n'est commité
+dans ce dépôt (`composer qa`/`npm run test` s'arrêtent à ce qui précède), mais l'automatisation
+navigateur de bout en bout sur l'extension réellement chargée **est possible et a été utilisée à
+plusieurs reprises** — `chromium.launchPersistentContext(userDataDir, { headless: false, args:
+['--disable-extensions-except=<dist>', '--load-extension=<dist>', '--headless=new'] })`, qui donne
+accès au vrai service worker (`context.serviceWorkers()` / `waitForEvent('serviceworker')`) et à
+l'ID d'extension réel. Utilisé pour la vérification manuelle end-to-end listée dans
+`chrome-extension/RELEASE_CHECKLIST.md`, pour du QA visuel de la popup, et pour générer les
+captures de `chrome-extension/store-assets/`. Ce n'est cependant qu'un script ad hoc relancé
+depuis un scratchpad à chaque besoin, pas un test de régression commité dans ce dépôt.

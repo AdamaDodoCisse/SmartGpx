@@ -1,0 +1,13 @@
+{#
+    Marque SmartGPX (Phase 9) — anneau topographique blanc ouvert + point de repère orange
+    (--route), sur fond vert pin (--primary, valeur claire fixe : la marque est un badge
+    autoportant à couleurs fixes, pas un pictogramme currentColor comme icons.html.twig, donc
+    pas de variante sombre séparée — le vert pin lui-même reste lisible sur les deux thèmes).
+#}
+{% macro mark(class = 'size-8') %}
+    <svg class="{{ class }}" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="SmartGPX">
+        <rect width="128" height="128" rx="28" fill="#003f1d"/>
+        <path d="M 90 44 A 34 34 0 1 0 62 90" fill="none" stroke="#f8fbf9" stroke-width="12" stroke-linecap="round"/>
+        <circle cx="90" cy="44" r="14" fill="#e36400"/>
+    </svg>
+{% endmacro %}

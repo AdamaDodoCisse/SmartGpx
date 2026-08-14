@@ -39,10 +39,19 @@ Productivity
 
 ## Screenshots
 
-Not yet produced — placeholder. Needed before submission: popup in each of its states
-(disconnected, route detected, export success), and the `/account/extensions` connection page.
+**Done.** Four real screenshots in `store-assets/`, composed onto a 1280×800 canvas framed like a
+Chrome toolbar dropdown (a raw 320px-wide popup image alone reads too small/bare for a store
+listing): `screenshot-1-popup-disconnected.png`, `screenshot-2-popup-route-detected.png`,
+`screenshot-3-popup-export-success.png` (all captured against the real built extension loaded
+unpacked, with `chrome.tabs.query`/`chrome.runtime.sendMessage` mocked so no live backend or
+account was needed — see `documentation/technique/chrome-extension.md` for how), and
+`screenshot-4-account-extensions.png` (`/account/extensions`, a real logged-in page, no mocking).
 
 ## Icons
 
-Placeholder solid-color PNGs currently in `icons/` (16/32/48/128px). Real artwork needed before
-submission.
+**Done.** Real artwork now in `icons/` (16/32/48/128px) — a pine-green badge (`--primary`) with a
+white open topographic contour ring and a trail-blaze orange (`--route`) waypoint dot, matching
+the site's "topo trail" identity (see CLAUDE.md). Same mark used for the web favicon
+(`public/favicon.svg`) and the popup/site/admin header marks — one design, one source of truth
+(the inline SVG in `templates/_macros/logo.html.twig` and `chrome-extension/src/popup/components/icons.tsx`'s
+`LogoMark`), so a future redesign only needs updating in those places plus re-rasterizing the PNGs.

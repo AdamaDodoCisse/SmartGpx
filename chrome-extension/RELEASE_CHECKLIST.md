@@ -9,11 +9,14 @@ instead of `/account/extensions` (the page carrying the actual "Connect a browse
 clicking "connect your account" from a disconnected popup 405'd. Fixed by pointing the popup at
 `/account/extensions` instead.
 
-Automated coverage stops at `npm run typecheck` + `vitest` unit tests for pure logic
-(`lib/mapsUrl.ts`, `lib/auth.ts`) and the backend's functional tests. The following requires a
-real Chrome browser and has not been automated — Puppeteer/Playwright browser automation is
-explicitly out of scope for this project (see `documentation/technique/chrome-extension.md`).
-Steps kept below for the next time this needs re-running (env changes, before a store
+Automated coverage in `composer qa`/`npm run test` stops at `npm run typecheck` + `vitest` unit
+tests for pure logic (`lib/mapsUrl.ts`, `lib/auth.ts`) and the backend's functional tests —
+loading the real unpacked extension is possible via Playwright
+(`chromium.launchPersistentContext` with `--load-extension`, see
+`documentation/technique/chrome-extension.md`) and has been used repeatedly this way (the E2E pass
+noted above, popup visual QA, generating the screenshots in `store-assets/`), but it's ad hoc
+tooling re-run from a scratch script each time, not a committed regression test in this repo.
+Steps kept below for the next time this needs re-running by hand (env changes, before a store
 submission, etc.):
 
 1. **Backend running locally**, reachable at `http://127.0.0.1:8000`.
@@ -46,10 +49,12 @@ submission, etc.):
 None of the following is done yet — this project has only ever been loaded unpacked for local
 development:
 
-- [ ] Replace the placeholder solid-color icons in `icons/` with real artwork.
+- [x] Replace the placeholder solid-color icons in `icons/` with real artwork — see
+      `STORE_LISTING.md`'s "Icons" section.
 - [ ] Replace `PROD_API_ORIGIN` in `src/lib/env.ts` (currently `https://smartgpx.com`, a
       placeholder) with the real production domain, once one exists.
-- [ ] Produce real screenshots for `STORE_LISTING.md`.
+- [x] Produce real screenshots for `STORE_LISTING.md` — done, see `store-assets/` and
+      `STORE_LISTING.md`'s "Screenshots" section.
 - [ ] Remove any `CRX_DEV_PUBLIC_KEY` usage from your local environment — a production build
       must never embed a `key` field (see the "Stabilizing the extension ID" section in
       `README.md`); confirm `dist/manifest.json` has no `"key"` after a `npm run build` with

@@ -66,3 +66,16 @@ export const CircleAlertIcon = createIcon(
 export const PuzzleIcon = createIcon(
     <path d="M15.39 4.39a1 1 0 0 0 1.68-.474 2.5 2.5 0 1 1 3.014 3.015 1 1 0 0 0-.474 1.68l1.683 1.682a2.414 2.414 0 0 1 0 3.414L19.61 15.39a1 1 0 0 1-1.68-.474 2.5 2.5 0 1 0-3.014 3.015 1 1 0 0 1 .474 1.68l-1.683 1.682a2.414 2.414 0 0 1-3.414 0L8.61 19.61a1 1 0 0 0-1.68.474 2.5 2.5 0 1 1-3.014-3.015 1 1 0 0 0 .474-1.68l-1.683-1.682a2.414 2.414 0 0 1 0-3.414L4.39 8.61a1 1 0 0 1 1.68.474 2.5 2.5 0 1 0 3.014-3.015 1 1 0 0 1-.474-1.68l1.683-1.682a2.414 2.414 0 0 1 3.414 0z" />,
 );
+
+// Marque SmartGPX : anneau topographique blanc ouvert + point de repère orange (--route) sur
+// fond vert pin (--primary) — badge autoportant à couleurs fixes, pas un pictogramme
+// currentColor comme createIcon() ci-dessus, donc composant à part plutôt que via la factory.
+export function LogoMark(props: SVGProps<SVGSVGElement>) {
+    return (
+        <svg width="22" height="22" viewBox="0 0 128 128" role="img" aria-label="SmartGPX" {...props}>
+            <rect width="128" height="128" rx="28" fill="#003f1d" />
+            <path d="M 90 44 A 34 34 0 1 0 62 90" fill="none" stroke="#f8fbf9" strokeWidth="12" strokeLinecap="round" />
+            <circle cx="90" cy="44" r="14" fill="#e36400" />
+        </svg>
+    );
+}

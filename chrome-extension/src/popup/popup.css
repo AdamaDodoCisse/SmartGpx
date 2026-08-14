@@ -70,15 +70,8 @@ body {
 }
 
 .popup-header-mark {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 22px;
-    height: 22px;
-    border-radius: 5px;
-    background: var(--primary);
-    color: var(--primary-foreground);
     flex-shrink: 0;
+    border-radius: 5px;
 }
 
 .popup-header-title {

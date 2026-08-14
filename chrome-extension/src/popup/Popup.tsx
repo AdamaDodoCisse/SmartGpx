@@ -7,7 +7,7 @@ import { ConnectPrompt } from './components/ConnectPrompt';
 import { CreditBadge } from './components/CreditBadge';
 import { ErrorState } from './components/ErrorState';
 import { ExportButton } from './components/ExportButton';
-import { CircleCheckIcon, RouteIcon } from './components/icons';
+import { CircleCheckIcon, LogoMark } from './components/icons';
 import { RouteSummary } from './components/RouteSummary';
 
 type Status = 'loading' | 'not-connected' | 'ready' | 'error';
@@ -116,9 +116,7 @@ export function Popup() {
     return (
         <div className="popup">
             <header className="popup-header">
-                <span className="popup-header-mark">
-                    <RouteIcon width={13} height={13} />
-                </span>
+                <LogoMark width={22} height={22} className="popup-header-mark" />
                 <span className="popup-header-title">SmartGPX</span>
             </header>
 
