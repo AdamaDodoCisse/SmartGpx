@@ -47,5 +47,37 @@
             "success": "Your browser is now connected. You can close this tab.",
             "failure": "We couldn't reach the SmartGPX extension. Make sure it's installed, then try again."
         }
+    },
+    "tools": {
+        "files_stay_on_device": "Files stay on your device.",
+        "drop_file": "Drop a file here, or click to browse",
+        "download": "Download",
+        "gpx_viewer": {
+            "error": "This file doesn't look like a valid GPX file."
+        },
+        "gpx_to_google_maps": {
+            "error": "This file doesn't look like a valid GPX file.",
+            "copy_link": "Copy link",
+            "copied": "Copied!"
+        },
+        "gpx_simplify": {
+            "error": "This file doesn't look like a valid GPX file.",
+            "tolerance_label": "Simplification tolerance",
+            "stats": "{{before}} points → {{after}} points ({{reduction}}% reduction)",
+            "honesty_notice": "The simplified track may differ slightly from the original."
+        },
+        "gpx_merge": {
+            "error": "One of these files doesn't look like a valid GPX file.",
+            "mode_label": "Merge mode",
+            "mode_single_track": "Single continuous track",
+            "mode_separate_segments": "Separate segments",
+            "remove_file": "Remove"
+        },
+        "kml_to_gpx": {
+            "error": "This file doesn't look like a valid KML file."
+        },
+        "gpx_to_kml": {
+            "error": "This file doesn't look like a valid GPX file."
+        }
     }
 }

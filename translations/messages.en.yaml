@@ -56,6 +56,7 @@ home:
         gpx_simplify: 'GPX Simplify'
         gpx_merge: 'GPX Merge'
         kml_to_gpx: 'KML → GPX'
+        gpx_to_kml: 'GPX → KML'
         kmz_to_gpx: 'KMZ → GPX'
         tcx_to_gpx: 'TCX → GPX'
         gpx_to_tcx: 'GPX → TCX'
@@ -64,6 +65,38 @@ home:
         geojson_to_gpx: 'GeoJSON → GPX'
         gpx_to_geojson: 'GPX → GeoJSON'
         gpx_viewer: 'GPX Viewer'
+
+tools:
+    gpx_viewer:
+        meta_title: 'GPX Viewer'
+        meta_description: 'View a GPX track on an interactive map, right in your browser — the file never leaves your device.'
+        title: 'GPX Viewer'
+        intro: 'Drop a GPX file to see its track, route, and waypoints on a map.'
+    gpx_to_google_maps:
+        meta_title: 'GPX → Google Maps'
+        meta_description: 'Turn a GPX track into a Google Maps link in one click.'
+        title: 'GPX → Google Maps'
+        intro: 'Drop a GPX file to get a Google Maps directions link for its route.'
+    gpx_simplify:
+        meta_title: 'GPX Simplify'
+        meta_description: 'Reduce the number of points in a GPX track while preserving its shape.'
+        title: 'GPX Simplify'
+        intro: 'Drop a GPX file and choose a tolerance to reduce its point count.'
+    gpx_merge:
+        meta_title: 'GPX Merge'
+        meta_description: 'Combine several GPX files into a single continuous track or separate segments.'
+        title: 'GPX Merge'
+        intro: 'Drop two or more GPX files to merge them into one.'
+    kml_to_gpx:
+        meta_title: 'KML → GPX'
+        meta_description: 'Convert a KML file to GPX, right in your browser.'
+        title: 'KML → GPX'
+        intro: 'Drop a KML file to convert it to GPX.'
+    gpx_to_kml:
+        meta_title: 'GPX → KML'
+        meta_description: 'Convert a GPX file to KML, right in your browser.'
+        title: 'GPX → KML'
+        intro: 'Drop a GPX file to convert it to KML.'
 
 pricing:
     title: 'Pricing'

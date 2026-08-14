@@ -1,8 +1,8 @@
 # Outils gratuits
 
-**Statut : listés sur la page d'accueil depuis la Phase 1 ; implémentation réelle en Phase 5
-(GPX Viewer, GPX → Google Maps, GPX Simplify, GPX Merge, KML ↔ GPX) et Phase 6 (KMZ → GPX, TCX ↔
-GPX, FIT ↔ GPX, GeoJSON ↔ GPX).**
+**Statut : GPX Viewer, GPX → Google Maps, GPX Simplify, GPX Merge et KML ↔ GPX implémentés
+(Phase 5). KMZ → GPX, TCX ↔ GPX, FIT ↔ GPX, GeoJSON ↔ GPX listés sur la page d'accueil depuis la
+Phase 1, implémentation réelle en Phase 6.**
 
 ## Principe commun
 
@@ -13,7 +13,7 @@ outils : « Files stay on your device. »
 
 ## Liste
 
-| Outil | Route prévue | Entrée | Sortie |
+| Outil | Route | Entrée | Sortie |
 |---|---|---|---|
 | GPX Viewer | `/gpx-viewer` | GPX | carte interactive |
 | GPX → Google Maps | `/tools/gpx-to-google-maps` | GPX | lien Google Maps |

@@ -47,5 +47,37 @@
             "success": "Votre navigateur est maintenant connecté. Vous pouvez fermer cet onglet.",
             "failure": "Impossible de contacter l'extension SmartGPX. Vérifiez qu'elle est installée, puis réessayez."
         }
+    },
+    "tools": {
+        "files_stay_on_device": "Les fichiers restent sur votre appareil.",
+        "drop_file": "Déposez un fichier ici, ou cliquez pour le sélectionner",
+        "download": "Télécharger",
+        "gpx_viewer": {
+            "error": "Ce fichier ne ressemble pas à un fichier GPX valide."
+        },
+        "gpx_to_google_maps": {
+            "error": "Ce fichier ne ressemble pas à un fichier GPX valide.",
+            "copy_link": "Copier le lien",
+            "copied": "Copié !"
+        },
+        "gpx_simplify": {
+            "error": "Ce fichier ne ressemble pas à un fichier GPX valide.",
+            "tolerance_label": "Tolérance de simplification",
+            "stats": "{{before}} points → {{after}} points ({{reduction}} % de réduction)",
+            "honesty_notice": "La trace simplifiée peut légèrement différer de l'originale."
+        },
+        "gpx_merge": {
+            "error": "L'un de ces fichiers ne ressemble pas à un fichier GPX valide.",
+            "mode_label": "Mode de fusion",
+            "mode_single_track": "Une seule trace continue",
+            "mode_separate_segments": "Segments distincts",
+            "remove_file": "Retirer"
+        },
+        "kml_to_gpx": {
+            "error": "Ce fichier ne ressemble pas à un fichier KML valide."
+        },
+        "gpx_to_kml": {
+            "error": "Ce fichier ne ressemble pas à un fichier GPX valide."
+        }
     }
 }

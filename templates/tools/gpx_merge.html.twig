@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'tools.gpx_merge.meta_title'|trans }} — SmartGPX{% endblock %}
+{% block meta_description %}{{ 'tools.gpx_merge.meta_description'|trans }}{% endblock %}
+
+{% block body %}
+    <div class="mx-auto max-w-3xl px-4 py-12">
+        <h1 class="text-3xl font-semibold">{{ 'tools.gpx_merge.title'|trans }}</h1>
+        <p class="mt-2 text-muted-foreground">{{ 'tools.gpx_merge.intro'|trans }}</p>
+        <div id="gpx-merge-root"></div>
+    </div>
+    {{ vite_entry_script_tags('gpxMerge', { dependency: 'react' }) }}
+{% endblock %}

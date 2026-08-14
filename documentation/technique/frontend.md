@@ -15,7 +15,8 @@ assets/app/src/
   entries/         # points d'entrée Vite (un fichier = un îlot ou l'entrée CSS globale)
   components/ui/    # primitives shadcn/ui (Button, Sheet, ...)
   components/layout/ # composants de mise en page (ex. MobileMenu)
-  lib/             # utils.ts (cn()), mountIsland.tsx
+  components/tools/  # composants partagés des outils gratuits (voir ci-dessous)
+  lib/             # utils.ts (cn()), mountIsland.tsx, downloadFile.ts
   i18n/            # react-i18next
   gps/             # moteur de conversion partagé (voir ci-dessous)
 ```
@@ -63,9 +64,37 @@ sans duplication.
 Prévu par le brief produit (§29) pour éviter de dupliquer le parsing dans chaque page React.
 `gps/model/` définit la forme interne pivot (`GpsRoute`, `GpsTrack`, `GpsWaypoint`, `GpsPoint`) ;
 chaque format (`gpx/`, `kml/`, `kmz/`, `tcx/`, `fit/`, `geojson/`) convertit depuis/vers cette
-forme, et `simplify/`/`merge/` opèrent dessus. **En Phase 1, ces modules sont des stubs typés qui
-lèvent une erreur** — l'implémentation réelle arrive en Phase 5 (GPX, KML, simplify, merge) et
-Phase 6 (KMZ, TCX, FIT, GeoJSON), voir [ADR-003](../decisions/ADR-003-browser-conversions.md).
-Les stubs existent dès maintenant pour que les futurs modules partagent un seul modèle de
-données dès le premier commit qui les implémente, plutôt que de redécouvrir la forme commune
-plus tard.
+forme, et `simplify/`/`merge/` opèrent dessus. **`gpx/`, `kml/`, `simplify/`, `merge/` sont
+implémentés (Phase 5)** — voir `documentation/technique/gpx.md` et `kml-kmz.md`. `kmz/`, `tcx/`,
+`fit/`, `geojson/` restent des stubs typés qui lèvent une erreur jusqu'à la Phase 6, voir
+[ADR-003](../decisions/ADR-003-browser-conversions.md). Les stubs existent dès la Phase 1 pour
+que les futurs modules partagent un seul modèle de données dès le premier commit qui les
+implémente, plutôt que de redécouvrir la forme commune plus tard.
+
+## Outils (`components/tools/`)
+
+Composants partagés par les 6 pages d'outils gratuits de la Phase 5 (`/gpx-viewer`,
+`/tools/gpx-to-google-maps`, `/tools/gpx-simplify`, `/tools/gpx-merge`, `/tools/kml-to-gpx`,
+`/tools/gpx-to-kml`) :
+
+- `useFileUpload.ts` — logique pure de glisser-déposer + sélecteur de fichier natif, indépendante
+  du format (rend un `File`, ne le lit jamais elle-même) ;
+- `FileDropzone.tsx` — la zone de dépôt accessible (clavier, ARIA) construite au-dessus ;
+- `ToolPageLayout.tsx` — bandeau « Files stay on your device » + espacement partagé ;
+- `SingleFileConverterTool.tsx` — composant générique upload → parse → generate → téléchargement,
+  paramétré par les fonctions `parse`/`generate` du module `gps/` concerné. Utilisé par KML → GPX
+  et GPX → KML aujourd'hui ; conçu pour être réutilisé sans modification par les convertisseurs
+  de la Phase 6 (KMZ → GPX, TCX ↔ GPX, FIT → GPX, GeoJSON ↔ GPX).
+
+GPX Simplify, GPX Merge, GPX → Google Maps et GPX Viewer ont chacun une UX propre (curseur de
+tolérance + statistiques ; dépôt multi-fichiers + sélecteur de mode ; lien généré au lieu d'un
+téléchargement ; carte Leaflet interactive) et ont donc leur propre composant
+(`GpxSimplifyTool.tsx`, `GpxMergeTool.tsx`, `GpxToGoogleMapsTool.tsx`, `GpxViewerTool.tsx`), tout
+en réutilisant `FileDropzone`/`ToolPageLayout`. Le téléchargement de fichier généré côté client
+passe par `src/lib/downloadFile.ts` (`Blob` + `URL.createObjectURL` + clic synthétique sur un
+`<a download>`) — aucune bibliothèque requise.
+
+Pas de bibliothèque de glisser-déposer (`react-dropzone` etc.) : la surface nécessaire (événements
+`drag`/`drop` + un `<input type=file>` masqué) est suffisamment petite pour être écrite
+directement, cohérent avec le refus des dépendances non indispensables déjà affirmé par
+[ADR-003](../decisions/ADR-003-browser-conversions.md).

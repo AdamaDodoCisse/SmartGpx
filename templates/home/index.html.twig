@@ -25,15 +25,28 @@
     <div class="mx-auto max-w-6xl px-4 pb-16">
         <h2 class="text-center text-2xl font-semibold">{{ 'home.free_tools.title'|trans }}</h2>
         <ul class="mt-6 grid grid-cols-2 gap-3 text-center text-sm text-muted-foreground sm:grid-cols-3 md:grid-cols-4">
-            {% for tool in [
-                'gpx_to_google_maps', 'gpx_simplify', 'gpx_merge',
-                'kml_to_gpx', 'kmz_to_gpx',
-                'tcx_to_gpx', 'gpx_to_tcx',
-                'fit_to_gpx', 'gpx_to_fit',
-                'geojson_to_gpx', 'gpx_to_geojson',
-                'gpx_viewer',
-            ] %}
-                <li class="rounded-md border border-border px-3 py-4">{{ ('home.free_tools.' ~ tool)|trans }}</li>
+            {% for tool, route in {
+                gpx_to_google_maps: 'app_tools_gpx_to_google_maps',
+                gpx_simplify: 'app_tools_gpx_simplify',
+                gpx_merge: 'app_tools_gpx_merge',
+                kml_to_gpx: 'app_tools_kml_to_gpx',
+                gpx_to_kml: 'app_tools_gpx_to_kml',
+                kmz_to_gpx: null,
+                tcx_to_gpx: null,
+                gpx_to_tcx: null,
+                fit_to_gpx: null,
+                gpx_to_fit: null,
+                geojson_to_gpx: null,
+                gpx_to_geojson: null,
+                gpx_viewer: 'app_gpx_viewer',
+            } %}
+                <li class="rounded-md border border-border px-3 py-4">
+                    {% if route is not null %}
+                        <a href="{{ path(route) }}" class="hover:text-foreground">{{ ('home.free_tools.' ~ tool)|trans }}</a>
+                    {% else %}
+                        {{ ('home.free_tools.' ~ tool)|trans }}
+                    {% endif %}
+                </li>
             {% endfor %}
         </ul>
         <p class="mt-4 text-center text-xs text-muted-foreground">{{ 'home.free_tools.coming_soon'|trans }}</p>

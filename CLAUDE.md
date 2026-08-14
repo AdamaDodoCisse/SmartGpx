@@ -77,6 +77,7 @@ cd assets/app
 npm run dev            # Vite dev server
 npm run build           # production build → public/build/
 npm run typecheck        # tsc --noEmit
+npm run test             # vitest unit tests (gps/ engine modules)
 
 cd chrome-extension
 npm run dev            # Vite dev server (extension HMR)
@@ -101,8 +102,8 @@ src/
 
 assets/app/src/
   entries/         # Vite entry points (one per React island)
-  components/       # shadcn/ui primitives + layout components + conversion/ (ConvertHero), extension/ (ExtensionConnect)
-  gps/              # shared client-side conversion engine (stubs until Phase 5/6)
+  components/       # shadcn/ui primitives + layout components + conversion/ (ConvertHero), extension/ (ExtensionConnect), tools/ (free GPS tools, Phase 5)
+  gps/              # shared client-side conversion engine — gpx/kml/simplify/merge implemented (Phase 5), kmz/tcx/fit/geojson still stubs (Phase 6)
 
 chrome-extension/    # separate npm project — Manifest V3 extension (Phase 3)
   src/popup/         # popup UI (React)
@@ -115,7 +116,7 @@ migrations/         # Doctrine migrations
 documentation/      # fonctionnel/ (product), technique/ (implementation), decisions/ (ADRs)
 ```
 
-## Current architectural state (through Phase 4)
+## Current architectural state (through Phase 5)
 
 **Phase 1 — Foundation**: Symfony backend skeleton, MySQL/Doctrine, full email+password auth
 (registration, email verification, login with throttling, forgot/reset password),
@@ -156,6 +157,17 @@ Manually verified end-to-end against a real Stripe test-mode account (`stripe li
 card) — real webhook signature, real crediting, idempotence confirmed against a real
 `stripe events resend` redelivery.
 
-Everything else (free format tools, SEO content, admin) is out of scope until later phases — see
-the implementation order in the product brief and the phase notes scattered through
-`documentation/fonctionnel/*.md`.
+**Phase 5 — Free client-side GPS tools**: GPX Viewer, GPX → Google Maps, GPX Simplify, GPX
+Merge, KML → GPX, GPX → KML — six pages, zero backend calls (`src/Controller/ToolsController.php`
+only renders Twig shells that mount React islands; all parsing/generation runs in the browser via
+`assets/app/src/gps/{gpx,kml,simplify,merge}/`, native `DOMParser`/`XMLSerializer`, no XML
+library). A generic `SingleFileConverterTool` component (upload → parse → generate → download)
+powers the two KML/GPX converters and is designed for the four Phase 6 format converters to reuse
+without modification. GPX Viewer uses Leaflet + OpenStreetMap tiles — no API key, consistent with
+these tools staying genuinely free to run. See `documentation/technique/gpx.md`,
+`documentation/technique/kml-kmz.md` (KML half), and
+`documentation/decisions/ADR-003-browser-conversions.md`.
+
+Everything else (Phase 6 free tools — KMZ, TCX, FIT, GeoJSON —, SEO content, admin) is out of
+scope until later phases — see the implementation order in the product brief and the phase notes
+scattered through `documentation/fonctionnel/*.md`.

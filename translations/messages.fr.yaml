@@ -56,6 +56,7 @@ home:
         gpx_simplify: 'Simplifier un GPX'
         gpx_merge: 'Fusionner des GPX'
         kml_to_gpx: 'KML → GPX'
+        gpx_to_kml: 'GPX → KML'
         kmz_to_gpx: 'KMZ → GPX'
         tcx_to_gpx: 'TCX → GPX'
         gpx_to_tcx: 'GPX → TCX'
@@ -64,6 +65,38 @@ home:
         geojson_to_gpx: 'GeoJSON → GPX'
         gpx_to_geojson: 'GPX → GeoJSON'
         gpx_viewer: 'Visionneuse GPX'
+
+tools:
+    gpx_viewer:
+        meta_title: 'Visionneuse GPX'
+        meta_description: 'Visualisez une trace GPX sur une carte interactive, directement dans votre navigateur — le fichier ne quitte jamais votre appareil.'
+        title: 'Visionneuse GPX'
+        intro: 'Déposez un fichier GPX pour voir sa trace, son itinéraire et ses points d’intérêt sur une carte.'
+    gpx_to_google_maps:
+        meta_title: 'GPX → Google Maps'
+        meta_description: 'Transformez une trace GPX en lien Google Maps en un clic.'
+        title: 'GPX → Google Maps'
+        intro: 'Déposez un fichier GPX pour obtenir un lien d’itinéraire Google Maps.'
+    gpx_simplify:
+        meta_title: 'Simplifier un GPX'
+        meta_description: 'Réduisez le nombre de points d’une trace GPX tout en préservant sa forme.'
+        title: 'Simplifier un GPX'
+        intro: 'Déposez un fichier GPX et choisissez une tolérance pour réduire son nombre de points.'
+    gpx_merge:
+        meta_title: 'Fusionner des GPX'
+        meta_description: 'Combinez plusieurs fichiers GPX en une seule trace continue ou en segments distincts.'
+        title: 'Fusionner des GPX'
+        intro: 'Déposez au moins deux fichiers GPX pour les fusionner en un seul.'
+    kml_to_gpx:
+        meta_title: 'KML → GPX'
+        meta_description: 'Convertissez un fichier KML en GPX, directement dans votre navigateur.'
+        title: 'KML → GPX'
+        intro: 'Déposez un fichier KML pour le convertir en GPX.'
+    gpx_to_kml:
+        meta_title: 'GPX → KML'
+        meta_description: 'Convertissez un fichier GPX en KML, directement dans votre navigateur.'
+        title: 'GPX → KML'
+        intro: 'Déposez un fichier GPX pour le convertir en KML.'
 
 pricing:
     title: 'Tarifs'

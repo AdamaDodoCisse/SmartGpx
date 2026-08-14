@@ -1,0 +1,84 @@
+import 'leaflet/dist/leaflet.css';
+import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { CircleMarker, MapContainer, Polyline, TileLayer, Tooltip, useMap } from 'react-leaflet';
+import type { LatLngTuple } from 'leaflet';
+import { parseGpx } from '@/gps/gpx';
+import type { GpsRoute, GpsTrack } from '@/gps/model';
+import { FileDropzone } from './FileDropzone';
+import { ToolPageLayout } from './ToolPageLayout';
+
+type ToolState = { status: 'idle' } | { status: 'error'; message: string } | { status: 'done'; route: GpsRoute };
+
+// CircleMarker plutôt que Marker : évite le problème classique des icônes par défaut de Leaflet
+// dont les chemins d'image ne se résolvent pas correctement une fois passés dans un bundler.
+function toLatLng(point: { latitude: number; longitude: number }): LatLngTuple {
+    return [point.latitude, point.longitude];
+}
+
+function FitBounds({ positions }: { positions: LatLngTuple[] }) {
+    const map = useMap();
+
+    useEffect(() => {
+        if (positions.length > 0) {
+            map.fitBounds(positions);
+        }
+    }, [positions, map]);
+
+    return null;
+}
+
+export function GpxViewerTool() {
+    const { t } = useTranslation();
+    const [state, setState] = useState<ToolState>({ status: 'idle' });
+
+    function handleFiles(files: File[]): void {
+        const file = files[0];
+        if (undefined === file) {
+            return;
+        }
+
+        file.text()
+            .then((content) => setState({ status: 'done', route: parseGpx(content) }))
+            .catch(() => setState({ status: 'error', message: t('tools.gpx_viewer.error') }));
+    }
+
+    if ('done' !== state.status) {
+        return (
+            <ToolPageLayout>
+                <FileDropzone accept=".gpx" onFiles={handleFiles} label={t('tools.drop_file')} />
+                {'error' === state.status && (
+                    <p role="alert" className="mt-3 text-sm text-red-600">
+                        {state.message}
+                    </p>
+                )}
+            </ToolPageLayout>
+        );
+    }
+
+    const lines: GpsTrack[] = [...state.route.tracks, ...state.route.routes];
+    const positions = lines.flatMap((line) => line.points.map(toLatLng));
+    const center: LatLngTuple = positions[0] ?? [0, 0];
+
+    return (
+        <ToolPageLayout>
+            <div className="h-[500px] w-full overflow-hidden rounded-md border border-border">
+                <MapContainer center={center} zoom={13} className="h-full w-full">
+                    <TileLayer
+                        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+                        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                    />
+                    <FitBounds positions={positions} />
+                    {lines.map((line, index) => (
+                        <Polyline key={index} positions={line.points.map(toLatLng)} pathOptions={{ color: '#2563eb' }} />
+                    ))}
+                    {state.route.waypoints.map((waypoint, index) => (
+                        <CircleMarker key={index} center={toLatLng(waypoint)} radius={6} pathOptions={{ color: '#dc2626' }}>
+                            {waypoint.name && <Tooltip>{waypoint.name}</Tooltip>}
+                        </CircleMarker>
+                    ))}
+                </MapContainer>
+            </div>
+        </ToolPageLayout>
+    );
+}

@@ -25,4 +25,6 @@ export interface GpsRoute {
     name?: string;
     waypoints: GpsWaypoint[];
     tracks: GpsTrack[];
+    /** GPX <rte> — distinct de <trk> mais structurellement identique (nom + liste de points). */
+    routes: GpsTrack[];
 }

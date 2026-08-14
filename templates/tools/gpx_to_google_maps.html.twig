@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'tools.gpx_to_google_maps.meta_title'|trans }} — SmartGPX{% endblock %}
+{% block meta_description %}{{ 'tools.gpx_to_google_maps.meta_description'|trans }}{% endblock %}
+
+{% block body %}
+    <div class="mx-auto max-w-3xl px-4 py-12">
+        <h1 class="text-3xl font-semibold">{{ 'tools.gpx_to_google_maps.title'|trans }}</h1>
+        <p class="mt-2 text-muted-foreground">{{ 'tools.gpx_to_google_maps.intro'|trans }}</p>
+        <div id="gpx-to-google-maps-root"></div>
+    </div>
+    {{ vite_entry_script_tags('gpxToGoogleMaps', { dependency: 'react' }) }}
+{% endblock %}
