@@ -105,6 +105,24 @@ final class ExtensionConversionControllerTest extends WebTestCase
         self::assertSame(401, $client->getResponse()->getStatusCode());
     }
 
+    public function testUnverifiedEmailReturnsForbidden(): void
+    {
+        $client = static::createClient();
+        $user = $this->createUnverifiedUser();
+        $this->seedCredits($user, 1);
+        $token = $this->generateToken($user);
+
+        $client->request(
+            'POST',
+            '/api/extension/conversions/google-maps',
+            server: ['CONTENT_TYPE' => 'application/json', 'HTTP_AUTHORIZATION' => 'Bearer '.$token],
+            content: self::jsonBody(['url' => self::VALID_URL]),
+        );
+
+        self::assertSame(403, $client->getResponse()->getStatusCode());
+        self::assertCount(0, static::getContainer()->get(ConversionFailureRepository::class)->findAll());
+    }
+
     public function testUnsupportedUrlLogsAConversionFailure(): void
     {
         $client = static::createClient();
@@ -132,6 +150,19 @@ final class ExtensionConversionControllerTest extends WebTestCase
         $user = new User(sprintf('ext-conv-%s@example.com', uniqid()));
         $user->setPassword('irrelevant-hash');
         $user->setVerified(true);
+        $entityManager->persist($user);
+        $entityManager->flush();
+
+        return $user;
+    }
+
+    private function createUnverifiedUser(): User
+    {
+        $container = static::getContainer();
+        $entityManager = $container->get(EntityManagerInterface::class);
+
+        $user = new User(sprintf('ext-conv-unverified-%s@example.com', uniqid()));
+        $user->setPassword('irrelevant-hash');
         $entityManager->persist($user);
         $entityManager->flush();
 

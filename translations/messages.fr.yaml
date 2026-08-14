@@ -7,6 +7,7 @@ conversion:
         insufficient_credits: "Vous n'avez pas assez de crédits pour cette conversion."
         route_not_found: 'Aucun itinéraire trouvé entre ces emplacements.'
         provider_unavailable: 'Le service de calcul d’itinéraire est temporairement indisponible. Merci de réessayer sous peu.'
+        email_not_verified: 'Merci de vérifier votre e-mail avant d’exporter. Consultez votre boîte de réception pour le lien de confirmation.'
 
 extension:
     error:
@@ -41,6 +42,10 @@ layout:
         pricing: 'Tarifs'
         chrome_extension: 'Extension Chrome'
         login: 'Connexion'
+        account: 'Compte'
+        credits: 'Crédits'
+        extensions: 'Extensions'
+        logout: 'Déconnexion'
         convert_cta: 'Convertir un itinéraire'
     footer:
         privacy: 'Confidentialité'

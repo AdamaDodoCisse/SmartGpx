@@ -14,6 +14,7 @@ use App\Conversion\Http\ConversionJsonPresenter;
 use App\Conversion\Repository\ConversionRepository;
 use App\Conversion\Request\ConvertGoogleMapsUrlRequest;
 use App\Identity\Entity\User;
+use App\Identity\Exception\EmailNotVerifiedException;
 use App\Routing\Enum\TravelMode;
 use App\Routing\Exception\RouteNotFoundException;
 use App\Routing\Exception\RoutingProviderUnavailableException;
@@ -83,6 +84,8 @@ final class ConvertGoogleMapsController extends AbstractController
 
         try {
             $conversion = $convertGoogleMapsToGpxAction->execute($user, $dto->url, $travelModeOverride);
+        } catch (EmailNotVerifiedException) {
+            return $this->errorResponse('conversion.error.email_not_verified', $user, Response::HTTP_FORBIDDEN);
         } catch (InvalidGoogleMapsUrlException|UnsupportedGoogleMapsUrlException) {
             $logConversionFailureAction->execute($user, $dto->url, ConversionFailureReason::UNSUPPORTED_URL);
 

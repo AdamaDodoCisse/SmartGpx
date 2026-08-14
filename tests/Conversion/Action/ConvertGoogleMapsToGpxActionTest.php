@@ -7,6 +7,7 @@ namespace App\Tests\Conversion\Action;
 use App\Conversion\Action\ConvertGoogleMapsToGpxAction;
 use App\Conversion\Repository\ConversionRepository;
 use App\Identity\Entity\User;
+use App\Identity\Exception\EmailNotVerifiedException;
 use App\Identity\Repository\UserRepository;
 use App\Routing\Exception\RouteNotFoundException;
 use App\Routing\Provider\FakeRoutingProvider;
@@ -41,6 +42,7 @@ final class ConvertGoogleMapsToGpxActionTest extends KernelTestCase
 
         $this->user = new User(sprintf('convert-action-%s@example.com', uniqid()));
         $this->user->setPassword('irrelevant-hash');
+        $this->user->setVerified(true);
         $this->entityManager->persist($this->user);
         $this->entityManager->flush();
     }
@@ -91,6 +93,27 @@ final class ConvertGoogleMapsToGpxActionTest extends KernelTestCase
 
         $conversionRepository = static::getContainer()->get(ConversionRepository::class);
         self::assertCount(0, $conversionRepository->findBy(['user' => $this->user]));
+    }
+
+    public function testAnUnverifiedEmailPreventsAnyCreditReservation(): void
+    {
+        $this->user->setVerified(false);
+        $this->entityManager->flush();
+        $this->seedAccount(1);
+
+        try {
+            $this->action->execute($this->user, self::VALID_URL);
+            self::fail('Expected EmailNotVerifiedException was not thrown.');
+        } catch (EmailNotVerifiedException) {
+            // expected
+        }
+
+        self::assertSame(0, $this->fakeRoutingProvider->callCount, 'The routing provider must never be called for an unverified email.');
+
+        $account = $this->creditAccountRepository->findOneByUserOrFail($this->user);
+        $this->entityManager->refresh($account);
+        self::assertSame(1, $account->getBalance(), 'No credit should be reserved for an unverified email.');
+        self::assertSame(0, $account->getReserved());
     }
 
     public function testInsufficientCreditsPreventsAnyExternalCall(): void

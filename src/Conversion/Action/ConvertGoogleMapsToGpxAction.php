@@ -10,6 +10,7 @@ use App\Conversion\Exception\UnsupportedGoogleMapsUrlException;
 use App\Conversion\Parser\GoogleMapsUrlParser;
 use App\Conversion\Parser\ParsedGoogleMapsUrl;
 use App\Identity\Entity\User;
+use App\Identity\Exception\EmailNotVerifiedException;
 use App\Routing\Enum\TravelMode;
 use App\Routing\Exception\RoutingProviderException;
 use App\Routing\Provider\RoutingProviderInterface;
@@ -30,6 +31,7 @@ final class ConvertGoogleMapsToGpxAction
     }
 
     /**
+     * @throws EmailNotVerifiedException         nothing is charged, checked before anything else
      * @throws InvalidGoogleMapsUrlException     nothing is charged, the URL is not even parseable
      * @throws UnsupportedGoogleMapsUrlException nothing is charged, unsupported link shape
      * @throws InsufficientCreditsException      nothing is charged, nothing external is called
@@ -37,6 +39,10 @@ final class ConvertGoogleMapsToGpxAction
      */
     public function execute(User $user, string $rawUrl, ?TravelMode $travelModeOverride = null): Conversion
     {
+        if (!$user->isVerified()) {
+            throw new EmailNotVerifiedException($user);
+        }
+
         $parsed = $this->urlParser->parse($rawUrl);
 
         if (null !== $travelModeOverride) {

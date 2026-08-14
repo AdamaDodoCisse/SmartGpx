@@ -7,6 +7,7 @@ conversion:
         insufficient_credits: "You don't have enough credits for this conversion."
         route_not_found: 'No route could be found between these locations.'
         provider_unavailable: 'The routing service is temporarily unavailable. Please try again shortly.'
+        email_not_verified: 'Please verify your email before exporting. Check your inbox for the confirmation link.'
 
 extension:
     error:
@@ -41,6 +42,10 @@ layout:
         pricing: 'Pricing'
         chrome_extension: 'Chrome Extension'
         login: 'Login'
+        account: 'Account'
+        credits: 'Credits'
+        extensions: 'Extensions'
+        logout: 'Log out'
         convert_cta: 'Convert a route'
     footer:
         privacy: 'Privacy'

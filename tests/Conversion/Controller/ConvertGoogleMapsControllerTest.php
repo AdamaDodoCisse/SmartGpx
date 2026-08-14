@@ -68,6 +68,30 @@ final class ConvertGoogleMapsControllerTest extends WebTestCase
         self::assertContains($client->getResponse()->getStatusCode(), [401, 302, 403]);
     }
 
+    public function testUnverifiedEmailReturnsForbidden(): void
+    {
+        $client = static::createClient();
+        $user = $this->createUnverifiedUser();
+        $this->seedCredits($user, 1);
+        $client->loginUser($user);
+
+        $crawler = $client->request('GET', '/');
+        $token = $this->extractCsrfToken($crawler);
+
+        $client->request(
+            'POST',
+            '/api/conversions/google-maps',
+            server: ['CONTENT_TYPE' => 'application/json', 'HTTP_X_CSRF_TOKEN' => $token],
+            content: self::jsonBody(['url' => self::VALID_URL]),
+        );
+
+        self::assertSame(403, $client->getResponse()->getStatusCode());
+        self::assertCount(0, static::getContainer()->get(ConversionFailureRepository::class)->findAll(), 'A guard clause before a genuine attempt must not log a ConversionFailure.');
+
+        $account = static::getContainer()->get(CreditAccountRepository::class)->findOneByUserOrFail($user);
+        self::assertSame(1, $account->getBalance(), 'No credit should be reserved for an unverified email.');
+    }
+
     public function testZeroBalanceReturnsPaymentRequired(): void
     {
         $client = static::createClient();
@@ -262,6 +286,21 @@ final class ConvertGoogleMapsControllerTest extends WebTestCase
         $user = new User(sprintf('convert-controller-%s@example.com', uniqid()));
         $user->setPassword($passwordHasher->hashPassword($user, 'correct-horse-battery-staple'));
         $user->setVerified(true);
+
+        $entityManager->persist($user);
+        $entityManager->flush();
+
+        return $user;
+    }
+
+    private function createUnverifiedUser(): User
+    {
+        $container = static::getContainer();
+        $passwordHasher = $container->get(UserPasswordHasherInterface::class);
+        $entityManager = $container->get(EntityManagerInterface::class);
+
+        $user = new User(sprintf('convert-controller-unverified-%s@example.com', uniqid()));
+        $user->setPassword($passwordHasher->hashPassword($user, 'correct-horse-battery-staple'));
 
         $entityManager->persist($user);
         $entityManager->flush();
