@@ -30,6 +30,10 @@ final class CreditPackFormType extends AbstractType
                 'class' => CreditPackBadge::class,
                 'required' => false,
                 'placeholder' => 'None',
+                'choice_label' => static fn (CreditPackBadge $badge): string => match ($badge) {
+                    CreditPackBadge::MOST_POPULAR => 'Most popular',
+                    CreditPackBadge::BEST_VALUE => 'Best value',
+                },
             ])
             ->add('displayOrder', IntegerType::class, ['label' => 'Display order'])
             ->add('active', CheckboxType::class, ['label' => 'Active', 'required' => false])
