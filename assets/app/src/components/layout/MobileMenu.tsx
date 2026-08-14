@@ -3,25 +3,44 @@ import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 
-interface NavLink {
+interface ToolLink {
     href: string;
-    labelKey: string;
+    label: string;
 }
 
-const NAV_LINKS: NavLink[] = [
-    { href: '/#convert', labelKey: 'nav.convert' },
-    { href: '/#free-tools', labelKey: 'nav.tools' },
-    { href: '/guides', labelKey: 'nav.guides' },
-    { href: '/pricing', labelKey: 'nav.pricing' },
-    { href: '/#chrome-extension', labelKey: 'nav.chrome_extension' },
-    { href: '/login', labelKey: 'nav.login' },
-];
+interface MobileMenuProps {
+    convertHref: string;
+    tools: ToolLink[];
+    guidesHref: string;
+    pricingHref: string;
+    chromeExtensionHref: string;
+    isAuthenticated: boolean;
+    loginHref: string;
+    creditsHref: string;
+    extensionsHref: string;
+    logoutHref: string;
+}
 
 /**
  * Seul élément interactif du header en Phase 1 (voir ADR-004) : la barre de navigation
  * "desktop" reste du Twig statique et indexable, ce composant ne gère que le menu mobile.
+ * Les liens viennent tous de Twig (path()) plutôt que d'être codés en dur ici — la version
+ * précédente pointait vers des chemins anglais fixes (/pricing, /guides…) même en contexte
+ * français, et n'affichait que 6 liens plats sans les 9 outils accessibles depuis le menu
+ * "Tools" du header desktop.
  */
-export function MobileMenu() {
+export function MobileMenu({
+    convertHref,
+    tools,
+    guidesHref,
+    pricingHref,
+    chromeExtensionHref,
+    isAuthenticated,
+    loginHref,
+    creditsHref,
+    extensionsHref,
+    logoutHref,
+}: MobileMenuProps) {
     const { t } = useTranslation();
 
     return (
@@ -35,11 +54,51 @@ export function MobileMenu() {
                 <SheetContent closeLabel={t('nav.close_menu')}>
                     <SheetTitle className="mb-6 text-lg font-semibold">SmartGPX</SheetTitle>
                     <nav className="flex flex-col gap-4">
-                        {NAV_LINKS.map((link) => (
-                            <a key={link.href} href={link.href} className="text-base font-medium">
-                                {t(link.labelKey)}
+                        <a href={convertHref} className="text-base font-medium">
+                            {t('nav.convert')}
+                        </a>
+
+                        <div>
+                            <p className="text-xs font-medium tracking-wide text-muted-foreground uppercase">{t('nav.tools')}</p>
+                            <div className="mt-2 flex flex-col gap-3 border-l border-border pl-3">
+                                {tools.map((tool) => (
+                                    <a key={tool.href} href={tool.href} className="text-sm">
+                                        {tool.label}
+                                    </a>
+                                ))}
+                            </div>
+                        </div>
+
+                        <a href={guidesHref} className="text-base font-medium">
+                            {t('nav.guides')}
+                        </a>
+                        <a href={pricingHref} className="text-base font-medium">
+                            {t('nav.pricing')}
+                        </a>
+                        <a href={chromeExtensionHref} className="text-base font-medium">
+                            {t('nav.chrome_extension')}
+                        </a>
+
+                        {isAuthenticated ? (
+                            <div>
+                                <p className="text-xs font-medium tracking-wide text-muted-foreground uppercase">{t('nav.account')}</p>
+                                <div className="mt-2 flex flex-col gap-3 border-l border-border pl-3">
+                                    <a href={creditsHref} className="text-sm">
+                                        {t('nav.credits')}
+                                    </a>
+                                    <a href={extensionsHref} className="text-sm">
+                                        {t('nav.extensions')}
+                                    </a>
+                                    <a href={logoutHref} className="text-sm">
+                                        {t('nav.logout')}
+                                    </a>
+                                </div>
+                            </div>
+                        ) : (
+                            <a href={loginHref} className="text-base font-medium">
+                                {t('nav.login')}
                             </a>
-                        ))}
+                        )}
                     </nav>
                 </SheetContent>
             </Sheet>

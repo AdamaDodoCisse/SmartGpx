@@ -219,6 +219,32 @@ body {
     );
 }
 
+/* Soulignement qui se dessine au survol des liens du header — écho discret de l'animation
+   route-draw du hero, sans dépendre de JS. */
+.nav-link {
+    position: relative;
+}
+.nav-link::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    bottom: -3px;
+    left: 0;
+    height: 1px;
+    background: var(--route);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.2s ease;
+}
+.nav-link:hover::after {
+    transform: scaleX(1);
+}
+@media (prefers-reduced-motion: reduce) {
+    .nav-link::after {
+        transition: none;
+    }
+}
+
 /*
  * Typographie des pages de contenu long (guides, privacy/terms) : la classe `.prose` était
  * utilisée dans les templates sans qu'aucune règle ne la définisse nulle part (pas de plugin

@@ -64,7 +64,7 @@
                 </a>
 
                 <nav class="hidden items-center gap-6 lg:flex" aria-label="{{ 'layout.main_navigation'|trans }}">
-                    <a href="{{ path('app_home') }}#convert" class="text-sm font-medium text-muted-foreground hover:text-foreground">{{ 'layout.nav.convert'|trans }}</a>
+                    <a href="{{ path('app_home') }}#convert" class="nav-link text-sm font-medium text-muted-foreground hover:text-foreground">{{ 'layout.nav.convert'|trans }}</a>
 
                     {# Menu "Tools" en HTML natif (details/summary) : le header reste du Twig
                        statique et indexable (voir ADR-004), aucun JS n'est nécessaire pour un
@@ -87,10 +87,26 @@
                         </div>
                     </details>
 
-                    <a href="{{ path('app_guides_index') }}" class="text-sm font-medium text-muted-foreground hover:text-foreground">{{ 'layout.nav.guides'|trans }}</a>
-                    <a href="{{ path('app_pricing') }}" class="text-sm font-medium text-muted-foreground hover:text-foreground">{{ 'layout.nav.pricing'|trans }}</a>
-                    <a href="{{ path('app_home') }}#chrome-extension" class="text-sm font-medium text-muted-foreground hover:text-foreground">{{ 'layout.nav.chrome_extension'|trans }}</a>
-                    <a href="{{ path('app_login') }}" class="text-sm font-medium text-muted-foreground hover:text-foreground">{{ 'layout.nav.login'|trans }}</a>
+                    <a href="{{ path('app_guides_index') }}" class="nav-link text-sm font-medium text-muted-foreground hover:text-foreground">{{ 'layout.nav.guides'|trans }}</a>
+                    <a href="{{ path('app_pricing') }}" class="nav-link text-sm font-medium text-muted-foreground hover:text-foreground">{{ 'layout.nav.pricing'|trans }}</a>
+                    <a href="{{ path('app_home') }}#chrome-extension" class="nav-link text-sm font-medium text-muted-foreground hover:text-foreground">{{ 'layout.nav.chrome_extension'|trans }}</a>
+
+                    {% if app.user %}
+                        <details class="group relative">
+                            <summary class="flex cursor-pointer list-none items-center gap-1 text-sm font-medium text-muted-foreground marker:content-none hover:text-foreground [&::-webkit-details-marker]:hidden">
+                                {{ 'layout.nav.account'|trans }}
+                                {{ icons.icon('chevron-down', 'size-3.5 transition-transform group-open:rotate-180') }}
+                            </summary>
+                            <div class="absolute right-0 top-full z-20 mt-3 w-48 rounded-md border border-border bg-background p-2 shadow-lg">
+                                <a href="{{ path('app_account_credits') }}" class="block rounded-sm px-3 py-2 text-sm hover:bg-secondary">{{ 'layout.nav.credits'|trans }}</a>
+                                <a href="{{ path('app_account_extensions_index') }}" class="block rounded-sm px-3 py-2 text-sm hover:bg-secondary">{{ 'layout.nav.extensions'|trans }}</a>
+                                <a href="{{ path('app_logout') }}" class="block rounded-sm px-3 py-2 text-sm hover:bg-secondary">{{ 'layout.nav.logout'|trans }}</a>
+                            </div>
+                        </details>
+                    {% else %}
+                        <a href="{{ path('app_login') }}" class="nav-link text-sm font-medium text-muted-foreground hover:text-foreground">{{ 'layout.nav.login'|trans }}</a>
+                    {% endif %}
+
                     <a
                         href="{{ path('app_home') }}#convert"
                         class="inline-flex h-9 items-center justify-center whitespace-nowrap rounded-md bg-primary px-4 text-sm font-medium text-primary-foreground hover:opacity-90"
@@ -109,7 +125,34 @@
                         <span class="icon-sun">{{ icons.icon('sun', 'size-5') }}</span>
                         <span class="icon-moon">{{ icons.icon('moon', 'size-5') }}</span>
                     </button>
-                    <div id="nav-mobile-menu-root" data-locale="{{ app.request.locale }}"></div>
+                    {# Les liens sont calculés ici plutôt que codés en dur côté React : path()
+                       connaît déjà la bonne URL par locale (slugs traduits inclus, ex.
+                       /fr/outils/simplifier-gpx), pas besoin d'une deuxième source de vérité
+                       dans MobileMenu.tsx. #}
+                    {% set mobile_nav_tools = [
+                        { href: path('app_gpx_viewer'), label: 'home.free_tools.gpx_viewer'|trans },
+                        { href: path('app_tools_gpx_to_google_maps'), label: 'home.free_tools.gpx_to_google_maps'|trans },
+                        { href: path('app_tools_gpx_simplify'), label: 'home.free_tools.gpx_simplify'|trans },
+                        { href: path('app_tools_gpx_merge'), label: 'home.free_tools.gpx_merge'|trans },
+                        { href: path('app_tools_kml_to_gpx'), label: 'home.free_tools.kml_to_gpx'|trans },
+                        { href: path('app_tools_kmz_to_gpx'), label: 'home.free_tools.kmz_to_gpx'|trans },
+                        { href: path('app_tools_tcx_to_gpx'), label: 'home.free_tools.tcx_to_gpx'|trans },
+                        { href: path('app_tools_fit_to_gpx'), label: 'home.free_tools.fit_to_gpx'|trans },
+                        { href: path('app_tools_geojson_to_gpx'), label: 'home.free_tools.geojson_to_gpx'|trans },
+                    ] %}
+                    <div
+                        id="nav-mobile-menu-root"
+                        data-convert-href="{{ path('app_home') }}#convert"
+                        data-tools="{{ mobile_nav_tools|json_encode }}"
+                        data-guides-href="{{ path('app_guides_index') }}"
+                        data-pricing-href="{{ path('app_pricing') }}"
+                        data-chrome-extension-href="{{ path('app_home') }}#chrome-extension"
+                        data-is-authenticated="{{ app.user ? '1' : '' }}"
+                        data-login-href="{{ path('app_login') }}"
+                        data-credits-href="{{ path('app_account_credits') }}"
+                        data-extensions-href="{{ path('app_account_extensions_index') }}"
+                        data-logout-href="{{ path('app_logout') }}"
+                    ></div>
                 </div>
             </div>
         </header>
@@ -132,48 +175,53 @@
             {% block body %}{% endblock %}
         </main>
 
-        <footer class="mt-16 border-t border-border">
-            <div class="mx-auto max-w-6xl px-4 py-12">
+        <footer class="contour-bg relative mt-16 border-t border-border">
+            <div class="absolute inset-x-0 top-0 h-px bg-route" aria-hidden="true"></div>
+            <div class="relative mx-auto max-w-6xl px-4 py-12">
                 <div class="grid grid-cols-2 gap-8 text-sm sm:grid-cols-4">
                     <div>
                         <p class="font-mono text-xs tracking-wide text-muted-foreground">{{ 'layout.footer.product_heading'|trans }}</p>
                         <ul class="mt-3 space-y-2">
-                            <li><a href="{{ path('app_home') }}#convert" class="text-muted-foreground hover:text-foreground">{{ 'layout.footer.google_maps_to_gpx'|trans }}</a></li>
-                            <li><a href="{{ path('app_gpx_viewer') }}" class="text-muted-foreground hover:text-foreground">{{ 'home.free_tools.gpx_viewer'|trans }}</a></li>
-                            <li><a href="{{ path('app_home') }}#chrome-extension" class="text-muted-foreground hover:text-foreground">{{ 'layout.nav.chrome_extension'|trans }}</a></li>
-                            <li><a href="{{ path('app_pricing') }}" class="text-muted-foreground hover:text-foreground">{{ 'layout.nav.pricing'|trans }}</a></li>
+                            <li><a href="{{ path('app_home') }}#convert" class="nav-link text-muted-foreground hover:text-foreground">{{ 'layout.footer.google_maps_to_gpx'|trans }}</a></li>
+                            <li><a href="{{ path('app_gpx_viewer') }}" class="nav-link text-muted-foreground hover:text-foreground">{{ 'home.free_tools.gpx_viewer'|trans }}</a></li>
+                            <li><a href="{{ path('app_home') }}#chrome-extension" class="nav-link text-muted-foreground hover:text-foreground">{{ 'layout.nav.chrome_extension'|trans }}</a></li>
+                            <li><a href="{{ path('app_pricing') }}" class="nav-link text-muted-foreground hover:text-foreground">{{ 'layout.nav.pricing'|trans }}</a></li>
                         </ul>
                     </div>
                     <div>
                         <p class="font-mono text-xs tracking-wide text-muted-foreground">{{ 'layout.footer.tools_heading'|trans }}</p>
                         <ul class="mt-3 space-y-2">
-                            <li><a href="{{ path('app_tools_gpx_to_google_maps') }}" class="text-muted-foreground hover:text-foreground">{{ 'home.free_tools.gpx_to_google_maps'|trans }}</a></li>
-                            <li><a href="{{ path('app_tools_gpx_simplify') }}" class="text-muted-foreground hover:text-foreground">{{ 'home.free_tools.gpx_simplify'|trans }}</a></li>
-                            <li><a href="{{ path('app_tools_gpx_merge') }}" class="text-muted-foreground hover:text-foreground">{{ 'home.free_tools.gpx_merge'|trans }}</a></li>
-                            <li><a href="{{ path('app_tools_kml_to_gpx') }}" class="text-muted-foreground hover:text-foreground">{{ 'home.free_tools.kml_to_gpx'|trans }}</a></li>
-                            <li><a href="{{ path('app_tools_fit_to_gpx') }}" class="text-muted-foreground hover:text-foreground">{{ 'home.free_tools.fit_to_gpx'|trans }}</a></li>
+                            <li><a href="{{ path('app_tools_gpx_to_google_maps') }}" class="nav-link text-muted-foreground hover:text-foreground">{{ 'home.free_tools.gpx_to_google_maps'|trans }}</a></li>
+                            <li><a href="{{ path('app_tools_gpx_simplify') }}" class="nav-link text-muted-foreground hover:text-foreground">{{ 'home.free_tools.gpx_simplify'|trans }}</a></li>
+                            <li><a href="{{ path('app_tools_gpx_merge') }}" class="nav-link text-muted-foreground hover:text-foreground">{{ 'home.free_tools.gpx_merge'|trans }}</a></li>
+                            <li><a href="{{ path('app_tools_kml_to_gpx') }}" class="nav-link text-muted-foreground hover:text-foreground">{{ 'home.free_tools.kml_to_gpx'|trans }}</a></li>
+                            <li><a href="{{ path('app_tools_fit_to_gpx') }}" class="nav-link text-muted-foreground hover:text-foreground">{{ 'home.free_tools.fit_to_gpx'|trans }}</a></li>
                         </ul>
                     </div>
                     <div>
                         <p class="font-mono text-xs tracking-wide text-muted-foreground">{{ 'layout.footer.resources_heading'|trans }}</p>
                         <ul class="mt-3 space-y-2">
-                            <li><a href="{{ path('app_guides_index') }}" class="text-muted-foreground hover:text-foreground">{{ 'layout.nav.guides'|trans }}</a></li>
-                            <li><a href="{{ path('app_home') }}#faq" class="text-muted-foreground hover:text-foreground">{{ 'layout.footer.faq'|trans }}</a></li>
+                            <li><a href="{{ path('app_guides_index') }}" class="nav-link text-muted-foreground hover:text-foreground">{{ 'layout.nav.guides'|trans }}</a></li>
+                            <li><a href="{{ path('app_home') }}#faq" class="nav-link text-muted-foreground hover:text-foreground">{{ 'layout.footer.faq'|trans }}</a></li>
                         </ul>
                     </div>
                     <div>
                         <p class="font-mono text-xs tracking-wide text-muted-foreground">{{ 'layout.footer.company_heading'|trans }}</p>
                         <ul class="mt-3 space-y-2">
-                            <li><a href="{{ path('app_privacy') }}" class="text-muted-foreground hover:text-foreground">{{ 'layout.footer.privacy'|trans }}</a></li>
-                            <li><a href="{{ path('app_terms') }}" class="text-muted-foreground hover:text-foreground">{{ 'layout.footer.terms'|trans }}</a></li>
-                            <li><a href="{{ path('app_contact') }}" class="text-muted-foreground hover:text-foreground">{{ 'layout.footer.contact'|trans }}</a></li>
+                            <li><a href="{{ path('app_privacy') }}" class="nav-link text-muted-foreground hover:text-foreground">{{ 'layout.footer.privacy'|trans }}</a></li>
+                            <li><a href="{{ path('app_terms') }}" class="nav-link text-muted-foreground hover:text-foreground">{{ 'layout.footer.terms'|trans }}</a></li>
+                            <li><a href="{{ path('app_contact') }}" class="nav-link text-muted-foreground hover:text-foreground">{{ 'layout.footer.contact'|trans }}</a></li>
                         </ul>
                     </div>
                 </div>
 
-                <p class="mt-10 border-t border-border pt-6 font-display text-sm tracking-wide text-muted-foreground">
-                    &copy; {{ "now"|date("Y") }} SmartGPX
-                </p>
+                <div class="mt-10 flex items-center justify-between border-t border-border pt-6">
+                    <a href="{{ path('app_home') }}" class="flex items-center gap-2 font-display text-sm tracking-wide text-muted-foreground hover:text-foreground">
+                        {{ logo.mark('size-5 rounded') }}
+                        SmartGPX
+                    </a>
+                    <p class="font-mono text-xs text-muted-foreground">&copy; {{ "now"|date("Y") }}</p>
+                </div>
             </div>
         </footer>
 
