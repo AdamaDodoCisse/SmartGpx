@@ -6,6 +6,169 @@
     <div class="mx-auto max-w-3xl px-4 py-12 prose">
         <h1 class="text-3xl font-display tracking-tight">{{ 'legal.privacy.title'|trans }}</h1>
         <p class="mt-4 text-muted-foreground">{{ 'legal.draft_notice'|trans }}</p>
-        <p class="mt-6">{{ 'legal.privacy.placeholder'|trans }}</p>
+
+        {% if app.request.locale == 'fr' %}
+            <p class="rounded-md border border-border bg-secondary px-4 py-3 text-sm text-muted-foreground">
+                Cette politique est publiée par <strong>[Raison sociale à compléter]</strong>,
+                <strong>[adresse à compléter]</strong>. Ces informations doivent être renseignées
+                avant toute mise en production.
+            </p>
+
+            <h2>Ce que nous collectons</h2>
+            <p><strong>Compte.</strong> À l'inscription : votre adresse e-mail et un mot de passe
+            (stocké sous forme hachée, jamais en clair). Nous conservons aussi votre langue
+            préférée et la date de création du compte.</p>
+            <p><strong>Conversions Google Maps → GPX.</strong> Chaque conversion réussie enregistre
+            le lien Google Maps d'origine, le départ, l'arrivée, les étapes intermédiaires, le tracé
+            complet (coordonnées), le mode de déplacement, la distance et la durée. Le fichier GPX
+            lui-même n'est pas stocké : il est régénéré à la demande à partir de ces données. Les
+            conversions échouées ne sont pas associées à un fichier ni à un tracé.</p>
+            <p><strong>Extension Chrome.</strong> Si vous connectez l'extension, nous conservons un
+            jeton d'autorisation (sous forme hachée), une étiquette d'appareil dérivée de votre
+            navigateur, et la date de dernière utilisation. Ce jeton donne à l'extension les mêmes
+            accès que votre session web (créer et télécharger des conversions).</p>
+            <p><strong>Paiements.</strong> Les achats de crédits passent entièrement par Stripe
+            Checkout : votre numéro de carte n'atteint jamais nos serveurs. Nous conservons
+            uniquement la trace de l'achat (montant, devise, crédits accordés, statut).</p>
+            <p><strong>Formulaire de contact.</strong> Si vous nous écrivez via
+            <a href="{{ path('app_contact') }}">/contact</a>, nous recevons le nom, l'e-mail et le
+            message que vous avez saisis.</p>
+
+            <h2>Pourquoi nous les collectons</h2>
+            <p>Pour fournir le service (créer votre compte, effectuer les conversions, gérer vos
+            crédits), traiter les paiements, vous envoyer les e-mails nécessaires au fonctionnement
+            du compte (vérification d'adresse, réinitialisation de mot de passe, confirmation
+            d'achat), répondre à vos messages, et limiter les abus (limitation du nombre de
+            requêtes).</p>
+
+            <h2>Avec qui ces données sont partagées</h2>
+            <ul>
+                <li><strong>API Google Routes</strong> : pour calculer un itinéraire, nous envoyons
+                le départ, l'arrivée, les étapes et le mode de déplacement à l'API Google Routes —
+                c'est nécessaire pour générer votre fichier GPX. Cet envoi est soumis à la politique
+                de confidentialité de Google.</li>
+                <li><strong>Stripe</strong> : traite les paiements et reçoit directement votre e-mail
+                et vos informations de paiement. Voir la politique de confidentialité de Stripe.</li>
+                <li><strong>Google Fonts</strong> : nos pages chargent des polices directement
+                depuis les serveurs de Google, qui reçoivent votre adresse IP à cette occasion.</li>
+                <li><strong>Envoi d'e-mails</strong> : les e-mails transactionnels (vérification,
+                réinitialisation, reçus d'achat, réponses au formulaire de contact) transitent par
+                notre prestataire d'envoi d'e-mails.</li>
+            </ul>
+            <p>Nous ne vendons aucune donnée, et n'utilisons aucun traceur publicitaire ou
+            analytique.</p>
+
+            <h2>Cookies et stockage local</h2>
+            <ul>
+                <li>Un cookie de session, strictement nécessaire pour rester connecté.</li>
+                <li>Le stockage local de votre navigateur retient votre choix de thème clair/sombre
+                — cette information ne quitte jamais votre appareil.</li>
+                <li>Aucun cookie publicitaire, analytique ou de suivi.</li>
+            </ul>
+
+            <h2>Durée de conservation</h2>
+            <p>Nous n'appliquons pas aujourd'hui de purge automatique des données de compte ou de
+            l'historique des conversions. Une suppression peut être demandée manuellement — voir
+            « Vos droits » ci-dessous.</p>
+
+            <h2>Vos droits</h2>
+            <p>Vous pouvez demander l'accès, la correction ou la suppression de vos données en nous
+            écrivant à <a href="mailto:{{ 'contact.email.support'|trans }}">{{ 'contact.email.support'|trans }}</a>.
+            L'accès de l'extension Chrome à votre compte peut être révoqué à tout moment depuis
+            <a href="{{ path('app_account_extensions_index') }}">votre page Extensions</a>, sans nous
+            contacter.</p>
+
+            <h2>Mineurs</h2>
+            <p>SmartGPX ne s'adresse pas aux personnes de moins de 16 ans, et nous ne collectons pas
+            sciemment de données les concernant.</p>
+
+            <h2>Modifications de cette politique</h2>
+            <p>Nous pouvons mettre à jour cette politique ; toute modification substantielle sera
+            reflétée par une nouvelle date de mise à jour en haut de cette page.</p>
+
+            <h2>Nous contacter</h2>
+            <p>Pour toute question sur cette politique, écrivez-nous à
+            <a href="mailto:{{ 'contact.email.support'|trans }}">{{ 'contact.email.support'|trans }}</a>
+            ou via le <a href="{{ path('app_contact') }}">formulaire de contact</a>.</p>
+        {% else %}
+            <p class="rounded-md border border-border bg-secondary px-4 py-3 text-sm text-muted-foreground">
+                This policy is issued by <strong>[Legal entity name to be completed]</strong>,
+                <strong>[registered address to be completed]</strong>. These details must be filled
+                in before this goes live in production.
+            </p>
+
+            <h2>What we collect</h2>
+            <p><strong>Account.</strong> When you sign up: your email address and a password
+            (stored as a hash, never in plain text). We also keep your preferred language and the
+            date your account was created.</p>
+            <p><strong>Google Maps → GPX conversions.</strong> Every successful conversion stores
+            the original Google Maps link, the origin, destination, any intermediate stops, the
+            full route geometry (coordinates), travel mode, distance, and duration. The GPX file
+            itself is not stored — it's regenerated on demand from this data. Failed conversions
+            are not associated with a file or a track.</p>
+            <p><strong>Chrome extension.</strong> If you connect the extension, we keep an
+            authorization token (in hashed form), a device label derived from your browser, and the
+            last time it was used. This token grants the extension the same access as your web
+            session (creating and downloading conversions).</p>
+            <p><strong>Payments.</strong> Credit purchases go entirely through Stripe Checkout — your
+            card number never reaches our servers. We only keep a record of the purchase itself
+            (amount, currency, credits granted, status).</p>
+            <p><strong>Contact form.</strong> If you write to us via
+            <a href="{{ path('app_contact') }}">/contact</a>, we receive the name, email, and
+            message you submitted.</p>
+
+            <h2>Why we collect it</h2>
+            <p>To provide the service (creating your account, running conversions, managing your
+            credits), process payments, send account-related emails (email verification, password
+            reset, purchase confirmations), respond to your messages, and prevent abuse (rate
+            limiting).</p>
+
+            <h2>Who we share it with</h2>
+            <ul>
+                <li><strong>Google Routes API</strong>: to compute a route, we send the origin,
+                destination, stops, and travel mode to Google's Routes API — this is required to
+                generate your GPX file. This is subject to Google's own privacy policy.</li>
+                <li><strong>Stripe</strong>: processes payments and receives your email and payment
+                details directly. See Stripe's privacy policy.</li>
+                <li><strong>Google Fonts</strong>: our pages load fonts directly from Google's
+                servers, which receive your IP address as part of that request.</li>
+                <li><strong>Email delivery</strong>: transactional emails (verification, password
+                reset, purchase receipts, contact-form responses) are sent through our email
+                delivery provider.</li>
+            </ul>
+            <p>We do not sell your data, and we do not use any advertising or analytics trackers.</p>
+
+            <h2>Cookies and local storage</h2>
+            <ul>
+                <li>A session cookie, strictly necessary to keep you signed in.</li>
+                <li>Your browser's local storage remembers your light/dark theme choice — this never
+                leaves your device.</li>
+                <li>No advertising, analytics, or tracking cookies of any kind.</li>
+            </ul>
+
+            <h2>Data retention</h2>
+            <p>We do not currently run automatic deletion schedules for account or conversion-history
+            data. Deletion can be requested manually — see "Your rights" below.</p>
+
+            <h2>Your rights</h2>
+            <p>You can request access to, correction of, or deletion of your data by writing to
+            <a href="mailto:{{ 'contact.email.support'|trans }}">{{ 'contact.email.support'|trans }}</a>.
+            The Chrome extension's access to your account can be revoked at any time from
+            <a href="{{ path('app_account_extensions_index') }}">your Extensions page</a>, with no
+            need to contact us.</p>
+
+            <h2>Children</h2>
+            <p>SmartGPX is not directed at anyone under 16, and we do not knowingly collect data
+            about them.</p>
+
+            <h2>Changes to this policy</h2>
+            <p>We may update this policy from time to time; any material change will be reflected
+            by a new "last updated" date at the top of this page.</p>
+
+            <h2>Contact us</h2>
+            <p>For any question about this policy, write to
+            <a href="mailto:{{ 'contact.email.support'|trans }}">{{ 'contact.email.support'|trans }}</a>
+            or use the <a href="{{ path('app_contact') }}">contact form</a>.</p>
+        {% endif %}
     </div>
 {% endblock %}

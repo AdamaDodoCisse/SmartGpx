@@ -333,10 +333,8 @@ legal:
     draft_notice: 'Brouillon — en attente de relecture juridique avant mise en production.'
     privacy:
         title: 'Politique de confidentialité'
-        placeholder: "Cette page décrira les données collectées par SmartGPX, la manière dont les données d'itinéraire Google Maps sont traitées, et comment demander la suppression du compte ou de l'historique."
     terms:
         title: "Conditions d'utilisation"
-        placeholder: "Cette page décrira les conditions d'utilisation de SmartGPX, des crédits et des achats."
 
 contact:
     title: 'Nous contacter'
@@ -348,6 +346,7 @@ contact:
     submit: 'Envoyer le message'
     email:
         subject: 'Nouveau message de contact de %name%'
+        support: 'support@smartgpx.com'
     flash:
         sent: 'Votre message a été envoyé. Nous vous répondrons par e-mail.'
         rate_limited: 'Trop de messages envoyés récemment. Merci de réessayer plus tard.'

@@ -333,10 +333,8 @@ legal:
     draft_notice: 'Draft — pending legal review before production use.'
     privacy:
         title: 'Privacy Policy'
-        placeholder: 'This page will describe what data SmartGPX collects, how Google Maps routing data is processed, and how to request account or history deletion.'
     terms:
         title: 'Terms of Service'
-        placeholder: 'This page will describe the terms governing use of SmartGPX, credits, and purchases.'
 
 contact:
     title: 'Contact us'
@@ -348,6 +346,7 @@ contact:
     submit: 'Send message'
     email:
         subject: 'New contact message from %name%'
+        support: 'support@smartgpx.com'
     flash:
         sent: "Your message has been sent. We'll get back to you by email."
         rate_limited: 'Too many messages sent recently. Please try again later.'
