@@ -1,4 +1,6 @@
 {% extends 'admin/_layout.html.twig' %}
+{% import '_macros/icons.html.twig' as icons %}
+{% import 'admin/_macros.html.twig' as admin %}
 {% block title %}Purchases — Admin — SmartGPX{% endblock %}
 {% block admin_body %}
     <h1 class="text-2xl font-semibold">Purchases</h1>
@@ -14,16 +16,17 @@
         </thead>
         <tbody>
             {% for purchase in result.items %}
+                {% set status_tone = purchase.status.value == 'completed' ? 'success' : (purchase.status.value == 'failed' ? 'error' : 'neutral') %}
                 <tr class="border-b border-border">
                     <td class="py-3">
-                        <a href="{{ path('app_admin_users_show', { publicId: purchase.user.publicId }) }}" class="hover:underline">
+                        <a href="{{ path('app_admin_users_show', { publicId: purchase.user.publicId }) }}" class="font-medium hover:underline">
                             {{ purchase.user.email }}
                         </a>
                     </td>
-                    <td class="py-3">{{ purchase.credits }}</td>
-                    <td class="py-3">{{ (purchase.amountCents / 100)|number_format(2) }} {{ purchase.currency|upper }}</td>
-                    <td class="py-3">{{ purchase.status.value }}</td>
-                    <td class="py-3">{{ purchase.createdAt|date('Y-m-d H:i') }}</td>
+                    <td class="py-3 [font-variant-numeric:tabular-nums]">{{ purchase.credits }}</td>
+                    <td class="py-3 [font-variant-numeric:tabular-nums]">{{ (purchase.amountCents / 100)|number_format(2) }} {{ purchase.currency|upper }}</td>
+                    <td class="py-3">{{ admin.pill(purchase.status.value, status_tone) }}</td>
+                    <td class="py-3 text-muted-foreground [font-variant-numeric:tabular-nums]">{{ purchase.createdAt|date('Y-m-d H:i') }}</td>
                 </tr>
             {% endfor %}
         </tbody>
@@ -31,13 +34,21 @@
 
     {% if result.total > result.perPage %}
         <div class="mt-6 flex items-center gap-4 text-sm">
-            {% if result.hasPrevious %}
-                <a href="{{ path('app_admin_purchases_index', { page: result.page - 1 }) }}">&larr; Previous</a>
-            {% endif %}
-            <span>Page {{ result.page }} of {{ result.lastPage }}</span>
-            {% if result.hasNext %}
-                <a href="{{ path('app_admin_purchases_index', { page: result.page + 1 }) }}">Next &rarr;</a>
-            {% endif %}
+            <a
+                href="{{ result.hasPrevious ? path('app_admin_purchases_index', { page: result.page - 1 }) : '#' }}"
+                class="flex items-center gap-1 rounded-md border border-border px-3 py-1.5 {{ result.hasPrevious ? 'hover:bg-secondary' : 'pointer-events-none opacity-40' }}"
+            >
+                {{ icons.icon('arrow-left', 'size-3.5') }}
+                Previous
+            </a>
+            <span class="text-muted-foreground">Page {{ result.page }} of {{ result.lastPage }}</span>
+            <a
+                href="{{ result.hasNext ? path('app_admin_purchases_index', { page: result.page + 1 }) : '#' }}"
+                class="flex items-center gap-1 rounded-md border border-border px-3 py-1.5 {{ result.hasNext ? 'hover:bg-secondary' : 'pointer-events-none opacity-40' }}"
+            >
+                Next
+                {{ icons.icon('arrow-right', 'size-3.5') }}
+            </a>
         </div>
     {% endif %}
 {% endblock %}

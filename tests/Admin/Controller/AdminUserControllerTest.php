@@ -47,7 +47,7 @@ final class AdminUserControllerTest extends WebTestCase
         $client->followRedirect();
 
         self::assertResponseIsSuccessful();
-        self::assertSelectorTextContains('body', 'admin_adjustment');
+        self::assertSelectorTextContains('body', 'admin adjustment');
 
         $creditAccountRepository = static::getContainer()->get(CreditAccountRepository::class);
         $account = $creditAccountRepository->findOneByUserOrFail($target);

@@ -1,13 +1,40 @@
 {% extends 'base.html.twig' %}
+{% import '_macros/icons.html.twig' as icons %}
 
 {% block body %}
-    <div class="mx-auto max-w-6xl px-4 py-12">
-        <nav class="flex flex-wrap gap-4 border-b border-border pb-4 text-sm font-medium text-muted-foreground">
-            <a href="{{ path('app_admin_dashboard') }}" class="hover:text-foreground">Dashboard</a>
-            <a href="{{ path('app_admin_users_index') }}" class="hover:text-foreground">Users</a>
-            <a href="{{ path('app_admin_purchases_index') }}" class="hover:text-foreground">Purchases</a>
-            <a href="{{ path('app_admin_credit_packs_index') }}" class="hover:text-foreground">Credit Packs</a>
-            <a href="{{ path('app_admin_conversions_failed') }}" class="hover:text-foreground">Failed Conversions</a>
+    <div class="mx-auto max-w-6xl px-4 py-10">
+        <div class="flex items-center justify-between pb-4">
+            <div class="flex items-center gap-2">
+                <span class="flex size-7 items-center justify-center rounded-md bg-primary text-primary-foreground">
+                    {{ icons.icon('gauge', 'size-4') }}
+                </span>
+                <span class="text-sm font-semibold tracking-wide">SmartGPX Admin</span>
+            </div>
+            <a href="{{ path('app_home') }}" class="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground">
+                {{ icons.icon('arrow-left', 'size-3.5') }}
+                Back to site
+            </a>
+        </div>
+
+        {% set nav_items = [
+            { route: 'app_admin_dashboard', prefix: 'app_admin_dashboard', label: 'Dashboard', icon: 'layout-dashboard' },
+            { route: 'app_admin_users_index', prefix: 'app_admin_users', label: 'Users', icon: 'users' },
+            { route: 'app_admin_purchases_index', prefix: 'app_admin_purchases', label: 'Purchases', icon: 'credit-card' },
+            { route: 'app_admin_credit_packs_index', prefix: 'app_admin_credit_packs', label: 'Credit Packs', icon: 'package' },
+            { route: 'app_admin_conversions_failed', prefix: 'app_admin_conversions', label: 'Failed Conversions', icon: 'triangle-alert' },
+        ] %}
+        <nav class="flex flex-wrap gap-1 border-b border-border py-3 text-sm font-medium" aria-label="Admin">
+            {% for item in nav_items %}
+                {% set is_active = app.request.attributes.get('_route') starts with item.prefix %}
+                <a
+                    href="{{ path(item.route) }}"
+                    aria-current="{{ is_active ? 'page' : 'false' }}"
+                    class="flex items-center gap-1.5 rounded-md px-3 py-1.5 {{ is_active ? 'bg-secondary text-foreground' : 'text-muted-foreground hover:text-foreground' }}"
+                >
+                    {{ icons.icon(item.icon, 'size-4') }}
+                    {{ item.label }}
+                </a>
+            {% endfor %}
         </nav>
 
         <div class="mt-8">

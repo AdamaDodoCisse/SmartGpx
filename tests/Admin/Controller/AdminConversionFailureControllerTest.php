@@ -32,7 +32,7 @@ final class AdminConversionFailureControllerTest extends WebTestCase
 
         self::assertResponseIsSuccessful();
         self::assertSelectorTextContains('body', $target->getEmail());
-        self::assertSelectorTextContains('body', 'unsupported_url');
+        self::assertSelectorTextContains('body', 'unsupported url');
 
         $entityManager->remove($failure);
         $entityManager->flush();

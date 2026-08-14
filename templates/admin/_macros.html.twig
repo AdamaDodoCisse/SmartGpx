@@ -1,0 +1,16 @@
+{#
+    Puce de statut réutilisée sur tous les écrans admin (Vrai/Faux, statut d'achat, raison
+    d'échec…) — encode l'état par la forme (pastille) en plus du texte, pas seulement par la
+    couleur, voir CLAUDE.md / a11y.
+#}
+{% macro pill(label, tone = 'neutral') %}
+    {% set tones = {
+        success: 'border-[var(--success-border)] bg-[var(--success-bg)] text-[var(--success-fg)]',
+        error: 'border-[var(--error-border)] bg-[var(--error-bg)] text-[var(--error-fg)]',
+        neutral: 'border-border bg-secondary text-muted-foreground',
+    } %}
+    <span class="inline-flex items-center gap-1 rounded-full border px-2.5 py-0.5 text-xs font-medium {{ tones[tone]|default(tones.neutral) }}">
+        <span class="size-1.5 rounded-full bg-current"></span>
+        {{ label }}
+    </span>
+{% endmacro %}

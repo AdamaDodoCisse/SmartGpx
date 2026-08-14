@@ -1,37 +1,44 @@
 {% extends 'admin/_layout.html.twig' %}
+{% import '_macros/icons.html.twig' as icons %}
+{% import 'admin/_macros.html.twig' as admin %}
 {% block title %}{{ targetUser.email }} — Admin — SmartGPX{% endblock %}
 {% block admin_body %}
-    <a href="{{ path('app_admin_users_index') }}" class="text-sm text-muted-foreground hover:underline">&larr; Users</a>
-    <h1 class="mt-2 text-2xl font-semibold">{{ targetUser.email }}</h1>
+    <a href="{{ path('app_admin_users_index') }}" class="flex w-fit items-center gap-1 text-sm text-muted-foreground hover:text-foreground">
+        {{ icons.icon('arrow-left', 'size-3.5') }}
+        Users
+    </a>
+    <div class="mt-2 flex flex-wrap items-center gap-3">
+        <h1 class="text-2xl font-semibold">{{ targetUser.email }}</h1>
+        {{ admin.pill(targetUser.verified ? 'Verified' : 'Unverified', targetUser.verified ? 'success' : 'neutral') }}
+    </div>
 
-    <dl class="mt-4 grid grid-cols-2 gap-2 text-sm sm:grid-cols-4">
-        <div>
+    <dl class="mt-6 grid grid-cols-2 gap-4 text-sm sm:grid-cols-4">
+        <div class="rounded-md border border-border p-4">
             <dt class="text-muted-foreground">Roles</dt>
-            <dd>{{ targetUser.roles|join(', ') }}</dd>
+            <dd class="mt-1 font-medium">{{ targetUser.roles|join(', ') }}</dd>
         </div>
-        <div>
-            <dt class="text-muted-foreground">Verified</dt>
-            <dd>{{ targetUser.verified ? 'Yes' : 'No' }}</dd>
-        </div>
-        <div>
+        <div class="rounded-md border border-border p-4">
             <dt class="text-muted-foreground">Registered</dt>
-            <dd>{{ targetUser.createdAt|date('Y-m-d') }}</dd>
+            <dd class="mt-1 font-medium [font-variant-numeric:tabular-nums]">{{ targetUser.createdAt|date('Y-m-d') }}</dd>
         </div>
-        <div>
+        <div class="rounded-md border border-border p-4">
             <dt class="text-muted-foreground">Balance</dt>
-            <dd>{{ creditAccount ? creditAccount.balance : '—' }}</dd>
+            <dd class="mt-1 font-medium [font-variant-numeric:tabular-nums]">{{ creditAccount ? creditAccount.balance : '—' }}</dd>
         </div>
     </dl>
 
-    <h2 class="mt-8 text-lg font-semibold">Grant credits</h2>
+    <h2 class="mt-10 text-lg font-semibold">Grant credits</h2>
     {{ form_start(creditAdjustmentForm, { action: path('app_admin_users_credit_adjustment', { publicId: targetUser.publicId }), method: 'POST' }) }}
-        <div class="flex items-end gap-3">
+        <div class="mt-3 flex items-end gap-3">
             {{ form_row(creditAdjustmentForm.amount) }}
-            <button type="submit" class="rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground">Grant</button>
+            <button type="submit" class="flex h-10 items-center gap-1.5 rounded-md bg-primary px-4 text-sm font-medium text-primary-foreground hover:opacity-90">
+                {{ icons.icon('infinity', 'size-4') }}
+                Grant
+            </button>
         </div>
     {{ form_end(creditAdjustmentForm) }}
 
-    <h2 class="mt-8 text-lg font-semibold">Credit ledger</h2>
+    <h2 class="mt-10 text-lg font-semibold">Credit ledger</h2>
     {% if ledger is null or ledger.items is empty %}
         <p class="mt-2 text-sm text-muted-foreground">No credit account or no transactions yet.</p>
     {% else %}
@@ -47,10 +54,12 @@
             <tbody>
                 {% for transaction in ledger.items %}
                     <tr class="border-b border-border">
-                        <td class="py-3">{{ transaction.type.value }}</td>
-                        <td class="py-3">{{ transaction.amount > 0 ? '+' ~ transaction.amount : transaction.amount }}</td>
-                        <td class="py-3">{{ transaction.balanceAfter }}</td>
-                        <td class="py-3">{{ transaction.createdAt|date('Y-m-d H:i') }}</td>
+                        <td class="py-3">{{ admin.pill(transaction.type.value|replace({'_': ' '}), transaction.amount > 0 ? 'success' : 'neutral') }}</td>
+                        <td class="py-3 [font-variant-numeric:tabular-nums] {{ transaction.amount > 0 ? 'text-[var(--success-fg)]' : '' }}">
+                            {{ transaction.amount > 0 ? '+' ~ transaction.amount : transaction.amount }}
+                        </td>
+                        <td class="py-3 [font-variant-numeric:tabular-nums]">{{ transaction.balanceAfter }}</td>
+                        <td class="py-3 text-muted-foreground [font-variant-numeric:tabular-nums]">{{ transaction.createdAt|date('Y-m-d H:i') }}</td>
                     </tr>
                 {% endfor %}
             </tbody>
@@ -58,13 +67,21 @@
 
         {% if ledger.total > ledger.perPage %}
             <div class="mt-4 flex items-center gap-4 text-sm">
-                {% if ledger.hasPrevious %}
-                    <a href="{{ path('app_admin_users_show', { publicId: targetUser.publicId, page: ledger.page - 1 }) }}">&larr; Previous</a>
-                {% endif %}
-                <span>Page {{ ledger.page }} of {{ ledger.lastPage }}</span>
-                {% if ledger.hasNext %}
-                    <a href="{{ path('app_admin_users_show', { publicId: targetUser.publicId, page: ledger.page + 1 }) }}">Next &rarr;</a>
-                {% endif %}
+                <a
+                    href="{{ ledger.hasPrevious ? path('app_admin_users_show', { publicId: targetUser.publicId, page: ledger.page - 1 }) : '#' }}"
+                    class="flex items-center gap-1 rounded-md border border-border px-3 py-1.5 {{ ledger.hasPrevious ? 'hover:bg-secondary' : 'pointer-events-none opacity-40' }}"
+                >
+                    {{ icons.icon('arrow-left', 'size-3.5') }}
+                    Previous
+                </a>
+                <span class="text-muted-foreground">Page {{ ledger.page }} of {{ ledger.lastPage }}</span>
+                <a
+                    href="{{ ledger.hasNext ? path('app_admin_users_show', { publicId: targetUser.publicId, page: ledger.page + 1 }) : '#' }}"
+                    class="flex items-center gap-1 rounded-md border border-border px-3 py-1.5 {{ ledger.hasNext ? 'hover:bg-secondary' : 'pointer-events-none opacity-40' }}"
+                >
+                    Next
+                    {{ icons.icon('arrow-right', 'size-3.5') }}
+                </a>
             </div>
         {% endif %}
     {% endif %}

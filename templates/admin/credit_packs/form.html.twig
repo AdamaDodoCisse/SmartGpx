@@ -1,10 +1,15 @@
 {% extends 'admin/_layout.html.twig' %}
+{% import '_macros/icons.html.twig' as icons %}
 {% block title %}{{ isNew ? 'New Credit Pack' : 'Edit Credit Pack' }} — Admin — SmartGPX{% endblock %}
 {% block admin_body %}
-    <h1 class="text-2xl font-semibold">{{ isNew ? 'New Credit Pack' : 'Edit Credit Pack' }}</h1>
+    <a href="{{ path('app_admin_credit_packs_index') }}" class="flex w-fit items-center gap-1 text-sm text-muted-foreground hover:text-foreground">
+        {{ icons.icon('arrow-left', 'size-3.5') }}
+        Credit Packs
+    </a>
+    <h1 class="mt-2 text-2xl font-semibold">{{ isNew ? 'New Credit Pack' : 'Edit Credit Pack' }}</h1>
 
     {{ form_start(creditPackForm) }}
-        <div class="mt-6 grid max-w-md gap-4">
+        <div class="mt-6 grid max-w-md gap-4 rounded-md border border-border p-5">
             {{ form_row(creditPackForm.credits) }}
             {{ form_row(creditPackForm.priceCents) }}
             {{ form_row(creditPackForm.currency) }}
@@ -12,7 +17,8 @@
             {{ form_row(creditPackForm.displayOrder) }}
             {{ form_row(creditPackForm.active) }}
         </div>
-        <button type="submit" class="mt-6 rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground">
+        <button type="submit" class="mt-6 flex h-10 items-center gap-1.5 rounded-md bg-primary px-4 text-sm font-medium text-primary-foreground hover:opacity-90">
+            {{ icons.icon('package', 'size-4') }}
             Save
         </button>
     {{ form_end(creditPackForm) }}

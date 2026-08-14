@@ -1,4 +1,6 @@
 {% extends 'admin/_layout.html.twig' %}
+{% import '_macros/icons.html.twig' as icons %}
+{% import 'admin/_macros.html.twig' as admin %}
 {% block title %}Users — Admin — SmartGPX{% endblock %}
 {% block admin_body %}
     <h1 class="text-2xl font-semibold">Users</h1>
@@ -15,13 +17,13 @@
             {% for targetUser in result.items %}
                 <tr class="border-b border-border">
                     <td class="py-3">
-                        <a href="{{ path('app_admin_users_show', { publicId: targetUser.publicId }) }}" class="hover:underline">
+                        <a href="{{ path('app_admin_users_show', { publicId: targetUser.publicId }) }}" class="font-medium hover:underline">
                             {{ targetUser.email }}
                         </a>
                     </td>
-                    <td class="py-3">{{ targetUser.roles|join(', ') }}</td>
-                    <td class="py-3">{{ targetUser.verified ? 'Yes' : 'No' }}</td>
-                    <td class="py-3">{{ targetUser.createdAt|date('Y-m-d') }}</td>
+                    <td class="py-3 text-muted-foreground">{{ targetUser.roles|join(', ') }}</td>
+                    <td class="py-3">{{ admin.pill(targetUser.verified ? 'Verified' : 'Unverified', targetUser.verified ? 'success' : 'neutral') }}</td>
+                    <td class="py-3 text-muted-foreground [font-variant-numeric:tabular-nums]">{{ targetUser.createdAt|date('Y-m-d') }}</td>
                 </tr>
             {% endfor %}
         </tbody>
@@ -29,13 +31,21 @@
 
     {% if result.total > result.perPage %}
         <div class="mt-6 flex items-center gap-4 text-sm">
-            {% if result.hasPrevious %}
-                <a href="{{ path('app_admin_users_index', { page: result.page - 1 }) }}">&larr; Previous</a>
-            {% endif %}
-            <span>Page {{ result.page }} of {{ result.lastPage }}</span>
-            {% if result.hasNext %}
-                <a href="{{ path('app_admin_users_index', { page: result.page + 1 }) }}">Next &rarr;</a>
-            {% endif %}
+            <a
+                href="{{ result.hasPrevious ? path('app_admin_users_index', { page: result.page - 1 }) : '#' }}"
+                class="flex items-center gap-1 rounded-md border border-border px-3 py-1.5 {{ result.hasPrevious ? 'hover:bg-secondary' : 'pointer-events-none opacity-40' }}"
+            >
+                {{ icons.icon('arrow-left', 'size-3.5') }}
+                Previous
+            </a>
+            <span class="text-muted-foreground">Page {{ result.page }} of {{ result.lastPage }}</span>
+            <a
+                href="{{ result.hasNext ? path('app_admin_users_index', { page: result.page + 1 }) : '#' }}"
+                class="flex items-center gap-1 rounded-md border border-border px-3 py-1.5 {{ result.hasNext ? 'hover:bg-secondary' : 'pointer-events-none opacity-40' }}"
+            >
+                Next
+                {{ icons.icon('arrow-right', 'size-3.5') }}
+            </a>
         </div>
     {% endif %}
 {% endblock %}
