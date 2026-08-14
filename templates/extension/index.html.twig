@@ -4,11 +4,11 @@
 
 {% block body %}
     <div class="mx-auto max-w-3xl px-4 py-12">
-        <div class="flex items-center justify-between">
+        <div class="flex flex-wrap items-center justify-between gap-3">
             <h1 class="text-2xl font-semibold">{{ 'extension.account.title'|trans }}</h1>
             <form method="post" action="{{ path('app_account_extensions_connect') }}">
                 <input type="hidden" name="_token" value="{{ csrf_token('extension_connect') }}">
-                <button type="submit" name="connect_submit" class="rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground">
+                <button type="submit" name="connect_submit" class="whitespace-nowrap rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground">
                     {{ 'extension.account.connect'|trans }}
                 </button>
             </form>
@@ -17,41 +17,43 @@
         {% if authorizations is empty %}
             <p class="mt-8 text-sm text-muted-foreground">{{ 'extension.account.empty'|trans }}</p>
         {% else %}
-            <table class="mt-8 w-full text-left text-sm">
-                <thead>
-                    <tr class="border-b border-border text-muted-foreground">
-                        <th class="py-2 font-medium">{{ 'extension.account.label'|trans }}</th>
-                        <th class="py-2 font-medium">{{ 'extension.account.created_at'|trans }}</th>
-                        <th class="py-2 font-medium">{{ 'extension.account.last_used_at'|trans }}</th>
-                        <th class="py-2 font-medium"></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for authorization in authorizations %}
-                        <tr class="border-b border-border">
-                            <td class="py-3">{{ authorization.label ?? '—' }}</td>
-                            <td class="py-3">{{ authorization.createdAt|date('Y-m-d') }}</td>
-                            <td class="py-3">
-                                {{ authorization.lastUsedAt ? authorization.lastUsedAt|date('Y-m-d H:i') : 'extension.account.never_used'|trans }}
-                            </td>
-                            <td class="py-3 text-right">
-                                {% if authorization.revoked %}
-                                    <span class="text-xs text-muted-foreground">
-                                        {{ 'extension.account.revoked_at'|trans }} {{ authorization.revokedAt|date('Y-m-d') }}
-                                    </span>
-                                {% else %}
-                                    <form method="post" action="{{ path('app_account_extensions_revoke', { publicId: authorization.publicId }) }}">
-                                        <input type="hidden" name="_token" value="{{ csrf_token('extension_revoke') }}">
-                                        <button type="submit" class="text-sm text-red-600 hover:underline">
-                                            {{ 'extension.account.revoke'|trans }}
-                                        </button>
-                                    </form>
-                                {% endif %}
-                            </td>
+            <div class="mt-8 overflow-x-auto">
+                <table class="w-full text-left text-sm">
+                    <thead>
+                        <tr class="border-b border-border text-muted-foreground">
+                            <th class="whitespace-nowrap py-2 pr-6 font-medium">{{ 'extension.account.label'|trans }}</th>
+                            <th class="whitespace-nowrap py-2 pr-6 font-medium">{{ 'extension.account.created_at'|trans }}</th>
+                            <th class="whitespace-nowrap py-2 pr-6 font-medium">{{ 'extension.account.last_used_at'|trans }}</th>
+                            <th class="whitespace-nowrap py-2 font-medium"></th>
                         </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        {% for authorization in authorizations %}
+                            <tr class="border-b border-border">
+                                <td class="max-w-[14rem] truncate py-3 pr-6" title="{{ authorization.label }}">{{ authorization.label ?? '—' }}</td>
+                                <td class="whitespace-nowrap py-3 pr-6 [font-variant-numeric:tabular-nums]">{{ authorization.createdAt|date('Y-m-d') }}</td>
+                                <td class="whitespace-nowrap py-3 pr-6 [font-variant-numeric:tabular-nums]">
+                                    {{ authorization.lastUsedAt ? authorization.lastUsedAt|date('Y-m-d H:i') : 'extension.account.never_used'|trans }}
+                                </td>
+                                <td class="whitespace-nowrap py-3 text-right">
+                                    {% if authorization.revoked %}
+                                        <span class="text-xs text-muted-foreground">
+                                            {{ 'extension.account.revoked_at'|trans }} {{ authorization.revokedAt|date('Y-m-d') }}
+                                        </span>
+                                    {% else %}
+                                        <form method="post" action="{{ path('app_account_extensions_revoke', { publicId: authorization.publicId }) }}">
+                                            <input type="hidden" name="_token" value="{{ csrf_token('extension_revoke') }}">
+                                            <button type="submit" class="text-sm text-[var(--error-fg)] hover:underline">
+                                                {{ 'extension.account.revoke'|trans }}
+                                            </button>
+                                        </form>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
         {% endif %}
     </div>
 {% endblock %}

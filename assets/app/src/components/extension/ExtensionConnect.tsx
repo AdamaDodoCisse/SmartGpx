@@ -50,7 +50,7 @@ export function ExtensionConnect({ token, extensionId, apiOrigin }: ExtensionCon
 
     if ('failure' === state) {
         return (
-            <p role="alert" className="text-sm text-red-600">
+            <p role="alert" className="text-sm text-[var(--error-fg)]">
                 {t('extension.connect.failure')}
             </p>
         );
