@@ -78,6 +78,27 @@
         },
         "gpx_to_kml": {
             "error": "Ce fichier ne ressemble pas à un fichier GPX valide."
+        },
+        "kmz_to_gpx": {
+            "error": "Ce fichier ne ressemble pas à un fichier KMZ valide."
+        },
+        "tcx_to_gpx": {
+            "error": "Ce fichier ne ressemble pas à un fichier TCX valide."
+        },
+        "gpx_to_tcx": {
+            "error": "Ce fichier ne ressemble pas à un fichier GPX valide."
+        },
+        "fit_to_gpx": {
+            "error": "Ce fichier ne ressemble pas à un fichier FIT valide."
+        },
+        "gpx_to_fit": {
+            "error": "Ce fichier ne ressemble pas à un fichier GPX valide."
+        },
+        "geojson_to_gpx": {
+            "error": "Ce fichier ne ressemble pas à un fichier GeoJSON valide."
+        },
+        "gpx_to_geojson": {
+            "error": "Ce fichier ne ressemble pas à un fichier GPX valide."
         }
     }
 }

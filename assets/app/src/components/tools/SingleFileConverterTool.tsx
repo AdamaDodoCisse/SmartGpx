@@ -6,10 +6,33 @@ import type { GpsRoute } from '@/gps/model';
 import { FileDropzone } from './FileDropzone';
 import { ToolPageLayout } from './ToolPageLayout';
 
+/**
+ * Étroitit le contenu lu en `string` pour les convertisseurs texte — évite un cast `as string`
+ * dans chaque point de montage (readAs="text" garantit le type à l'exécution, cette fonction le
+ * fait échouer bruyamment plutôt que silencieusement si jamais ce n'était pas le cas).
+ */
+export function asText(content: string | ArrayBuffer): string {
+    if ('string' !== typeof content) {
+        throw new Error('asText : contenu binaire inattendu pour un convertisseur texte.');
+    }
+
+    return content;
+}
+
+/** Même rôle que asText, pour les convertisseurs binaires (readAs="arrayBuffer"). */
+export function asArrayBuffer(content: string | ArrayBuffer): ArrayBuffer {
+    if ('string' === typeof content) {
+        throw new Error('asArrayBuffer : contenu texte inattendu pour un convertisseur binaire.');
+    }
+
+    return content;
+}
+
 export interface SingleFileConverterToolProps {
     accept: string;
-    parse: (content: string) => GpsRoute;
-    generate: (route: GpsRoute) => string;
+    readAs: 'text' | 'arrayBuffer';
+    parse: (content: string | ArrayBuffer) => GpsRoute | Promise<GpsRoute>;
+    generate: (route: GpsRoute) => string | ArrayBuffer | Promise<string | ArrayBuffer>;
     outputFileName: (originalName: string) => string;
     outputMimeType: string;
     i18nPrefix: string;
@@ -19,7 +42,7 @@ type ToolState =
     | { status: 'idle' }
     | { status: 'processing' }
     | { status: 'error'; message: string }
-    | { status: 'done'; fileName: string; content: string };
+    | { status: 'done'; fileName: string; content: string | ArrayBuffer };
 
 /**
  * Composant générique upload → parse → generate → téléchargement, utilisé par KML → GPX et
@@ -27,6 +50,7 @@ type ToolState =
  */
 export function SingleFileConverterTool({
     accept,
+    readAs,
     parse,
     generate,
     outputFileName,
@@ -44,8 +68,11 @@ export function SingleFileConverterTool({
 
         setState({ status: 'processing' });
 
-        file.text()
-            .then((content) => generate(parse(content)))
+        const readPromise: Promise<string | ArrayBuffer> = 'text' === readAs ? file.text() : file.arrayBuffer();
+
+        readPromise
+            .then((content) => Promise.resolve(parse(content)))
+            .then((route) => Promise.resolve(generate(route)))
             .then((generated) => {
                 setState({ status: 'done', fileName: outputFileName(file.name), content: generated });
             })

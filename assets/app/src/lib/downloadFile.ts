@@ -1,5 +1,5 @@
-/** Déclenche le téléchargement d'un contenu texte généré côté client — aucune bibliothèque requise. */
-export function downloadFile(content: string, fileName: string, mimeType: string): void {
+/** Déclenche le téléchargement d'un contenu (texte ou binaire) généré côté client — aucune bibliothèque requise. */
+export function downloadFile(content: string | ArrayBuffer, fileName: string, mimeType: string): void {
     const blob = new Blob([content], { type: mimeType });
     const url = URL.createObjectURL(blob);
     const anchor = document.createElement('a');

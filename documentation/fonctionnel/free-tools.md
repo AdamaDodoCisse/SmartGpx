@@ -1,8 +1,7 @@
 # Outils gratuits
 
-**Statut : GPX Viewer, GPX → Google Maps, GPX Simplify, GPX Merge et KML ↔ GPX implémentés
-(Phase 5). KMZ → GPX, TCX ↔ GPX, FIT ↔ GPX, GeoJSON ↔ GPX listés sur la page d'accueil depuis la
-Phase 1, implémentation réelle en Phase 6.**
+**Statut : les 13 outils sont implémentés — GPX Viewer, GPX → Google Maps, GPX Simplify, GPX
+Merge et KML ↔ GPX (Phase 5), KMZ → GPX, TCX ↔ GPX, FIT ↔ GPX et GeoJSON ↔ GPX (Phase 6).**
 
 ## Principe commun
 
@@ -37,6 +36,6 @@ que la trajectoire de navigation résultante peut différer légèrement de la t
 
 ## KMZ — sécurité
 
-Une archive KMZ est un ZIP contenant un KML. L'extraction doit se prémunir contre les zip bombs,
-le path traversal et les archives imbriquées inattendues — voir
-`documentation/technique/kml-kmz.md` (à rédiger en Phase 6).
+Une archive KMZ est un ZIP contenant un KML. L'extraction se prémunit contre les zip bombs, le
+path traversal et les archives imbriquées inattendues — voir
+`documentation/technique/kml-kmz.md`.

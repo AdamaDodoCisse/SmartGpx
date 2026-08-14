@@ -97,6 +97,41 @@ tools:
         meta_description: 'Convert a GPX file to KML, right in your browser.'
         title: 'GPX → KML'
         intro: 'Drop a GPX file to convert it to KML.'
+    kmz_to_gpx:
+        meta_title: 'KMZ → GPX'
+        meta_description: 'Convert a KMZ file to GPX, right in your browser.'
+        title: 'KMZ → GPX'
+        intro: 'Drop a KMZ file to convert it to GPX.'
+    tcx_to_gpx:
+        meta_title: 'TCX → GPX'
+        meta_description: 'Convert a TCX file to GPX, right in your browser.'
+        title: 'TCX → GPX'
+        intro: 'Drop a TCX file to convert it to GPX.'
+    gpx_to_tcx:
+        meta_title: 'GPX → TCX'
+        meta_description: 'Convert a GPX file to TCX, right in your browser.'
+        title: 'GPX → TCX'
+        intro: 'Drop a GPX file to convert it to TCX.'
+    fit_to_gpx:
+        meta_title: 'FIT → GPX'
+        meta_description: 'Convert a FIT file to GPX, right in your browser.'
+        title: 'FIT → GPX'
+        intro: 'Drop a FIT file to convert it to GPX.'
+    gpx_to_fit:
+        meta_title: 'GPX → FIT'
+        meta_description: 'Convert a GPX file to a running FIT file, right in your browser.'
+        title: 'GPX → FIT'
+        intro: 'Drop a GPX file to convert it to a FIT file for a running activity.'
+    geojson_to_gpx:
+        meta_title: 'GeoJSON → GPX'
+        meta_description: 'Convert a GeoJSON file to GPX, right in your browser.'
+        title: 'GeoJSON → GPX'
+        intro: 'Drop a GeoJSON file to convert it to GPX.'
+    gpx_to_geojson:
+        meta_title: 'GPX → GeoJSON'
+        meta_description: 'Convert a GPX file to GeoJSON, right in your browser.'
+        title: 'GPX → GeoJSON'
+        intro: 'Drop a GPX file to convert it to GeoJSON.'
 
 pricing:
     title: 'Pricing'

@@ -1,16 +1,16 @@
 import { mountIsland } from '@/lib/mountIsland';
 import { asText, SingleFileConverterTool } from '@/components/tools/SingleFileConverterTool';
 import { generateGpx } from '@/gps/gpx';
-import { parseKml } from '@/gps/kml';
+import { parseGeoJson } from '@/gps/geojson';
 
-mountIsland('kml-to-gpx-root', (_props) => (
+mountIsland('geojson-to-gpx-root', (_props) => (
     <SingleFileConverterTool
-        accept=".kml"
+        accept=".geojson,.json"
         readAs="text"
-        parse={(content) => parseKml(asText(content))}
+        parse={(content) => parseGeoJson(asText(content))}
         generate={generateGpx}
-        outputFileName={(name) => `${name.replace(/\.kml$/i, '')}.gpx`}
+        outputFileName={(name) => `${name.replace(/\.(geojson|json)$/i, '')}.gpx`}
         outputMimeType="application/gpx+xml"
-        i18nPrefix="tools.kml_to_gpx"
+        i18nPrefix="tools.geojson_to_gpx"
     />
 ));

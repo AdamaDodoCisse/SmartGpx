@@ -1,16 +1,16 @@
 import { mountIsland } from '@/lib/mountIsland';
 import { asText, SingleFileConverterTool } from '@/components/tools/SingleFileConverterTool';
-import { generateKml } from '@/gps/kml';
 import { parseGpx } from '@/gps/gpx';
+import { generateTcx } from '@/gps/tcx';
 
-mountIsland('gpx-to-kml-root', (_props) => (
+mountIsland('gpx-to-tcx-root', (_props) => (
     <SingleFileConverterTool
         accept=".gpx"
         readAs="text"
         parse={(content) => parseGpx(asText(content))}
-        generate={generateKml}
-        outputFileName={(name) => `${name.replace(/\.gpx$/i, '')}.kml`}
-        outputMimeType="application/vnd.google-earth.kml+xml"
-        i18nPrefix="tools.gpx_to_kml"
+        generate={generateTcx}
+        outputFileName={(name) => `${name.replace(/\.gpx$/i, '')}.tcx`}
+        outputMimeType="application/vnd.garmin.tcx+xml"
+        i18nPrefix="tools.gpx_to_tcx"
     />
 ));

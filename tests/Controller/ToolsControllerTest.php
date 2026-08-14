@@ -37,5 +37,19 @@ final class ToolsControllerTest extends WebTestCase
         yield 'kml to gpx (fr)' => ['/fr/outils/kml-vers-gpx', 'kml-to-gpx'];
         yield 'gpx to kml (en)' => ['/tools/gpx-to-kml', 'gpx-to-kml'];
         yield 'gpx to kml (fr)' => ['/fr/outils/gpx-vers-kml', 'gpx-to-kml'];
+        yield 'kmz to gpx (en)' => ['/tools/kmz-to-gpx', 'kmz-to-gpx'];
+        yield 'kmz to gpx (fr)' => ['/fr/outils/kmz-vers-gpx', 'kmz-to-gpx'];
+        yield 'tcx to gpx (en)' => ['/tools/tcx-to-gpx', 'tcx-to-gpx'];
+        yield 'tcx to gpx (fr)' => ['/fr/outils/tcx-vers-gpx', 'tcx-to-gpx'];
+        yield 'gpx to tcx (en)' => ['/tools/gpx-to-tcx', 'gpx-to-tcx'];
+        yield 'gpx to tcx (fr)' => ['/fr/outils/gpx-vers-tcx', 'gpx-to-tcx'];
+        yield 'fit to gpx (en)' => ['/tools/fit-to-gpx', 'fit-to-gpx'];
+        yield 'fit to gpx (fr)' => ['/fr/outils/fit-vers-gpx', 'fit-to-gpx'];
+        yield 'gpx to fit (en)' => ['/tools/gpx-to-fit', 'gpx-to-fit'];
+        yield 'gpx to fit (fr)' => ['/fr/outils/gpx-vers-fit', 'gpx-to-fit'];
+        yield 'geojson to gpx (en)' => ['/tools/geojson-to-gpx', 'geojson-to-gpx'];
+        yield 'geojson to gpx (fr)' => ['/fr/outils/geojson-vers-gpx', 'geojson-to-gpx'];
+        yield 'gpx to geojson (en)' => ['/tools/gpx-to-geojson', 'gpx-to-geojson'];
+        yield 'gpx to geojson (fr)' => ['/fr/outils/gpx-vers-geojson', 'gpx-to-geojson'];
     }
 }

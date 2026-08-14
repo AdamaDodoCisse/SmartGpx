@@ -50,4 +50,46 @@ final class ToolsController extends AbstractController
     {
         return $this->render('tools/gpx_to_kml.html.twig');
     }
+
+    #[Route(['en' => '/tools/kmz-to-gpx', 'fr' => '/fr/outils/kmz-vers-gpx'], name: 'app_tools_kmz_to_gpx')]
+    public function kmzToGpx(): Response
+    {
+        return $this->render('tools/kmz_to_gpx.html.twig');
+    }
+
+    #[Route(['en' => '/tools/tcx-to-gpx', 'fr' => '/fr/outils/tcx-vers-gpx'], name: 'app_tools_tcx_to_gpx')]
+    public function tcxToGpx(): Response
+    {
+        return $this->render('tools/tcx_to_gpx.html.twig');
+    }
+
+    #[Route(['en' => '/tools/gpx-to-tcx', 'fr' => '/fr/outils/gpx-vers-tcx'], name: 'app_tools_gpx_to_tcx')]
+    public function gpxToTcx(): Response
+    {
+        return $this->render('tools/gpx_to_tcx.html.twig');
+    }
+
+    #[Route(['en' => '/tools/fit-to-gpx', 'fr' => '/fr/outils/fit-vers-gpx'], name: 'app_tools_fit_to_gpx')]
+    public function fitToGpx(): Response
+    {
+        return $this->render('tools/fit_to_gpx.html.twig');
+    }
+
+    #[Route(['en' => '/tools/gpx-to-fit', 'fr' => '/fr/outils/gpx-vers-fit'], name: 'app_tools_gpx_to_fit')]
+    public function gpxToFit(): Response
+    {
+        return $this->render('tools/gpx_to_fit.html.twig');
+    }
+
+    #[Route(['en' => '/tools/geojson-to-gpx', 'fr' => '/fr/outils/geojson-vers-gpx'], name: 'app_tools_geojson_to_gpx')]
+    public function geojsonToGpx(): Response
+    {
+        return $this->render('tools/geojson_to_gpx.html.twig');
+    }
+
+    #[Route(['en' => '/tools/gpx-to-geojson', 'fr' => '/fr/outils/gpx-vers-geojson'], name: 'app_tools_gpx_to_geojson')]
+    public function gpxToGeojson(): Response
+    {
+        return $this->render('tools/gpx_to_geojson.html.twig');
+    }
 }

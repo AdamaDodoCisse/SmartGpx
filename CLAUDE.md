@@ -103,7 +103,7 @@ src/
 assets/app/src/
   entries/         # Vite entry points (one per React island)
   components/       # shadcn/ui primitives + layout components + conversion/ (ConvertHero), extension/ (ExtensionConnect), tools/ (free GPS tools, Phase 5)
-  gps/              # shared client-side conversion engine — gpx/kml/simplify/merge implemented (Phase 5), kmz/tcx/fit/geojson still stubs (Phase 6)
+  gps/              # shared client-side conversion engine — gpx/kml/simplify/merge (Phase 5), kmz/tcx/fit/geojson (Phase 6) — all implemented
 
 chrome-extension/    # separate npm project — Manifest V3 extension (Phase 3)
   src/popup/         # popup UI (React)
@@ -116,7 +116,7 @@ migrations/         # Doctrine migrations
 documentation/      # fonctionnel/ (product), technique/ (implementation), decisions/ (ADRs)
 ```
 
-## Current architectural state (through Phase 5)
+## Current architectural state (through Phase 6)
 
 **Phase 1 — Foundation**: Symfony backend skeleton, MySQL/Doctrine, full email+password auth
 (registration, email verification, login with throttling, forgot/reset password),
@@ -168,6 +168,18 @@ these tools staying genuinely free to run. See `documentation/technique/gpx.md`,
 `documentation/technique/kml-kmz.md` (KML half), and
 `documentation/decisions/ADR-003-browser-conversions.md`.
 
-Everything else (Phase 6 free tools — KMZ, TCX, FIT, GeoJSON —, SEO content, admin) is out of
-scope until later phases — see the implementation order in the product brief and the phase notes
-scattered through `documentation/fonctionnel/*.md`.
+**Phase 6 — Remaining free client-side GPS tools**: the last seven format converters — KMZ →
+GPX, TCX ↔ GPX, FIT ↔ GPX, GeoJSON ↔ GPX — completing the free-tools set (13 pages total). Two
+new dependencies, both justified at true external-format boundaries: `fflate` (`gps/kmz/`, ZIP
+extraction with a pre-inflate size guard against zip bombs plus a path-traversal guard, no
+`generateKmz` — one-directional only) and `@garmin/fitsdk` (`gps/fit/`, the official Garmin FIT
+SDK; `generateFit` targets a minimal running-activity profile only — see
+`documentation/technique/fit.md` for the documented limitation). `gps/tcx/` and `gps/geojson/`
+stay native (`DOMParser`/`JSON`), matching the Phase 5 precedent of preferring browser built-ins
+over libraries wherever the format allows it. `SingleFileConverterTool` and `downloadFile` were
+widened (a `readAs: 'text' | 'arrayBuffer'` prop, `string | ArrayBuffer` content) to support
+binary formats without changing Phase 5's existing text-based tools. See
+`documentation/technique/{kml-kmz,tcx,fit,geojson}.md`.
+
+Everything else (SEO content, admin) is out of scope until later phases — see the implementation
+order in the product brief and the phase notes scattered through `documentation/fonctionnel/*.md`.

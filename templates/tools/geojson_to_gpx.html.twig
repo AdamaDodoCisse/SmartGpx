@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'tools.geojson_to_gpx.meta_title'|trans }} — SmartGPX{% endblock %}
+{% block meta_description %}{{ 'tools.geojson_to_gpx.meta_description'|trans }}{% endblock %}
+
+{% block body %}
+    <div class="mx-auto max-w-3xl px-4 py-12">
+        <h1 class="text-3xl font-semibold">{{ 'tools.geojson_to_gpx.title'|trans }}</h1>
+        <p class="mt-2 text-muted-foreground">{{ 'tools.geojson_to_gpx.intro'|trans }}</p>
+        <div id="geojson-to-gpx-root"></div>
+    </div>
+    {{ vite_entry_script_tags('geojsonToGpx', { dependency: 'react' }) }}
+{% endblock %}

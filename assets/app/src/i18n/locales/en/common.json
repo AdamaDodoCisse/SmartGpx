@@ -78,6 +78,27 @@
         },
         "gpx_to_kml": {
             "error": "This file doesn't look like a valid GPX file."
+        },
+        "kmz_to_gpx": {
+            "error": "This file doesn't look like a valid KMZ file."
+        },
+        "tcx_to_gpx": {
+            "error": "This file doesn't look like a valid TCX file."
+        },
+        "gpx_to_tcx": {
+            "error": "This file doesn't look like a valid GPX file."
+        },
+        "fit_to_gpx": {
+            "error": "This file doesn't look like a valid FIT file."
+        },
+        "gpx_to_fit": {
+            "error": "This file doesn't look like a valid GPX file."
+        },
+        "geojson_to_gpx": {
+            "error": "This file doesn't look like a valid GeoJSON file."
+        },
+        "gpx_to_geojson": {
+            "error": "This file doesn't look like a valid GPX file."
         }
     }
 }

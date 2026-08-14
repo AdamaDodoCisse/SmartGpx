@@ -97,6 +97,41 @@ tools:
         meta_description: 'Convertissez un fichier GPX en KML, directement dans votre navigateur.'
         title: 'GPX → KML'
         intro: 'Déposez un fichier GPX pour le convertir en KML.'
+    kmz_to_gpx:
+        meta_title: 'KMZ → GPX'
+        meta_description: 'Convertissez un fichier KMZ en GPX, directement dans votre navigateur.'
+        title: 'KMZ → GPX'
+        intro: 'Déposez un fichier KMZ pour le convertir en GPX.'
+    tcx_to_gpx:
+        meta_title: 'TCX → GPX'
+        meta_description: 'Convertissez un fichier TCX en GPX, directement dans votre navigateur.'
+        title: 'TCX → GPX'
+        intro: 'Déposez un fichier TCX pour le convertir en GPX.'
+    gpx_to_tcx:
+        meta_title: 'GPX → TCX'
+        meta_description: 'Convertissez un fichier GPX en TCX, directement dans votre navigateur.'
+        title: 'GPX → TCX'
+        intro: 'Déposez un fichier GPX pour le convertir en TCX.'
+    fit_to_gpx:
+        meta_title: 'FIT → GPX'
+        meta_description: 'Convertissez un fichier FIT en GPX, directement dans votre navigateur.'
+        title: 'FIT → GPX'
+        intro: 'Déposez un fichier FIT pour le convertir en GPX.'
+    gpx_to_fit:
+        meta_title: 'GPX → FIT'
+        meta_description: 'Convertissez un fichier GPX en fichier FIT de course à pied, directement dans votre navigateur.'
+        title: 'GPX → FIT'
+        intro: 'Déposez un fichier GPX pour le convertir en fichier FIT de course à pied.'
+    geojson_to_gpx:
+        meta_title: 'GeoJSON → GPX'
+        meta_description: 'Convertissez un fichier GeoJSON en GPX, directement dans votre navigateur.'
+        title: 'GeoJSON → GPX'
+        intro: 'Déposez un fichier GeoJSON pour le convertir en GPX.'
+    gpx_to_geojson:
+        meta_title: 'GPX → GeoJSON'
+        meta_description: 'Convertissez un fichier GPX en GeoJSON, directement dans votre navigateur.'
+        title: 'GPX → GeoJSON'
+        intro: 'Déposez un fichier GPX pour le convertir en GeoJSON.'
 
 pricing:
     title: 'Tarifs'
