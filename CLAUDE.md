@@ -97,7 +97,7 @@ src/
   Extension/        # ExtensionAuthorization, token authenticator, /api/extension/* (Phase 3)
   Billing/          # CreditPack/CreditPurchase, BillingProviderInterface + StripeBillingProvider (Phase 4)
   Shared/          # genuinely cross-domain code only (e.g. TimestampableTrait)
-  Controller/       # top-level pages with no dedicated domain yet (Home, Pricing, Legal)
+  Controller/       # top-level pages with no dedicated domain yet (Home, Pricing, Legal, Guides, Sitemap, Robots)
   # Admin/ — Phase 8
 
 assets/app/src/
@@ -110,13 +110,13 @@ chrome-extension/    # separate npm project — Manifest V3 extension (Phase 3)
   src/background/    # service worker — the only code that reads the stored token
   src/lib/           # env, auth, api, mapsUrl, messages, i18n
 
-templates/         # Twig — every public page
+templates/         # Twig — every public page (guides/ — 8 SEO content pages + index, Phase 7)
 translations/       # Twig i18n catalogs (messages.{en,fr}.yaml)
 migrations/         # Doctrine migrations
 documentation/      # fonctionnel/ (product), technique/ (implementation), decisions/ (ADRs)
 ```
 
-## Current architectural state (through Phase 6)
+## Current architectural state (through Phase 7)
 
 **Phase 1 — Foundation**: Symfony backend skeleton, MySQL/Doctrine, full email+password auth
 (registration, email verification, login with throttling, forgot/reset password),
@@ -181,5 +181,19 @@ widened (a `readAs: 'text' | 'arrayBuffer'` prop, `string | ArrayBuffer` content
 binary formats without changing Phase 5's existing text-based tools. See
 `documentation/technique/{kml-kmz,tcx,fit,geojson}.md`.
 
-Everything else (SEO content, admin) is out of scope until later phases — see the implementation
-order in the product brief and the phase notes scattered through `documentation/fonctionnel/*.md`.
+**Phase 7 — SEO content + sitemap infrastructure**: the "+ SEO" half of the acquisition engine
+(`vision-produit.md`). Eight static, server-rendered guide pages (format comparisons —
+GPX vs KML/TCX/FIT/GeoJSON — plus how-tos for Google Maps → GPX, KMZ, simplifying, and merging)
+under `GuidesController` (`src/Controller/`), each ending in an internal link to the free tool or
+paid converter it's about; EN/FR body prose lives inline in each Twig template, branched on
+`app.request.locale`, rather than in the translation catalogs (unsuited to multi-paragraph
+content). Also added, since none of it existed before: a `SitemapController` (`/sitemap.xml`,
+hand-maintained public-route list, same pattern as the homepage tool map),
+a `RobotsController` (`/robots.txt` — a controller, not a static file, so the sitemap URL it
+points at is always correct for the current host), and canonical/hreflang `<link>` tags in
+`base.html.twig` using Symfony's `_canonical_route` request attribute. The header nav (desktop and
+mobile) gained "Tools"/"Guides" links, since there was previously no way to reach either from the
+site chrome. See `documentation/fonctionnel/guides.md` and `documentation/technique/seo.md`.
+
+Everything else (admin) is out of scope until later phases — see the implementation order in the
+product brief and the phase notes scattered through `documentation/fonctionnel/*.md`.

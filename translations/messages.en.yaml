@@ -34,6 +34,8 @@ layout:
     main_navigation: 'Main navigation'
     default_meta_description: 'SmartGPX converts Google Maps routes to GPX in seconds, plus a full toolbox of free GPS format converters — GPX, KML, KMZ, TCX, FIT, GeoJSON.'
     nav:
+        tools: 'Tools'
+        guides: 'Guides'
         pricing: 'Pricing'
         login: 'Login'
     footer:
@@ -51,7 +53,7 @@ home:
     compatibility: 'Works with Garmin, Wahoo, OsmAnd, Locus Map, Strava and other GPS apps.'
     free_tools:
         title: 'Free GPS Tools'
-        coming_soon: 'These tools are on the way — check back soon.'
+        coming_soon: 'Every tool below is free and runs entirely in your browser.'
         gpx_to_google_maps: 'GPX → Google Maps'
         gpx_simplify: 'GPX Simplify'
         gpx_merge: 'GPX Merge'
@@ -132,6 +134,53 @@ tools:
         meta_description: 'Convert a GPX file to GeoJSON, right in your browser.'
         title: 'GPX → GeoJSON'
         intro: 'Drop a GPX file to convert it to GeoJSON.'
+
+guides:
+    index:
+        meta_title: 'Guides'
+        meta_description: "Guides to help you choose the right GPS format and get the most out of SmartGPX's free conversion tools."
+        title: 'GPS Format Guides'
+        intro: 'Practical guides on GPS file formats and how to convert between them.'
+    gpx_vs_kml:
+        meta_title: 'GPX vs KML: Which Format Should You Use?'
+        meta_description: "Compare GPX and KML file formats — what they're for, which GPS apps support them, and how to convert between the two."
+        title: 'GPX vs KML: Which Should You Use?'
+        intro: "GPX is built for GPS devices and tracking apps; KML is built for Google Earth and mapping. Here's how to tell them apart — and convert between them."
+    gpx_vs_tcx:
+        meta_title: 'GPX vs TCX: Which Format for Your GPS Device?'
+        meta_description: 'GPX and TCX both store GPS tracks, but TCX adds workout data like heart rate and laps. Learn the difference and how to convert between them.'
+        title: "GPX vs TCX: What's the Difference?"
+        intro: "TCX extends GPX with training data — heart rate, cadence, laps. Here's when you need one over the other."
+    gpx_vs_fit:
+        meta_title: 'GPX vs FIT: Understanding the Difference'
+        meta_description: "FIT is Garmin's compact binary format for activity data; GPX is the universal, human-readable standard for GPS tracks. Learn when to use each."
+        title: 'GPX vs FIT: Understanding the Difference'
+        intro: "FIT is a compact binary format built for fitness devices; GPX is a universal, text-based standard most GPS software reads. Here's how they compare."
+    gpx_vs_geojson:
+        meta_title: 'GPX vs GeoJSON: Web Maps vs GPS Devices'
+        meta_description: 'GeoJSON is built for web maps and developers; GPX is built for GPS devices and outdoor apps. Learn the difference and how to convert between them.'
+        title: "GPX vs GeoJSON: What's the Difference?"
+        intro: "GeoJSON is the standard for web mapping libraries; GPX is the standard for GPS devices and hiking/cycling apps. Here's when to use each."
+    google_maps_to_gpx:
+        meta_title: 'How to Convert a Google Maps Route to GPX'
+        meta_description: 'Step-by-step: turn any Google Maps route into a GPX file you can load onto a Garmin, Wahoo, or any GPS app — in seconds, no software to install.'
+        title: 'How to Convert a Google Maps Route to GPX'
+        intro: "Planned a route in Google Maps but need it on your GPS device? Here's the fastest way to turn it into a standard GPX file."
+    kmz:
+        meta_title: 'What Is a KMZ File, and How Do You Convert It to GPX?'
+        meta_description: "KMZ is a zipped KML file exported by Google Earth and Google My Maps. Learn what's inside and how to convert it to GPX for your GPS device."
+        title: 'What Is a KMZ File?'
+        intro: "KMZ is just a KML file (Google Earth's format) zipped up, often with icons or images bundled in. Here's what that means for converting it to GPX."
+    simplify_track:
+        meta_title: 'How to Simplify a GPS Track Without Losing Its Shape'
+        meta_description: "Learn how track simplification works (Ramer-Douglas-Peucker) and how to reduce a dense GPX file's point count while keeping its shape accurate."
+        title: 'How to Simplify a GPS Track Without Losing Its Shape'
+        intro: "A GPX recorded every second can have thousands of points. Here's how simplification trims that down without distorting the route."
+    merge_tracks:
+        meta_title: 'How to Merge Multiple GPX Tracks Into One File'
+        meta_description: 'Combine several GPX files recorded across multiple days or segments into a single track or file — directly in your browser, no software needed.'
+        title: 'How to Merge Multiple GPX Tracks Into One File'
+        intro: "Recorded a multi-day trip as separate GPX files? Here's how to combine them into a single track, or a single file with separate segments."
 
 pricing:
     title: 'Pricing'

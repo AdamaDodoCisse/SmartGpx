@@ -5,6 +5,13 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>{% block title %}SmartGPX{% endblock %}</title>
         <meta name="description" content="{% block meta_description %}{{ 'layout.default_meta_description'|trans }}{% endblock %}">
+        {% set canonical_route = app.request.attributes.get('_canonical_route', app.request.attributes.get('_route')) %}
+        {% if canonical_route %}
+            <link rel="canonical" href="{{ url(canonical_route) }}">
+            <link rel="alternate" hreflang="en" href="{{ url(canonical_route, {_locale: 'en'}) }}">
+            <link rel="alternate" hreflang="fr" href="{{ url(canonical_route, {_locale: 'fr'}) }}">
+            <link rel="alternate" hreflang="x-default" href="{{ url(canonical_route, {_locale: 'en'}) }}">
+        {% endif %}
         {% block stylesheets %}
             {{ vite_entry_link_tags('app') }}
         {% endblock %}
@@ -20,6 +27,8 @@
                 <a href="{{ path('app_home') }}" class="text-lg font-semibold">SmartGPX</a>
 
                 <nav class="hidden items-center gap-6 md:flex" aria-label="{{ 'layout.main_navigation'|trans }}">
+                    <a href="{{ path('app_home') }}#free-tools" class="text-sm font-medium text-muted-foreground hover:text-foreground">{{ 'layout.nav.tools'|trans }}</a>
+                    <a href="{{ path('app_guides_index') }}" class="text-sm font-medium text-muted-foreground hover:text-foreground">{{ 'layout.nav.guides'|trans }}</a>
                     <a href="{{ path('app_pricing') }}" class="text-sm font-medium text-muted-foreground hover:text-foreground">{{ 'layout.nav.pricing'|trans }}</a>
                     <a href="{{ path('app_login') }}" class="text-sm font-medium text-muted-foreground hover:text-foreground">{{ 'layout.nav.login'|trans }}</a>
                 </nav>

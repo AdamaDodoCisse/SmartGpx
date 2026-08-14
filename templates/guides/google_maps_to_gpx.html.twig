@@ -1,0 +1,61 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'guides.google_maps_to_gpx.meta_title'|trans }} — SmartGPX{% endblock %}
+{% block meta_description %}{{ 'guides.google_maps_to_gpx.meta_description'|trans }}{% endblock %}
+
+{% block body %}
+    <div id="guide-google-maps-to-gpx" class="mx-auto max-w-3xl px-4 py-12 prose">
+        <h1 class="text-3xl font-semibold">{{ 'guides.google_maps_to_gpx.title'|trans }}</h1>
+
+        {% if app.request.locale == 'fr' %}
+            <p>Google Maps est pratique pour préparer un itinéraire, mais il n'exporte pas de fichier
+            GPX — le format standard que la plupart des appareils GPS et applications de randonnée ou
+            de vélo attendent. Voici comment récupérer un vrai fichier GPX à partir de votre
+            itinéraire Google Maps.</p>
+
+            <h2>Étape 1 : copier le lien de votre itinéraire</h2>
+            <p>Dans Google Maps, préparez votre itinéraire (départ, arrivée, étapes éventuelles),
+            puis copiez le lien depuis la barre d'adresse ou le bouton « Partager ».</p>
+
+            <h2>Étape 2 : coller le lien dans SmartGPX</h2>
+            <p>Sur la <a href="{{ path('app_home') }}">page d'accueil de SmartGPX</a>, collez ce
+            lien dans le champ de conversion et lancez la conversion. SmartGPX calcule l'itinéraire
+            réel (avec le mode de transport détecté) et génère un fichier GPX complet, avec les
+            points de la trace.</p>
+
+            <h2>Étape 3 : télécharger et importer</h2>
+            <p>Téléchargez le fichier GPX obtenu et importez-le dans votre appareil GPS ou votre
+            application (Garmin Connect, OsmAnd, Locus Map…) — le format GPX est reconnu presque
+            partout.</p>
+
+            <p class="text-sm text-muted-foreground">La conversion Google Maps → GPX est le seul
+            outil payant de SmartGPX (1 crédit par conversion, avec un crédit de bienvenue à
+            l'inscription) — le calcul d'itinéraire s'appuie sur une API tierce, contrairement aux
+            <a href="{{ path('app_guides_index') }}">autres outils</a>, entièrement gratuits et
+            exécutés dans votre navigateur.</p>
+        {% else %}
+            <p>Google Maps is great for planning a route, but it doesn't export a GPX file — the
+            standard format most GPS devices and hiking or cycling apps expect. Here's how to get a
+            real GPX file out of your Google Maps route.</p>
+
+            <h2>Step 1: copy your route's link</h2>
+            <p>In Google Maps, plan your route (start, destination, any stops), then copy the link
+            from the address bar or the "Share" button.</p>
+
+            <h2>Step 2: paste the link into SmartGPX</h2>
+            <p>On the <a href="{{ path('app_home') }}">SmartGPX homepage</a>, paste that link into
+            the conversion field and run the conversion. SmartGPX computes the actual route (with
+            the detected travel mode) and generates a complete GPX file with track points.</p>
+
+            <h2>Step 3: download and import</h2>
+            <p>Download the resulting GPX file and import it into your GPS device or app (Garmin
+            Connect, OsmAnd, Locus Map…) — GPX is recognized almost everywhere.</p>
+
+            <p class="text-sm text-muted-foreground">Google Maps → GPX is SmartGPX's only paid tool
+            (1 credit per conversion, with a free welcome credit on sign-up) — the route calculation
+            relies on a third-party API, unlike the
+            <a href="{{ path('app_guides_index') }}">other tools</a>, which are entirely free and
+            run in your browser.</p>
+        {% endif %}
+    </div>
+{% endblock %}

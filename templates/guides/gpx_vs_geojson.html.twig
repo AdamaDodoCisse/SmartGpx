@@ -1,0 +1,62 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'guides.gpx_vs_geojson.meta_title'|trans }} — SmartGPX{% endblock %}
+{% block meta_description %}{{ 'guides.gpx_vs_geojson.meta_description'|trans }}{% endblock %}
+
+{% block body %}
+    <div id="guide-gpx-vs-geojson" class="mx-auto max-w-3xl px-4 py-12 prose">
+        <h1 class="text-3xl font-semibold">{{ 'guides.gpx_vs_geojson.title'|trans }}</h1>
+
+        {% if app.request.locale == 'fr' %}
+            <p>Le GeoJSON est un format JSON standardisé (RFC 7946) pour représenter des données
+            géographiques — points, lignes, polygones. C'est le format de prédilection des
+            bibliothèques de cartographie web (Leaflet, Mapbox, OpenLayers…) et des développeurs. Le
+            GPX, de son côté, reste le format de référence des appareils GPS grand public.</p>
+
+            <h2>Quand utiliser le GPX</h2>
+            <p>Pour charger un itinéraire sur une montre, un compteur vélo ou dans une application de
+            randonnée, le GPX est le format attendu — le GeoJSON n'y est généralement pas pris en
+            charge.</p>
+
+            <h2>Quand utiliser le GeoJSON</h2>
+            <p>Pour afficher une trace sur une carte web personnalisée, ou pour la traiter avec des
+            outils SIG (QGIS, Turf.js…), le GeoJSON s'intègre nativement à l'écosystème JavaScript et
+            aux bibliothèques cartographiques modernes.</p>
+
+            <h2>Convertir de l'un à l'autre</h2>
+            <ul>
+                <li><a href="{{ path('app_tools_geojson_to_gpx') }}">GeoJSON → GPX</a>, pour charger
+                une trace exportée d'un outil web sur un appareil GPS.</li>
+                <li><a href="{{ path('app_tools_gpx_to_geojson') }}">GPX → GeoJSON</a>, pour afficher
+                une trace GPS sur une carte web.</li>
+            </ul>
+            <p class="text-sm text-muted-foreground">Piège classique : l'ordre des coordonnées en
+            GeoJSON est <code>[longitude, latitude]</code>, inversé par rapport à l'ordre habituel
+            latitude/longitude — notre convertisseur gère cette conversion automatiquement.</p>
+        {% else %}
+            <p>GeoJSON is a standardized JSON format (RFC 7946) for representing geographic data —
+            points, lines, polygons. It's the go-to format for web mapping libraries (Leaflet,
+            Mapbox, OpenLayers…) and developers. GPX, meanwhile, remains the reference format for
+            consumer GPS devices.</p>
+
+            <h2>When to use GPX</h2>
+            <p>To load a route onto a watch, a bike computer, or into a hiking app, GPX is the
+            expected format — GeoJSON is typically not supported there.</p>
+
+            <h2>When to use GeoJSON</h2>
+            <p>To display a track on a custom web map, or process it with GIS tools (QGIS, Turf.js…),
+            GeoJSON fits natively into the JavaScript ecosystem and modern mapping libraries.</p>
+
+            <h2>Converting between them</h2>
+            <ul>
+                <li><a href="{{ path('app_tools_geojson_to_gpx') }}">GeoJSON → GPX</a>, to load a
+                track exported from a web tool onto a GPS device.</li>
+                <li><a href="{{ path('app_tools_gpx_to_geojson') }}">GPX → GeoJSON</a>, to display a
+                GPS track on a web map.</li>
+            </ul>
+            <p class="text-sm text-muted-foreground">Common pitfall: GeoJSON's coordinate order is
+            <code>[longitude, latitude]</code>, reversed from the usual latitude/longitude order —
+            our converter handles this automatically.</p>
+        {% endif %}
+    </div>
+{% endblock %}

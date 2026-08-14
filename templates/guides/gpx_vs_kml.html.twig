@@ -1,0 +1,71 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'guides.gpx_vs_kml.meta_title'|trans }} — SmartGPX{% endblock %}
+{% block meta_description %}{{ 'guides.gpx_vs_kml.meta_description'|trans }}{% endblock %}
+
+{% block body %}
+    <div id="guide-gpx-vs-kml" class="mx-auto max-w-3xl px-4 py-12 prose">
+        <h1 class="text-3xl font-semibold">{{ 'guides.gpx_vs_kml.title'|trans }}</h1>
+
+        {% if app.request.locale == 'fr' %}
+            <p>GPX et KML servent tous les deux à stocker des points, des traces et des itinéraires,
+            mais ils viennent de deux mondes différents. Le GPX (GPS Exchange Format) a été conçu
+            spécifiquement pour les appareils GPS et les applications de randonnée, de vélo ou de
+            navigation. Le KML (Keyhole Markup Language) est le format de Google Earth et de Google
+            My Maps, pensé pour la cartographie et la visualisation, avec des options de style
+            (icônes, couleurs, info-bulles) que le GPX n'a pas.</p>
+
+            <h2>Quand utiliser le GPX</h2>
+            <p>Si vous voulez charger un itinéraire sur une montre Garmin, un compteur Wahoo, ou
+            dans une application comme OsmAnd, Locus Map ou Strava, le GPX est le format à utiliser
+            — c'est celui que ces appareils et applications comprennent nativement.</p>
+
+            <h2>Quand utiliser le KML</h2>
+            <p>Si vous préparez une carte à partager ou à visualiser dans Google Earth ou Google My
+            Maps, avec des repères stylisés ou des zones colorées, le KML est plus adapté : ses
+            options de style n'ont pas d'équivalent direct en GPX.</p>
+
+            <h2>Convertir de l'un à l'autre</h2>
+            <p>SmartGPX propose deux convertisseurs gratuits, exécutés entièrement dans votre
+            navigateur — vos fichiers ne quittent jamais votre appareil :</p>
+            <ul>
+                <li><a href="{{ path('app_tools_kml_to_gpx') }}">KML → GPX</a>, pour importer une
+                carte Google Earth / My Maps dans une application GPS.</li>
+                <li><a href="{{ path('app_tools_gpx_to_kml') }}">GPX → KML</a>, pour visualiser une
+                trace GPS dans Google Earth.</li>
+            </ul>
+            <p class="text-sm text-muted-foreground">À noter : le KML n'a pas d'équivalent de la
+            distinction GPX entre trace enregistrée (<code>trk</code>) et itinéraire planifié
+            (<code>rte</code>) — les deux sont fusionnés en une seule ligne lors de la conversion.</p>
+        {% else %}
+            <p>GPX and KML both store points, tracks, and routes, but they come from very different
+            worlds. GPX (GPS Exchange Format) was built specifically for GPS devices and hiking,
+            cycling, and navigation apps. KML (Keyhole Markup Language) is Google Earth and Google
+            My Maps' format, built for mapping and visualization, with styling options (icons,
+            colors, info balloons) that GPX doesn't have.</p>
+
+            <h2>When to use GPX</h2>
+            <p>If you want to load a route onto a Garmin watch, a Wahoo bike computer, or into an
+            app like OsmAnd, Locus Map, or Strava, GPX is the format to use — it's what those
+            devices and apps natively understand.</p>
+
+            <h2>When to use KML</h2>
+            <p>If you're building a map to share or view in Google Earth or Google My Maps, with
+            styled placemarks or colored areas, KML is the better fit — its styling options have no
+            direct GPX equivalent.</p>
+
+            <h2>Converting between them</h2>
+            <p>SmartGPX has two free converters, running entirely in your browser — your files
+            never leave your device:</p>
+            <ul>
+                <li><a href="{{ path('app_tools_kml_to_gpx') }}">KML → GPX</a>, to bring a Google
+                Earth / My Maps map into a GPS app.</li>
+                <li><a href="{{ path('app_tools_gpx_to_kml') }}">GPX → KML</a>, to view a GPS track
+                in Google Earth.</li>
+            </ul>
+            <p class="text-sm text-muted-foreground">Note: KML has no equivalent of GPX's distinction
+            between a recorded track (<code>trk</code>) and a planned route (<code>rte</code>) —
+            both are merged into a single line on conversion.</p>
+        {% endif %}
+    </div>
+{% endblock %}

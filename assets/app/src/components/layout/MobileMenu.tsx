@@ -9,6 +9,8 @@ interface NavLink {
 }
 
 const NAV_LINKS: NavLink[] = [
+    { href: '/#free-tools', labelKey: 'nav.tools' },
+    { href: '/guides', labelKey: 'nav.guides' },
     { href: '/pricing', labelKey: 'nav.pricing' },
     { href: '/login', labelKey: 'nav.login' },
 ];

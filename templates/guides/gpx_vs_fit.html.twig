@@ -1,0 +1,65 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'guides.gpx_vs_fit.meta_title'|trans }} — SmartGPX{% endblock %}
+{% block meta_description %}{{ 'guides.gpx_vs_fit.meta_description'|trans }}{% endblock %}
+
+{% block body %}
+    <div id="guide-gpx-vs-fit" class="mx-auto max-w-3xl px-4 py-12 prose">
+        <h1 class="text-3xl font-semibold">{{ 'guides.gpx_vs_fit.title'|trans }}</h1>
+
+        {% if app.request.locale == 'fr' %}
+            <p>Le FIT (Flexible and Interoperable Data Transfer) est le format binaire développé par
+            Garmin et utilisé par la plupart des montres et compteurs GPS modernes. Contrairement au
+            GPX, qui est un format texte (XML) lisible directement, le FIT est compact et encodé en
+            binaire — plus efficace à stocker et à transmettre, mais illisible sans logiciel dédié.</p>
+
+            <h2>Quand utiliser le GPX</h2>
+            <p>Le GPX reste le format le plus universellement compris : la quasi-totalité des
+            applications GPS, sites de partage d'itinéraires et logiciels de cartographie l'acceptent
+            en entrée.</p>
+
+            <h2>Quand utiliser le FIT</h2>
+            <p>Le FIT est ce que produit nativement un appareil Garmin (et beaucoup d'autres marques)
+            après un enregistrement d'activité. Si vous devez importer un enregistrement directement
+            dans un logiciel orienté sport (Garmin Connect, TrainingPeaks…), le FIT est souvent le
+            format attendu.</p>
+
+            <h2>Convertir de l'un à l'autre</h2>
+            <ul>
+                <li><a href="{{ path('app_tools_fit_to_gpx') }}">FIT → GPX</a>, pour réutiliser un
+                enregistrement d'activité comme itinéraire dans une application GPS classique.</li>
+                <li><a href="{{ path('app_tools_gpx_to_fit') }}">GPX → FIT</a>, pour importer un
+                itinéraire planifié dans un appareil ou service qui attend du FIT.</li>
+            </ul>
+            <p class="text-sm text-muted-foreground">À noter : notre convertisseur GPX → FIT cible un
+            profil d'activité « course à pied » minimal — sans agrégats calculés comme la distance
+            totale ou les calories, qui ne peuvent pas être fabriqués de façon fiable à partir d'un
+            simple itinéraire.</p>
+        {% else %}
+            <p>FIT (Flexible and Interoperable Data Transfer) is the binary format developed by
+            Garmin and used by most modern GPS watches and bike computers. Unlike GPX, a plain-text
+            (XML) format you can read directly, FIT is compact and binary-encoded — more efficient
+            to store and transmit, but unreadable without dedicated software.</p>
+
+            <h2>When to use GPX</h2>
+            <p>GPX remains the most universally understood format: nearly every GPS app, route-
+            sharing site, and mapping tool accepts it as input.</p>
+
+            <h2>When to use FIT</h2>
+            <p>FIT is what a Garmin device (and many other brands) natively produces after recording
+            an activity. If you need to import a recording directly into sport-focused software
+            (Garmin Connect, TrainingPeaks…), FIT is often the expected format.</p>
+
+            <h2>Converting between them</h2>
+            <ul>
+                <li><a href="{{ path('app_tools_fit_to_gpx') }}">FIT → GPX</a>, to reuse a recorded
+                activity as a route in a regular GPS app.</li>
+                <li><a href="{{ path('app_tools_gpx_to_fit') }}">GPX → FIT</a>, to import a planned
+                route into a device or service that expects FIT.</li>
+            </ul>
+            <p class="text-sm text-muted-foreground">Note: our GPX → FIT converter targets a minimal
+            "running activity" profile — without computed aggregates like total distance or
+            calories, which can't be reliably fabricated from a plain route.</p>
+        {% endif %}
+    </div>
+{% endblock %}

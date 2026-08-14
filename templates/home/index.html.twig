@@ -22,7 +22,7 @@
 
     {{ vite_entry_script_tags('convertHero', { dependency: 'react' }) }}
 
-    <div class="mx-auto max-w-6xl px-4 pb-16">
+    <div id="free-tools" class="mx-auto max-w-6xl px-4 pb-16">
         <h2 class="text-center text-2xl font-semibold">{{ 'home.free_tools.title'|trans }}</h2>
         <ul class="mt-6 grid grid-cols-2 gap-3 text-center text-sm text-muted-foreground sm:grid-cols-3 md:grid-cols-4">
             {% for tool, route in {

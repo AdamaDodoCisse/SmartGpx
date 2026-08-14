@@ -34,6 +34,8 @@ layout:
     main_navigation: 'Navigation principale'
     default_meta_description: "SmartGPX convertit vos itinéraires Google Maps en GPX en quelques secondes, avec une boîte à outils complète de convertisseurs GPS gratuits — GPX, KML, KMZ, TCX, FIT, GeoJSON."
     nav:
+        tools: 'Outils'
+        guides: 'Guides'
         pricing: 'Tarifs'
         login: 'Connexion'
     footer:
@@ -51,7 +53,7 @@ home:
     compatibility: 'Compatible avec Garmin, Wahoo, OsmAnd, Locus Map, Strava et d’autres applications GPS.'
     free_tools:
         title: 'Outils GPS gratuits'
-        coming_soon: 'Ces outils arrivent bientôt — revenez prochainement.'
+        coming_soon: "Chaque outil ci-dessous est gratuit et s'exécute entièrement dans votre navigateur."
         gpx_to_google_maps: 'GPX → Google Maps'
         gpx_simplify: 'Simplifier un GPX'
         gpx_merge: 'Fusionner des GPX'
@@ -132,6 +134,53 @@ tools:
         meta_description: 'Convertissez un fichier GPX en GeoJSON, directement dans votre navigateur.'
         title: 'GPX → GeoJSON'
         intro: 'Déposez un fichier GPX pour le convertir en GeoJSON.'
+
+guides:
+    index:
+        meta_title: 'Guides'
+        meta_description: "Des guides pour choisir le bon format GPS et tirer parti des outils de conversion gratuits de SmartGPX."
+        title: 'Guides sur les formats GPS'
+        intro: 'Des guides pratiques sur les formats de fichiers GPS et comment les convertir.'
+    gpx_vs_kml:
+        meta_title: 'GPX ou KML : quel format choisir ?'
+        meta_description: "Comparez les formats GPX et KML : leurs usages, les applications GPS compatibles, et comment convertir de l'un à l'autre."
+        title: 'GPX ou KML : quel format choisir ?'
+        intro: "Le GPX est conçu pour les appareils GPS et les applications de suivi ; le KML pour Google Earth et la cartographie. Voici comment les distinguer — et les convertir."
+    gpx_vs_tcx:
+        meta_title: 'GPX ou TCX : quel format pour votre appareil GPS ?'
+        meta_description: "GPX et TCX stockent tous deux des traces GPS, mais TCX ajoute des données d'entraînement comme la fréquence cardiaque et les tours. Découvrez la différence."
+        title: 'GPX ou TCX : quelle différence ?'
+        intro: "Le TCX étend le GPX avec des données d'entraînement — fréquence cardiaque, cadence, tours. Voici quand utiliser l'un plutôt que l'autre."
+    gpx_vs_fit:
+        meta_title: 'GPX ou FIT : comprendre la différence'
+        meta_description: "Le FIT est le format binaire compact de Garmin pour les données d'activité ; le GPX est le standard universel et lisible pour les traces GPS. Découvrez quand utiliser chacun."
+        title: 'GPX ou FIT : comprendre la différence'
+        intro: "Le FIT est un format binaire compact conçu pour les appareils sportifs ; le GPX est un standard universel en texte que la plupart des logiciels GPS lisent. Voici la comparaison."
+    gpx_vs_geojson:
+        meta_title: 'GPX ou GeoJSON : cartes web ou appareils GPS ?'
+        meta_description: "Le GeoJSON est conçu pour les cartes web et les développeurs ; le GPX pour les appareils GPS et les applications outdoor. Découvrez la différence."
+        title: 'GPX ou GeoJSON : quelle différence ?'
+        intro: "Le GeoJSON est le standard des bibliothèques de cartographie web ; le GPX est le standard des appareils GPS et des applications de randonnée ou de vélo. Voici quand utiliser chacun."
+    google_maps_to_gpx:
+        meta_title: 'Comment convertir un itinéraire Google Maps en GPX'
+        meta_description: "Étape par étape : transformez un itinéraire Google Maps en fichier GPX utilisable sur un Garmin, un Wahoo ou toute application GPS — en quelques secondes."
+        title: 'Comment convertir un itinéraire Google Maps en GPX'
+        intro: "Vous avez préparé un itinéraire sur Google Maps mais avez besoin de l'avoir sur votre GPS ? Voici comment le transformer en fichier GPX standard, rapidement."
+    kmz:
+        meta_title: "Qu'est-ce qu'un fichier KMZ et comment le convertir en GPX ?"
+        meta_description: "Le KMZ est un fichier KML compressé, exporté par Google Earth ou Google My Maps. Découvrez ce qu'il contient et comment le convertir en GPX."
+        title: "Qu'est-ce qu'un fichier KMZ ?"
+        intro: "Un KMZ est simplement un fichier KML (le format de Google Earth) compressé, souvent avec des icônes ou des images. Voici ce que cela implique pour le convertir en GPX."
+    simplify_track:
+        meta_title: 'Comment simplifier une trace GPS sans perdre sa forme'
+        meta_description: "Découvrez comment fonctionne la simplification de trace (Ramer-Douglas-Peucker) et comment réduire le nombre de points d'un GPX tout en gardant sa forme."
+        title: 'Comment simplifier une trace GPS sans perdre sa forme'
+        intro: "Un GPX enregistré chaque seconde peut contenir des milliers de points. Voici comment la simplification réduit ce nombre sans déformer l'itinéraire."
+    merge_tracks:
+        meta_title: 'Comment fusionner plusieurs traces GPX en un seul fichier'
+        meta_description: "Combinez plusieurs fichiers GPX enregistrés sur plusieurs jours ou segments en une seule trace ou un seul fichier — directement dans votre navigateur."
+        title: 'Comment fusionner plusieurs traces GPX en un seul fichier'
+        intro: "Vous avez enregistré un voyage de plusieurs jours en plusieurs fichiers GPX ? Voici comment les combiner en une seule trace, ou en un seul fichier à segments distincts."
 
 pricing:
     title: 'Tarifs'

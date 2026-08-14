@@ -1,0 +1,31 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'guides.index.meta_title'|trans }} — SmartGPX{% endblock %}
+{% block meta_description %}{{ 'guides.index.meta_description'|trans }}{% endblock %}
+
+{% block body %}
+    <div id="guides-index" class="mx-auto max-w-4xl px-4 py-12">
+        <h1 class="text-center text-3xl font-semibold">{{ 'guides.index.title'|trans }}</h1>
+        <p class="mt-2 text-center text-muted-foreground">{{ 'guides.index.intro'|trans }}</p>
+
+        <ul class="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2">
+            {% for guide, route in {
+                gpx_vs_kml: 'app_guides_gpx_vs_kml',
+                gpx_vs_tcx: 'app_guides_gpx_vs_tcx',
+                gpx_vs_fit: 'app_guides_gpx_vs_fit',
+                gpx_vs_geojson: 'app_guides_gpx_vs_geojson',
+                google_maps_to_gpx: 'app_guides_google_maps_to_gpx',
+                kmz: 'app_guides_kmz',
+                simplify_track: 'app_guides_simplify_track',
+                merge_tracks: 'app_guides_merge_tracks',
+            } %}
+                <li class="rounded-md border border-border p-4">
+                    <a href="{{ path(route) }}" class="font-medium hover:text-foreground">
+                        {{ ('guides.' ~ guide ~ '.title')|trans }}
+                    </a>
+                    <p class="mt-1 text-sm text-muted-foreground">{{ ('guides.' ~ guide ~ '.intro')|trans }}</p>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endblock %}

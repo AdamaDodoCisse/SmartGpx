@@ -1,0 +1,48 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'guides.merge_tracks.meta_title'|trans }} — SmartGPX{% endblock %}
+{% block meta_description %}{{ 'guides.merge_tracks.meta_description'|trans }}{% endblock %}
+
+{% block body %}
+    <div id="guide-merge-tracks" class="mx-auto max-w-3xl px-4 py-12 prose">
+        <h1 class="text-3xl font-semibold">{{ 'guides.merge_tracks.title'|trans }}</h1>
+
+        {% if app.request.locale == 'fr' %}
+            <p>Un voyage de plusieurs jours donne souvent lieu à plusieurs fichiers GPX distincts —
+            un par jour, ou un par segment de trajet. Pour visualiser l'ensemble comme un seul
+            parcours, ou l'importer d'un coup dans une application, il faut fusionner ces fichiers.</p>
+
+            <h2>Deux façons de fusionner</h2>
+            <p>Notre outil propose deux modes : fusionner en une seule trace continue (les fichiers
+            sont mis bout à bout, dans l'ordre où vous les avez ajoutés), ou conserver des segments
+            distincts au sein d'un même fichier — utile si vous voulez garder la distinction visuelle
+            entre chaque journée ou chaque tronçon.</p>
+
+            <h2>Fusionner des fichiers GPX</h2>
+            <p>Utilisez notre <a href="{{ path('app_tools_gpx_merge') }}">outil GPX Merge</a>
+            gratuit : déposez au moins deux fichiers GPX, choisissez le mode de fusion, et
+            téléchargez le fichier combiné — entièrement traité dans votre navigateur.</p>
+
+            <p class="text-sm text-muted-foreground">L'ordre d'ajout des fichiers détermine l'ordre
+            de la trace fusionnée — pensez à les déposer dans l'ordre chronologique de votre
+            parcours.</p>
+        {% else %}
+            <p>A multi-day trip often ends up as several separate GPX files — one per day, or one
+            per leg of the journey. To view the whole thing as a single route, or import it all at
+            once into an app, you need to merge those files.</p>
+
+            <h2>Two ways to merge</h2>
+            <p>Our tool offers two modes: merge into a single continuous track (files are stitched
+            together in the order you added them), or keep separate segments within one file —
+            useful if you want to preserve the visual distinction between each day or leg.</p>
+
+            <h2>Merging GPX files</h2>
+            <p>Use our free <a href="{{ path('app_tools_gpx_merge') }}">GPX Merge tool</a>: drop two
+            or more GPX files, choose the merge mode, and download the combined file — entirely
+            processed in your browser.</p>
+
+            <p class="text-sm text-muted-foreground">The order you add files in determines the
+            order of the merged track — drop them in the chronological order of your trip.</p>
+        {% endif %}
+    </div>
+{% endblock %}

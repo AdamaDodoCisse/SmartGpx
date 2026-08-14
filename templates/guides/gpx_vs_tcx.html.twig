@@ -1,0 +1,65 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'guides.gpx_vs_tcx.meta_title'|trans }} — SmartGPX{% endblock %}
+{% block meta_description %}{{ 'guides.gpx_vs_tcx.meta_description'|trans }}{% endblock %}
+
+{% block body %}
+    <div id="guide-gpx-vs-tcx" class="mx-auto max-w-3xl px-4 py-12 prose">
+        <h1 class="text-3xl font-semibold">{{ 'guides.gpx_vs_tcx.title'|trans }}</h1>
+
+        {% if app.request.locale == 'fr' %}
+            <p>Le GPX et le TCX stockent tous les deux une trace GPS — une suite de points avec
+            latitude, longitude et parfois altitude et horodatage. La différence tient à ce qu'ils
+            ajoutent autour de cette trace : le TCX (Training Center XML), format créé par Garmin,
+            organise les points en tours (<em>laps</em>) et peut inclure des données
+            d'entraînement — fréquence cardiaque, cadence — que le GPX ne prévoit pas nativement.</p>
+
+            <h2>Quand utiliser le GPX</h2>
+            <p>Pour un itinéraire à suivre (randonnée, road trip, tour à vélo), le GPX est le format
+            le plus universellement accepté par les appareils GPS et les applications de
+            navigation.</p>
+
+            <h2>Quand utiliser le TCX</h2>
+            <p>Pour une activité sportive enregistrée — course à pied, vélo, natation — où les tours
+            et les données physiologiques comptent, le TCX conserve des informations qu'un simple
+            GPX perdrait.</p>
+
+            <h2>Convertir de l'un à l'autre</h2>
+            <ul>
+                <li><a href="{{ path('app_tools_tcx_to_gpx') }}">TCX → GPX</a>, pour réutiliser une
+                activité enregistrée comme itinéraire dans une autre application.</li>
+                <li><a href="{{ path('app_tools_gpx_to_tcx') }}">GPX → TCX</a>, pour importer un
+                itinéraire dans un logiciel d'entraînement qui attend du TCX.</li>
+            </ul>
+            <p class="text-sm text-muted-foreground">À noter : le TCX n'a pas de notion de point
+            d'intérêt ou d'itinéraire planifié — seule la trace est convertie, et un aller-retour
+            GPX → TCX → GPX ne restitue pas les tours d'origine (ils sont aplatis en une seule
+            trace continue).</p>
+        {% else %}
+            <p>GPX and TCX both store a GPS track — a sequence of points with latitude, longitude,
+            and often elevation and timestamps. The difference is in what they add around that
+            track: TCX (Training Center XML), a format created by Garmin, organizes points into
+            laps and can carry workout data — heart rate, cadence — that GPX has no native slot
+            for.</p>
+
+            <h2>When to use GPX</h2>
+            <p>For a route you plan to follow (a hike, a road trip, a bike tour), GPX is the most
+            universally accepted format across GPS devices and navigation apps.</p>
+
+            <h2>When to use TCX</h2>
+            <p>For a recorded workout — a run, a ride, a swim — where laps and physiological data
+            matter, TCX keeps information a plain GPX would lose.</p>
+
+            <h2>Converting between them</h2>
+            <ul>
+                <li><a href="{{ path('app_tools_tcx_to_gpx') }}">TCX → GPX</a>, to reuse a recorded
+                activity as a route in another app.</li>
+                <li><a href="{{ path('app_tools_gpx_to_tcx') }}">GPX → TCX</a>, to import a route
+                into training software that expects TCX.</li>
+            </ul>
+            <p class="text-sm text-muted-foreground">Note: TCX has no concept of a waypoint or a
+            planned route — only the track is converted, and a GPX → TCX → GPX round trip won't
+            restore the original laps (they get flattened into one continuous track).</p>
+        {% endif %}
+    </div>
+{% endblock %}
