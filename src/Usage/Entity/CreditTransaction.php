@@ -12,10 +12,11 @@ use Doctrine\ORM\Mapping as ORM;
  * Ligne de ledger immuable — jamais modifiée après création (pas de TimestampableTrait :
  * updatedAt n'aurait aucun sens sur une ligne qui n'est jamais mise à jour).
  *
- * conversionId référence App\Conversion\Entity\Conversion sans relation Doctrine ni contrainte
- * FK : Usage reste indépendant du domaine Conversion (même logique que Identity qui ignore
+ * conversionId référence App\Conversion\Entity\Conversion et creditPurchaseId référence
+ * App\Billing\Entity\CreditPurchase, tous deux sans relation Doctrine ni contrainte FK : Usage
+ * reste indépendant des domaines Conversion et Billing (même logique que Identity qui ignore
  * l'existence de Usage, voir UserRegisteredEvent) — un simple entier suffit pour la traçabilité,
- * une jointure applicative reste possible via ConversionRepository si nécessaire.
+ * une jointure applicative reste possible via leurs repositories respectifs si nécessaire.
  */
 #[ORM\Entity(repositoryClass: CreditTransactionRepository::class)]
 #[ORM\Table(name: 'credit_transaction')]
@@ -43,6 +44,9 @@ class CreditTransaction
     #[ORM\Column(nullable: true)]
     private ?int $conversionId;
 
+    #[ORM\Column(nullable: true)]
+    private ?int $creditPurchaseId;
+
     #[ORM\Column(type: 'datetime_immutable')]
     private \DateTimeImmutable $createdAt;
 
@@ -52,12 +56,14 @@ class CreditTransaction
         int $amount,
         int $balanceAfter,
         ?int $conversionId = null,
+        ?int $creditPurchaseId = null,
     ) {
         $this->creditAccount = $creditAccount;
         $this->type = $type;
         $this->amount = $amount;
         $this->balanceAfter = $balanceAfter;
         $this->conversionId = $conversionId;
+        $this->creditPurchaseId = $creditPurchaseId;
         $this->createdAt = new \DateTimeImmutable();
     }
 
@@ -89,6 +95,11 @@ class CreditTransaction
     public function getConversionId(): ?int
     {
         return $this->conversionId;
+    }
+
+    public function getCreditPurchaseId(): ?int
+    {
+        return $this->creditPurchaseId;
     }
 
     public function getCreatedAt(): \DateTimeImmutable

@@ -27,7 +27,8 @@ there before re-deciding something already settled.
 - **Interfaces only at true external boundaries** (a real third-party API, a payment provider) —
   not speculatively. `RoutingProviderInterface` (implemented, Phase 2 — see
   `documentation/decisions/ADR-001-routing-provider.md`) and `BillingProviderInterface`
-  (Phase 4) are the only ones planned/existing.
+  (implemented, Phase 4 — see `documentation/decisions/ADR-006-billing-provider.md`) are the
+  only ones planned/existing.
 - **The Chrome extension is a separate npm project** (`chrome-extension/`), not part of
   `assets/app/` — see `documentation/decisions/ADR-005-extension-authentication.md`. It
   authenticates via a revocable opaque token (`ExtensionAuthorization`), never a session cookie.
@@ -93,9 +94,10 @@ src/
   Conversion/       # Google Maps URL parsing, GPX generation, Conversion entity/API (Phase 2)
   Usage/            # credit ledger (CreditAccount/CreditTransaction), reserve/consume/release (Phase 2)
   Extension/        # ExtensionAuthorization, token authenticator, /api/extension/* (Phase 3)
+  Billing/          # CreditPack/CreditPurchase, BillingProviderInterface + StripeBillingProvider (Phase 4)
   Shared/          # genuinely cross-domain code only (e.g. TimestampableTrait)
   Controller/       # top-level pages with no dedicated domain yet (Home, Pricing, Legal)
-  # Billing/, Admin/ — Phase 4+
+  # Admin/ — Phase 8
 
 assets/app/src/
   entries/         # Vite entry points (one per React island)
@@ -113,7 +115,7 @@ migrations/         # Doctrine migrations
 documentation/      # fonctionnel/ (product), technique/ (implementation), decisions/ (ADRs)
 ```
 
-## Current architectural state (through Phase 3)
+## Current architectural state (through Phase 4)
 
 **Phase 1 — Foundation**: Symfony backend skeleton, MySQL/Doctrine, full email+password auth
 (registration, email verification, login with throttling, forgot/reset password),
@@ -140,6 +142,20 @@ the stored token. See `documentation/technique/chrome-extension.md`. **Manual en
 verification (real Chrome, real Google Maps route) is still pending** — see
 `chrome-extension/RELEASE_CHECKLIST.md`.
 
-Everything else (Stripe payments, free format tools, SEO content, admin) is out of scope until
-later phases — see the implementation order in the product brief and the phase notes scattered
-through `documentation/fonctionnel/*.md`.
+**Phase 4 — Stripe billing**: credit-pack purchases via hosted Stripe Checkout.
+`BillingProviderInterface`/`StripeBillingProvider`/`FakeBillingProvider` (`src/Billing/`) mirror
+the Phase 2 routing-provider pattern exactly. `CreditPack` (DB-backed pricing catalog, seeded by
+migration) replaces the old hardcoded `/pricing` grid; `CreditPurchase` tracks a Checkout Session
+through to confirmation, keyed by a unique Stripe session id, which is what makes
+`GrantPurchasedCreditsAction` idempotent against Stripe's at-least-once webhook delivery — proven
+by a functional test that posts the same webhook event twice and asserts credits land only once.
+A dedicated `api_billing_webhook` firewall (`security: false`, no `User` to authenticate) hands
+all trust to signature verification inside the controller. See
+`documentation/decisions/ADR-006-billing-provider.md` and `documentation/technique/stripe.md`.
+Manually verified end-to-end against a real Stripe test-mode account (`stripe listen`, test
+card) — real webhook signature, real crediting, idempotence confirmed against a real
+`stripe events resend` redelivery.
+
+Everything else (free format tools, SEO content, admin) is out of scope until later phases — see
+the implementation order in the product brief and the phase notes scattered through
+`documentation/fonctionnel/*.md`.

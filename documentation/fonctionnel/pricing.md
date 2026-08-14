@@ -1,7 +1,8 @@
 # Pricing
 
-**Statut : grille définie par le produit, paiement non implémenté avant la Phase 4.** La page
-`/pricing` (Phase 1) affiche déjà cette grille à titre informatif, sans achat possible.
+**Statut : implémenté (Phase 4).** La page `/pricing` lit la grille depuis `CreditPack` (base de
+données) et permet l'achat via Stripe Checkout — voir `documentation/technique/stripe.md` et
+[ADR-006](../decisions/ADR-006-billing-provider.md).
 
 ## Principe
 
@@ -26,9 +27,10 @@
 | — | 79,99 $ | 1 000 | 0,080 $ | |
 | — | 699,99 $ | 10 000 | 0,070 $ | |
 
-## Architecture (à implémenter en Phase 4)
+## Architecture
 
-Bien que la grille ci-dessus soit fixe au lancement, l'architecture doit permettre de modifier
-prix, nombre de crédits, statut actif/inactif, ordre d'affichage et libellés (Most Popular, Best
-Value) sans réécrire de code métier — pas de valeurs numériques éparpillées dans le code (voir
-`documentation/technique/credit-system.md`, à rédiger en Phase 4).
+La grille ci-dessus est seedée par migration dans la table `credit_pack`
+(`credits`/`price_cents`/`badge`/`display_order`/`active`) — prix, nombre de crédits, statut
+actif/inactif, ordre d'affichage et libellés se modifient sans réécrire de code métier, pas de
+valeurs numériques éparpillées dans le code. Pas encore d'interface d'administration pour éditer
+ces lignes (Phase 8) — voir `documentation/technique/stripe.md`.

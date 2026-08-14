@@ -37,13 +37,16 @@ utilisateur connecté, jamais converti (solde affiché sur la page d'accueil)
 Voir `documentation/technique/google-maps-to-gpx.md` et
 [ADR-002](../decisions/ADR-002-credit-ledger.md).
 
-## Achat de crédits (Phase 4, non implémenté)
+## Achat de crédits (implémenté, Phase 4)
 
 ```
 /pricing → choix d'un pack → paiement Stripe
   → webhook checkout.session.completed → crédits ajoutés (idempotent)
   → utilisateur redirigé, solde visible
 ```
+
+Voir `documentation/technique/stripe.md` et
+[ADR-006](../decisions/ADR-006-billing-provider.md).
 
 ## Utilisation d'un outil gratuit (Phase 5/6, non implémenté)
 

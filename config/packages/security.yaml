@@ -22,6 +22,14 @@ security:
             provider: app_user_provider
             custom_authenticators:
                 - App\Extension\Security\ExtensionTokenAuthenticator
+        # Aucun User à authentifier : Stripe n'est pas un utilisateur. La confiance vient d'une
+        # vérification cryptographique (Stripe-Signature + secret) faite dans le contrôleur via
+        # BillingProviderInterface::parseWebhookEvent(), pas d'un custom_authenticators forcé
+        # dans un moule UserBadge qui n'a rien à authentifier — voir
+        # documentation/decisions/ADR-006-billing-provider.md. Même forme que le firewall "dev".
+        api_billing_webhook:
+            pattern: ^/billing/webhook/
+            security: false
         main:
             lazy: true
             provider: app_user_provider

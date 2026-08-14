@@ -30,10 +30,10 @@ src/<Domaine>/
 ```
 
 `src/Identity/` (Phase 1) suit cette forme et sert de référence pour les domaines suivants ;
-`src/Routing/`, `src/Conversion/` et `src/Usage/` (Phase 2) l'adaptent avec quelques sous-dossiers
-techniques supplémentaires propres à leur usage (`ValueObject/`, `Provider/`, `Result/`,
-`Parser/`, `Gpx/`, `EventListener/`) — même esprit que `Identity/Mailer/`. `Billing/`,
-`Extension/`, `Admin/` restent à construire (Phases 3 à 8).
+`src/Routing/`, `src/Conversion/`, `src/Usage/` (Phase 2), `src/Extension/` (Phase 3) et
+`src/Billing/` (Phase 4) l'adaptent avec quelques sous-dossiers techniques supplémentaires
+propres à leur usage (`ValueObject/`, `Provider/`, `Result/`, `Parser/`, `Gpx/`,
+`EventListener/`) — même esprit que `Identity/Mailer/`. `Admin/` reste à construire (Phase 8).
 
 `src/Shared/` contient uniquement du code réellement transverse à tous les domaines (ex.
 `Shared/Doctrine/TimestampableTrait.php`) — à ne pas utiliser comme fourre-tout.
@@ -69,7 +69,9 @@ prestataire de paiement). Frontières identifiées par le brief produit :
   [ADR-001](../decisions/ADR-001-routing-provider.md)) — abstraction du fournisseur de routing
   (Google Routes en premier, puis OpenRouteService/GraphHopper/OSRM/Valhalla possibles sans
   réécrire le moteur de conversion) ;
-- `BillingProviderInterface` (Phase 4) — abstraction du prestataire de paiement (Stripe).
+- `BillingProviderInterface` (implémentée, Phase 4 — voir
+  [ADR-006](../decisions/ADR-006-billing-provider.md)) — abstraction du prestataire de paiement
+  (Stripe).
 
 Ne pas créer d'interface spéculative « au cas où » pour un composant qui n'a qu'une seule
 implémentation réelle (ex. pas d'`AuthenticationProviderInterface` en Phase 1 pour un Google

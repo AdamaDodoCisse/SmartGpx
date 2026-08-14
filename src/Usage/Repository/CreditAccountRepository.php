@@ -86,6 +86,27 @@ class CreditAccountRepository extends ServiceEntityRepository
     }
 
     /**
+     * Crédite le compte (achat confirmé) — additif, sans garde conditionnelle contrairement à
+     * reserveOne : il n'existe aucun scénario de concurrence où créditer un compte peut
+     * légitimement échouer. Renvoie le solde résultant, à utiliser pour
+     * CreditTransaction::balanceAfter.
+     */
+    public function creditBalance(User $user, int $amount): int
+    {
+        $connection = $this->getEntityManager()->getConnection();
+
+        $connection->executeStatement(
+            'UPDATE credit_account SET balance = balance + :amount WHERE user_id = :userId',
+            ['amount' => $amount, 'userId' => $user->getId()],
+        );
+
+        return (int) $connection->fetchOne(
+            'SELECT balance FROM credit_account WHERE user_id = :userId',
+            ['userId' => $user->getId()],
+        );
+    }
+
+    /**
      * Restaure balance et décrémente reserved — aucune ligne de ledger n'est écrite pour un
      * relâchement : rien n'a jamais été définitivement consommé, une conversion échouée coûte 0.
      */

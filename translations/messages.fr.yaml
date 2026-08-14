@@ -74,9 +74,19 @@ pricing:
     credits_count: '{1}%count% crédit|]1,Inf[%count% crédits'
     per_conversion: '/ conversion'
     buy: 'Acheter {1}%count% crédit|]1,Inf[%count% crédits'
-    coming_soon: "Les achats ne sont pas encore disponibles."
+    sign_in_to_buy: 'Connectez-vous pour acheter'
     one_credit_equals: '1 crédit = 1 conversion Google Maps vers GPX.'
     credits_never_expire: 'Les crédits n’expirent jamais.'
+
+billing:
+    checkout:
+        error: 'Impossible de contacter le prestataire de paiement. Merci de réessayer.'
+        cancelled: 'Paiement annulé — vous n’avez pas été débité.'
+        success:
+            title: 'Paiement reçu'
+            body: 'Vos crédits apparaîtront sur votre compte dans quelques secondes.'
+            credited: '{1}%count% crédit a été ajouté à votre compte.|]1,Inf[%count% crédits ont été ajoutés à votre compte.'
+            back_home: 'Retour à l’accueil'
 
 legal:
     draft_notice: 'Brouillon — en attente de relecture juridique avant mise en production.'

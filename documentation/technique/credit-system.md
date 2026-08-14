@@ -29,6 +29,11 @@ conversion Google Maps → GPX (Conversion\Action\ConvertGoogleMapsToGpxAction)
   → appel au fournisseur de routing
       → échec → ReleaseReservedCreditAction (0 crédit débité)
       → succès → ConsumeReservedCreditAction (ligne de ledger CONVERSION, -1)
+
+achat d'un pack de crédits (Billing\Action\GrantPurchasedCreditsAction, Phase 4)
+  → déclenché par le webhook Stripe checkout.session.completed, jamais par la page de succès
+  → CreditAccountRepository::creditBalance() (ligne de ledger PURCHASE, +N, idempotent)
+  → voir documentation/technique/stripe.md et ADR-006
 ```
 
 ## Consulter un solde
@@ -43,6 +48,8 @@ atomique) — voir ADR-002 pour le raisonnement de concurrence complet.
 
 ## Ce qui n'est pas encore fait
 
-`PURCHASE` (achat via Stripe) et `REFUND` : Phase 4. `ADMIN_ADJUSTMENT` : Phase 8. L'enum
-`CreditTransactionType` les définit déjà pour éviter une migration cassante, mais aucun code
-actuel ne les produit.
+`PURCHASE` est implémenté (Phase 4, voir `documentation/technique/stripe.md`). `REFUND` :
+non traité (un remboursement Stripe ne reprend jamais de crédits automatiquement — décision
+produit documentée dans [ADR-006](../decisions/ADR-006-billing-provider.md), pas un oubli).
+`ADMIN_ADJUSTMENT` : Phase 8. L'enum `CreditTransactionType` définit déjà les deux derniers pour
+éviter une migration cassante, mais aucun code actuel ne les produit.

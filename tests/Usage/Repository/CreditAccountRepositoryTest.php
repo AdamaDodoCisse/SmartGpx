@@ -80,6 +80,17 @@ final class CreditAccountRepositoryTest extends KernelTestCase
         self::assertFalse($this->creditAccountRepository->reserveOne($this->user));
     }
 
+    public function testCreditBalanceAddsToTheBalanceAndReturnsTheResultingBalance(): void
+    {
+        $this->seedAccount(balance: 5, reserved: 0);
+
+        self::assertSame(105, $this->creditAccountRepository->creditBalance($this->user, 100));
+
+        $account = $this->creditAccountRepository->findOneByUserOrFail($this->user);
+        $this->entityManager->refresh($account);
+        self::assertSame(105, $account->getBalance());
+    }
+
     private function seedAccount(int $balance, int $reserved): void
     {
         $account = new CreditAccount($this->user);
