@@ -26,6 +26,39 @@
 
     {{ vite_entry_script_tags('convertHero', { dependency: 'react' }) }}
 
+    <div class="border-t border-border bg-secondary/40">
+        <div class="mx-auto max-w-5xl px-4 py-16">
+            <h2 class="text-center text-2xl font-semibold">{{ 'home.how_it_works.title'|trans }}</h2>
+            <ol class="mt-10 grid grid-cols-1 gap-8 sm:grid-cols-3">
+                {% for step, icon in { 1: 'clipboard-paste', 2: 'route', 3: 'download' } %}
+                    <li class="text-center">
+                        <div class="mx-auto flex size-12 items-center justify-center rounded-full bg-primary text-primary-foreground">
+                            {{ icons.icon(icon, 'size-6') }}
+                        </div>
+                        <h3 class="mt-4 font-semibold">{{ ('home.how_it_works.step_' ~ step ~ '_title')|trans }}</h3>
+                        <p class="mt-2 text-sm text-muted-foreground">{{ ('home.how_it_works.step_' ~ step ~ '_body')|trans }}</p>
+                    </li>
+                {% endfor %}
+            </ol>
+        </div>
+    </div>
+
+    <div class="mx-auto max-w-5xl px-4 py-16">
+        <ul class="grid grid-cols-1 gap-8 sm:grid-cols-3">
+            {% for benefit, icon in { device: 'watch', privacy: 'shield-check', credits: 'infinity' } %}
+                <li class="flex gap-3">
+                    <span class="mt-0.5 shrink-0 text-primary">
+                        {{ icons.icon(icon, 'size-5') }}
+                    </span>
+                    <span>
+                        <span class="block font-medium">{{ ('home.benefits.' ~ benefit ~ '_title')|trans }}</span>
+                        <span class="mt-1 block text-sm text-muted-foreground">{{ ('home.benefits.' ~ benefit ~ '_body')|trans }}</span>
+                    </span>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+
     <div id="free-tools" class="mx-auto max-w-6xl px-4 pb-16">
         <h2 class="text-center text-2xl font-semibold">{{ 'home.free_tools.title'|trans }}</h2>
         <ul class="mt-6 grid grid-cols-2 gap-3 text-center text-sm text-muted-foreground sm:grid-cols-3 md:grid-cols-4">

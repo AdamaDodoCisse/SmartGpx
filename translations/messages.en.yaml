@@ -52,6 +52,21 @@ home:
         cta: 'Convert to GPX'
         coming_soon: 'Coming soon — the converter is not available yet.'
     compatibility: 'Works with Garmin, Wahoo, OsmAnd, Locus Map, Strava and other GPS apps.'
+    how_it_works:
+        title: 'How it works'
+        step_1_title: 'Paste your route'
+        step_1_body: 'Copy a route from Google Maps and paste the link — origin, destination, and any stops are detected automatically.'
+        step_2_title: 'We calculate it'
+        step_2_body: 'SmartGPX computes the real route, including your travel mode, the same way Google Maps would.'
+        step_3_title: 'Download your GPX'
+        step_3_body: 'Get a standards-compliant GPX file, ready to load onto any GPS device or app.'
+    benefits:
+        device_title: 'Works with your GPS device'
+        device_body: 'Garmin, Wahoo, OsmAnd, Locus Map, Strava, and anything else that reads GPX.'
+        privacy_title: 'Your files stay private'
+        privacy_body: 'Every free tool runs entirely in your browser — nothing is ever uploaded.'
+        credits_title: 'Credits never expire'
+        credits_body: 'Buy once, use whenever. No subscription, no monthly reset.'
     free_tools:
         title: 'Free GPS Tools'
         coming_soon: 'Every tool below is free and runs entirely in your browser.'

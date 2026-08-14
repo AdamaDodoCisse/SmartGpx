@@ -52,6 +52,21 @@ home:
         cta: 'Convertir en GPX'
         coming_soon: 'Bientôt disponible — le convertisseur n’est pas encore actif.'
     compatibility: 'Compatible avec Garmin, Wahoo, OsmAnd, Locus Map, Strava et d’autres applications GPS.'
+    how_it_works:
+        title: 'Comment ça marche'
+        step_1_title: 'Collez votre itinéraire'
+        step_1_body: "Copiez un itinéraire depuis Google Maps et collez le lien — origine, destination et étapes sont détectées automatiquement."
+        step_2_title: 'On le calcule'
+        step_2_body: "SmartGPX calcule l'itinéraire réel, mode de transport inclus, de la même façon que Google Maps."
+        step_3_title: 'Téléchargez votre GPX'
+        step_3_body: 'Récupérez un fichier GPX standard, prêt à charger sur n’importe quel appareil ou application GPS.'
+    benefits:
+        device_title: 'Compatible avec votre appareil GPS'
+        device_body: 'Garmin, Wahoo, OsmAnd, Locus Map, Strava, et tout ce qui lit le GPX.'
+        privacy_title: 'Vos fichiers restent privés'
+        privacy_body: "Chaque outil gratuit s'exécute entièrement dans votre navigateur — rien n'est jamais envoyé sur un serveur."
+        credits_title: 'Les crédits n’expirent jamais'
+        credits_body: 'Achetez une fois, utilisez quand vous voulez. Pas d’abonnement, pas de remise à zéro mensuelle.'
     free_tools:
         title: 'Outils GPS gratuits'
         coming_soon: "Chaque outil ci-dessous est gratuit et s'exécute entièrement dans votre navigateur."
