@@ -11,7 +11,8 @@ there before re-deciding something already settled.
 
 ## Stack
 
-- Backend: PHP 8.4, Symfony 8.1, MySQL 8 (Doctrine ORM), Redis (cache + rate limiter).
+- Backend: PHP 8.4, Symfony 8.1, MySQL 8 (Doctrine ORM, dev/prod) / SQLite (tests), Redis (cache
+  + rate limiter).
 - Frontend: React + TypeScript + Vite + Tailwind CSS v4 + shadcn/ui + Lucide React, under
   `assets/app/`.
 - Rendering: Symfony/Twig server-renders all public pages; React is used only as "islands" for
@@ -45,24 +46,42 @@ there before re-deciding something already settled.
   French.
 - **PHPStan level 8** and `php-cs-fixer` must stay clean — run `composer qa` before considering
   any backend change done.
+- **No new Doctrine migrations** (as of Phase 8) — sync schema via `doctrine:schema:update
+  --force` instead; see "Local development" below. `ROLE_ADMIN` is granted only via
+  `bin/console app:user:promote-admin <email>`, never from the admin UI itself — see
+  [ADR-007](documentation/decisions/ADR-007-admin-access-control.md).
 
 ## Local development
 
 MySQL and Redis are assumed already installed and running locally (no Docker Compose — a
-deliberate Phase 1 choice). Put real connection strings in `.env.local` (dev) and
-`.env.test.local` (tests) — both gitignored.
+deliberate Phase 1 choice) for the **dev** environment. Put real connection strings in
+`.env.local` (dev) — gitignored.
 
 ```
 symfony serve                    # or: php -S 127.0.0.1:8000 -t public
 cd assets/app && npm run dev     # Vite dev server (HMR) — run alongside the PHP server
 ```
 
-Database:
+Dev database schema (no migration files — see below):
 
 ```
 php bin/console doctrine:database:create --if-not-exists
-php bin/console doctrine:migrations:migrate
-php bin/console doctrine:migrations:migrate --env=test
+php bin/console doctrine:schema:update --force
+php bin/console app:credit-pack:seed-launch-grid   # only needed once, on a fresh database
+```
+
+**Tests run against SQLite, not MySQL** (`.env.test`'s `DATABASE_URL`, a file under `var/`) — no
+server to start, and `config/packages/doctrine.yaml`'s `when@test` block overrides the driver
+accordingly. **New schema changes are never migrations** (as of Phase 8) — sync straight from
+entity mappings with `doctrine:schema:update --force`, dev and test alike; the handful of
+`migrations/*.php` files already in the repo are Phase 1–7 history, already applied, left as-is
+— don't add new ones. `tests/bootstrap.php` seeds the `credit_pack` launch grid once per test run
+(invoking `app:credit-pack:seed-launch-grid` in-process) since `schema:update` only syncs DDL,
+never data. Recreate the test database after any entity change:
+
+```
+rm -f var/test.db
+php bin/console doctrine:schema:update --force --env=test
 ```
 
 ## Commands
@@ -96,9 +115,9 @@ src/
   Usage/            # credit ledger (CreditAccount/CreditTransaction), reserve/consume/release (Phase 2)
   Extension/        # ExtensionAuthorization, token authenticator, /api/extension/* (Phase 3)
   Billing/          # CreditPack/CreditPurchase, BillingProviderInterface + StripeBillingProvider (Phase 4)
-  Shared/          # genuinely cross-domain code only (e.g. TimestampableTrait)
+  Shared/          # genuinely cross-domain code only (e.g. TimestampableTrait, Pagination/)
   Controller/       # top-level pages with no dedicated domain yet (Home, Pricing, Legal, Guides, Sitemap, Robots)
-  # Admin/ — Phase 8
+  Admin/            # admin back-office: Controller/ + Metrics/ + ComputeAdminMetricsAction (Phase 8) — mutations live in the domain they mutate, not here
 
 assets/app/src/
   entries/         # Vite entry points (one per React island)
@@ -116,7 +135,7 @@ migrations/         # Doctrine migrations
 documentation/      # fonctionnel/ (product), technique/ (implementation), decisions/ (ADRs)
 ```
 
-## Current architectural state (through Phase 7)
+## Current architectural state (through Phase 8)
 
 **Phase 1 — Foundation**: Symfony backend skeleton, MySQL/Doctrine, full email+password auth
 (registration, email verification, login with throttling, forgot/reset password),
@@ -195,5 +214,25 @@ points at is always correct for the current host), and canonical/hreflang `<link
 mobile) gained "Tools"/"Guides" links, since there was previously no way to reach either from the
 site chrome. See `documentation/fonctionnel/guides.md` and `documentation/technique/seo.md`.
 
-Everything else (admin) is out of scope until later phases — see the implementation order in the
-product brief and the phase notes scattered through `documentation/fonctionnel/*.md`.
+**Phase 8 — Admin interface**: the last phase named in the product brief. A simple back-office
+(`src/Admin/`) — dashboard metrics, a paginated user list with a per-user credit ledger and manual
+credit-grant form, a purchase list, full `CreditPack` CRUD (create/edit/deactivate), and a newly
+built failed-conversion log. `ROLE_ADMIN` is granted only via
+`bin/console app:user:promote-admin <email>`, never from the UI itself; every admin route carries
+`#[IsGranted('ROLE_ADMIN')]`, the same per-route pattern used everywhere else in the app. Failed
+conversions weren't tracked at all before this phase — `ConversionFailure` (`src/Conversion/`) is
+a new, always-fully-populated entity, wired into both `ConvertGoogleMapsController` and
+`ExtensionConversionController`'s catch blocks via `LogConversionFailureAction`, so a failure
+triggered from the web app or the Chrome extension is counted either way. Every admin mutation
+lives in the domain of the entity it mutates (`GrantAdminCreditAdjustmentAction` in `Usage/`,
+`CreateCreditPackAction`/`UpdateCreditPackAction` in `Billing/`) — `src/Admin/` itself holds only
+controllers, templates, and the one cross-domain read (`ComputeAdminMetricsAction`). Pagination
+(`src/Shared/Pagination/`) wraps Doctrine ORM's own paginator, no new dependency. Also: schema
+management switched from Doctrine migrations to `doctrine:schema:update --force` (see "Local
+development" above), and the test suite now runs against SQLite instead of MySQL. See
+`documentation/fonctionnel/admin.md`, `documentation/technique/admin.md`, and
+[ADR-007](documentation/decisions/ADR-007-admin-access-control.md).
+
+This completes every phase named in the original product brief. Further work needs a new phase
+scoped explicitly first — see `documentation/fonctionnel/vision-produit.md` and the ADRs before
+assuming a direction that hasn't been decided yet.

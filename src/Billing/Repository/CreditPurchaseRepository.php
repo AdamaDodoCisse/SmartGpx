@@ -5,6 +5,9 @@ declare(strict_types=1);
 namespace App\Billing\Repository;
 
 use App\Billing\Entity\CreditPurchase;
+use App\Billing\Enum\CreditPurchaseStatus;
+use App\Shared\Pagination\PaginatedResult;
+use App\Shared\Pagination\Paginator;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\DBAL\LockMode;
 use Doctrine\Persistence\ManagerRegistry;
@@ -38,5 +41,38 @@ class CreditPurchaseRepository extends ServiceEntityRepository
             ->getQuery()
             ->setLockMode(LockMode::PESSIMISTIC_WRITE)
             ->getOneOrNullResult();
+    }
+
+    /**
+     * @return PaginatedResult<CreditPurchase>
+     */
+    public function findPageOrderedByCreatedAt(Paginator $paginator): PaginatedResult
+    {
+        /** @var PaginatedResult<CreditPurchase> $result */
+        $result = $paginator->paginate($this->createQueryBuilder('p')->orderBy('p.createdAt', 'DESC'));
+
+        return $result;
+    }
+
+    public function countCompleted(): int
+    {
+        return (int) $this->createQueryBuilder('p')
+            ->select('COUNT(p.id)')
+            ->where('p.status = :status')
+            ->setParameter('status', CreditPurchaseStatus::COMPLETED)
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+
+    public function sumAmountCentsCompleted(): int
+    {
+        $sum = $this->createQueryBuilder('p')
+            ->select('SUM(p.amountCents)')
+            ->where('p.status = :status')
+            ->setParameter('status', CreditPurchaseStatus::COMPLETED)
+            ->getQuery()
+            ->getSingleScalarResult();
+
+        return null !== $sum ? (int) $sum : 0;
     }
 }

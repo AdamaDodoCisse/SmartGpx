@@ -35,4 +35,24 @@ class CreditPackRepository extends ServiceEntityRepository
 
         return $this->findOneBy(['publicId' => $publicId, 'active' => true]);
     }
+
+    public function findOneByPublicId(string $publicId): ?CreditPack
+    {
+        if (!Uuid::isValid($publicId)) {
+            return null;
+        }
+
+        return $this->findOneBy(['publicId' => $publicId]);
+    }
+
+    /**
+     * Catalogue complet (actifs + inactifs) — pour l'écran admin, contrairement à
+     * findActiveOrderedForDisplay() qui filtre les inactifs pour /pricing.
+     *
+     * @return list<CreditPack>
+     */
+    public function findAllOrderedForAdmin(): array
+    {
+        return $this->findBy([], ['displayOrder' => 'ASC']);
+    }
 }

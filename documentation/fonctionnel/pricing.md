@@ -29,8 +29,7 @@ données) et permet l'achat via Stripe Checkout — voir `documentation/techniqu
 
 ## Architecture
 
-La grille ci-dessus est seedée par migration dans la table `credit_pack`
+La grille ci-dessus vit dans la table `credit_pack`
 (`credits`/`price_cents`/`badge`/`display_order`/`active`) — prix, nombre de crédits, statut
-actif/inactif, ordre d'affichage et libellés se modifient sans réécrire de code métier, pas de
-valeurs numériques éparpillées dans le code. Pas encore d'interface d'administration pour éditer
-ces lignes (Phase 8) — voir `documentation/technique/stripe.md`.
+actif/inactif et ordre d'affichage se modifient sans réécrire de code métier. Éditable depuis
+`/admin/credit-packs` (Phase 8) — voir `documentation/fonctionnel/admin.md`.

@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace App\Extension\Controller;
 
 use App\Conversion\Action\ConvertGoogleMapsToGpxAction;
+use App\Conversion\Action\LogConversionFailureAction;
+use App\Conversion\Enum\ConversionFailureReason;
 use App\Conversion\Exception\InvalidGoogleMapsUrlException;
 use App\Conversion\Exception\UnsupportedGoogleMapsUrlException;
 use App\Conversion\Gpx\GpxGenerator;
@@ -54,6 +56,7 @@ final class ExtensionConversionController extends AbstractController
     public function create(
         Request $request,
         ConvertGoogleMapsToGpxAction $convertGoogleMapsToGpxAction,
+        LogConversionFailureAction $logConversionFailureAction,
         UrlGeneratorInterface $urlGenerator,
     ): JsonResponse {
         $user = $this->currentUser();
@@ -86,12 +89,20 @@ final class ExtensionConversionController extends AbstractController
         try {
             $conversion = $convertGoogleMapsToGpxAction->execute($user, $dto->url, $travelModeOverride);
         } catch (InvalidGoogleMapsUrlException|UnsupportedGoogleMapsUrlException) {
+            $logConversionFailureAction->execute($user, $dto->url, ConversionFailureReason::UNSUPPORTED_URL);
+
             return $this->errorResponse('conversion.error.unsupported_url', $user, Response::HTTP_UNPROCESSABLE_ENTITY);
         } catch (InsufficientCreditsException) {
+            $logConversionFailureAction->execute($user, $dto->url, ConversionFailureReason::INSUFFICIENT_CREDITS);
+
             return $this->errorResponse('conversion.error.insufficient_credits', $user, Response::HTTP_PAYMENT_REQUIRED);
         } catch (RouteNotFoundException) {
+            $logConversionFailureAction->execute($user, $dto->url, ConversionFailureReason::ROUTE_NOT_FOUND);
+
             return $this->errorResponse('conversion.error.route_not_found', $user, Response::HTTP_UNPROCESSABLE_ENTITY);
         } catch (RoutingProviderUnavailableException) {
+            $logConversionFailureAction->execute($user, $dto->url, ConversionFailureReason::PROVIDER_UNAVAILABLE);
+
             return $this->errorResponse('conversion.error.provider_unavailable', $user, Response::HTTP_SERVICE_UNAVAILABLE);
         }
 

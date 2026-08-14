@@ -1,0 +1,40 @@
+{% extends 'admin/_layout.html.twig' %}
+{% block title %}Admin Dashboard — SmartGPX{% endblock %}
+{% block admin_body %}
+    <h1 class="text-2xl font-semibold">Dashboard</h1>
+
+    <dl class="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-4">
+        <div class="rounded-md border border-border p-4">
+            <dt class="text-sm text-muted-foreground">Total users</dt>
+            <dd class="mt-1 text-2xl font-semibold">{{ metrics.totalUsers }}</dd>
+        </div>
+        <div class="rounded-md border border-border p-4">
+            <dt class="text-sm text-muted-foreground">Credits issued</dt>
+            <dd class="mt-1 text-2xl font-semibold">{{ metrics.totalCreditsIssued }}</dd>
+        </div>
+        <div class="rounded-md border border-border p-4">
+            <dt class="text-sm text-muted-foreground">Credits consumed</dt>
+            <dd class="mt-1 text-2xl font-semibold">{{ metrics.totalCreditsConsumed }}</dd>
+        </div>
+        <div class="rounded-md border border-border p-4">
+            <dt class="text-sm text-muted-foreground">Successful conversions</dt>
+            <dd class="mt-1 text-2xl font-semibold">{{ metrics.totalSuccessfulConversions }}</dd>
+        </div>
+        <div class="rounded-md border border-border p-4">
+            <dt class="text-sm text-muted-foreground">Failed conversions</dt>
+            <dd class="mt-1 text-2xl font-semibold">{{ metrics.totalFailedConversions }}</dd>
+        </div>
+        <div class="rounded-md border border-border p-4">
+            <dt class="text-sm text-muted-foreground">Completed purchases</dt>
+            <dd class="mt-1 text-2xl font-semibold">{{ metrics.totalCompletedPurchases }}</dd>
+        </div>
+        <div class="rounded-md border border-border p-4">
+            <dt class="text-sm text-muted-foreground">Revenue</dt>
+            <dd class="mt-1 text-2xl font-semibold">${{ (metrics.totalRevenueCents / 100)|number_format(2) }}</dd>
+        </div>
+        <div class="rounded-md border border-border p-4">
+            <dt class="text-sm text-muted-foreground">Active credit packs</dt>
+            <dd class="mt-1 text-2xl font-semibold">{{ metrics.activeCreditPackCount }}</dd>
+        </div>
+    </dl>
+{% endblock %}

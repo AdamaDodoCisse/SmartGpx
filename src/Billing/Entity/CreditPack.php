@@ -11,10 +11,8 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Uid\UuidV7;
 
 /**
- * Catalogue des packs de crédits achetables — voir documentation/fonctionnel/pricing.md.
- * Pas encore d'interface d'administration (Phase 8) : les lignes sont créées/modifiées par
- * migration, mais le prix/nombre de crédits/statut actif/ordre ne sont plus figés dans le code
- * comme c'était le cas avant la Phase 4.
+ * Catalogue des packs de crédits achetables — voir documentation/fonctionnel/pricing.md et
+ * documentation/technique/admin.md (CRUD admin, Phase 8).
  */
 #[ORM\Entity(repositoryClass: CreditPackRepository::class)]
 #[ORM\Table(name: 'credit_pack')]
@@ -105,5 +103,21 @@ class CreditPack
     public function isActive(): bool
     {
         return $this->active;
+    }
+
+    public function update(
+        int $credits,
+        int $priceCents,
+        string $currency,
+        ?CreditPackBadge $badge,
+        int $displayOrder,
+        bool $active,
+    ): void {
+        $this->credits = $credits;
+        $this->priceCents = $priceCents;
+        $this->currency = $currency;
+        $this->badge = $badge;
+        $this->displayOrder = $displayOrder;
+        $this->active = $active;
     }
 }

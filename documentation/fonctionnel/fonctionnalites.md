@@ -48,4 +48,5 @@ titre informatif sur `/pricing`.
 ## Admin
 
 Interface simple pour opérer le produit (utilisateurs, ledger de crédits, achats, conversions
-échouées, métriques de base). **Statut : Phase 8, non implémenté.**
+échouées, métriques de base). **Statut : implémenté (Phase 8)** — voir
+`documentation/fonctionnel/admin.md`.

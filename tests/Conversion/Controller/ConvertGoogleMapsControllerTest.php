@@ -4,9 +4,15 @@ declare(strict_types=1);
 
 namespace App\Tests\Conversion\Controller;
 
+use App\Conversion\Enum\ConversionFailureReason;
+use App\Conversion\Repository\ConversionFailureRepository;
 use App\Conversion\Repository\ConversionRepository;
 use App\Identity\Entity\User;
 use App\Identity\Repository\UserRepository;
+use App\Routing\Exception\RouteNotFoundException;
+use App\Routing\Exception\RoutingProviderUnavailableException;
+use App\Routing\Provider\FakeRoutingProvider;
+use App\Routing\Provider\RoutingProviderInterface;
 use App\Usage\Entity\CreditAccount;
 use App\Usage\Repository\CreditAccountRepository;
 use App\Usage\Repository\CreditTransactionRepository;
@@ -102,6 +108,127 @@ final class ConvertGoogleMapsControllerTest extends WebTestCase
         self::assertSame(422, $client->getResponse()->getStatusCode());
     }
 
+    public function testUnsupportedUrlLogsAConversionFailure(): void
+    {
+        $client = static::createClient();
+        $user = $this->createVerifiedUser();
+        $this->seedCredits($user, 1);
+        $client->loginUser($user);
+
+        $crawler = $client->request('GET', '/');
+        $token = $this->extractCsrfToken($crawler);
+
+        $conversionFailureRepository = static::getContainer()->get(ConversionFailureRepository::class);
+        self::assertCount(0, $conversionFailureRepository->findAll());
+
+        $client->request(
+            'POST',
+            '/api/conversions/google-maps',
+            server: ['CONTENT_TYPE' => 'application/json', 'HTTP_X_CSRF_TOKEN' => $token],
+            // Bien formée (passe Assert\Url) mais pas un lien Google Maps — atteint
+            // GoogleMapsUrlParser, contrairement à "not-a-url" qui échoue avant même l'Action.
+            content: self::jsonBody(['url' => 'https://example.com/not-google-maps']),
+        );
+
+        $failures = $conversionFailureRepository->findAll();
+        self::assertCount(1, $failures);
+        self::assertSame(ConversionFailureReason::UNSUPPORTED_URL, $failures[0]->getReason());
+    }
+
+    public function testInsufficientCreditsLogsAConversionFailure(): void
+    {
+        $client = static::createClient();
+        $user = $this->createVerifiedUser();
+        $this->seedCredits($user, 0);
+        $client->loginUser($user);
+
+        $crawler = $client->request('GET', '/');
+        $token = $this->extractCsrfToken($crawler);
+
+        $client->request(
+            'POST',
+            '/api/conversions/google-maps',
+            server: ['CONTENT_TYPE' => 'application/json', 'HTTP_X_CSRF_TOKEN' => $token],
+            content: self::jsonBody(['url' => self::VALID_URL]),
+        );
+
+        $failures = static::getContainer()->get(ConversionFailureRepository::class)->findAll();
+        self::assertCount(1, $failures);
+        self::assertSame(ConversionFailureReason::INSUFFICIENT_CREDITS, $failures[0]->getReason());
+    }
+
+    public function testRouteNotFoundLogsAConversionFailure(): void
+    {
+        $client = static::createClient();
+        $client->disableReboot();
+        $user = $this->createVerifiedUser();
+        $this->seedCredits($user, 1);
+        $client->loginUser($user);
+
+        $routingProvider = static::getContainer()->get(RoutingProviderInterface::class);
+        self::assertInstanceOf(FakeRoutingProvider::class, $routingProvider);
+        $routingProvider->queue(new RouteNotFoundException());
+
+        $crawler = $client->request('GET', '/');
+        $token = $this->extractCsrfToken($crawler);
+
+        $client->request(
+            'POST',
+            '/api/conversions/google-maps',
+            server: ['CONTENT_TYPE' => 'application/json', 'HTTP_X_CSRF_TOKEN' => $token],
+            content: self::jsonBody(['url' => self::VALID_URL]),
+        );
+
+        $failures = static::getContainer()->get(ConversionFailureRepository::class)->findAll();
+        self::assertCount(1, $failures);
+        self::assertSame(ConversionFailureReason::ROUTE_NOT_FOUND, $failures[0]->getReason());
+    }
+
+    public function testProviderUnavailableLogsAConversionFailure(): void
+    {
+        $client = static::createClient();
+        $client->disableReboot();
+        $user = $this->createVerifiedUser();
+        $this->seedCredits($user, 1);
+        $client->loginUser($user);
+
+        $routingProvider = static::getContainer()->get(RoutingProviderInterface::class);
+        self::assertInstanceOf(FakeRoutingProvider::class, $routingProvider);
+        $routingProvider->queue(new RoutingProviderUnavailableException());
+
+        $crawler = $client->request('GET', '/');
+        $token = $this->extractCsrfToken($crawler);
+
+        $client->request(
+            'POST',
+            '/api/conversions/google-maps',
+            server: ['CONTENT_TYPE' => 'application/json', 'HTTP_X_CSRF_TOKEN' => $token],
+            content: self::jsonBody(['url' => self::VALID_URL]),
+        );
+
+        $failures = static::getContainer()->get(ConversionFailureRepository::class)->findAll();
+        self::assertCount(1, $failures);
+        self::assertSame(ConversionFailureReason::PROVIDER_UNAVAILABLE, $failures[0]->getReason());
+    }
+
+    public function testCsrfAndRateLimitGuardsDoNotLogAConversionFailure(): void
+    {
+        $client = static::createClient();
+        $user = $this->createVerifiedUser();
+        $this->seedCredits($user, 1);
+        $client->loginUser($user);
+
+        $client->request(
+            'POST',
+            '/api/conversions/google-maps',
+            server: ['CONTENT_TYPE' => 'application/json', 'HTTP_X_CSRF_TOKEN' => 'not-a-real-token'],
+            content: self::jsonBody(['url' => self::VALID_URL]),
+        );
+
+        self::assertSame(409, $client->getResponse()->getStatusCode());
+        self::assertCount(0, static::getContainer()->get(ConversionFailureRepository::class)->findAll());
+    }
+
     /**
      * @param array<string, mixed> $data
      */
@@ -157,6 +284,11 @@ final class ConvertGoogleMapsControllerTest extends WebTestCase
     {
         $container = static::getContainer();
         $entityManager = $container->get(EntityManagerInterface::class);
+
+        foreach ($container->get(ConversionFailureRepository::class)->findAll() as $failure) {
+            $entityManager->remove($failure);
+        }
+        $entityManager->flush();
 
         foreach ($container->get(ConversionRepository::class)->findAll() as $conversion) {
             $entityManager->remove($conversion);

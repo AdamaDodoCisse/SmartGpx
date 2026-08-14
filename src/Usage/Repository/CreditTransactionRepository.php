@@ -5,6 +5,9 @@ declare(strict_types=1);
 namespace App\Usage\Repository;
 
 use App\Identity\Entity\User;
+use App\Shared\Pagination\PaginatedResult;
+use App\Shared\Pagination\Paginator;
+use App\Usage\Entity\CreditAccount;
 use App\Usage\Entity\CreditTransaction;
 use App\Usage\Enum\CreditTransactionType;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -40,5 +43,39 @@ class CreditTransactionRepository extends ServiceEntityRepository
         ;
 
         return null !== $result;
+    }
+
+    /**
+     * @return PaginatedResult<CreditTransaction>
+     */
+    public function findPageForAccountOrderedByCreatedAt(CreditAccount $creditAccount, Paginator $paginator): PaginatedResult
+    {
+        /** @var PaginatedResult<CreditTransaction> $result */
+        $result = $paginator->paginate(
+            $this->createQueryBuilder('t')
+                ->where('t.creditAccount = :creditAccount')
+                ->setParameter('creditAccount', $creditAccount)
+                ->orderBy('t.createdAt', 'DESC'),
+        );
+
+        return $result;
+    }
+
+    /**
+     * Somme des montants (signés) pour un ensemble de types de transaction — utilisé par le
+     * tableau de bord admin (crédits émis/consommés).
+     *
+     * @param list<CreditTransactionType> $types
+     */
+    public function sumAmountByTypes(array $types): int
+    {
+        $sum = $this->createQueryBuilder('t')
+            ->select('SUM(t.amount)')
+            ->where('t.type IN (:types)')
+            ->setParameter('types', $types)
+            ->getQuery()
+            ->getSingleScalarResult();
+
+        return null !== $sum ? (int) $sum : 0;
     }
 }

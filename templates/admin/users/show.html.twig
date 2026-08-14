@@ -1,0 +1,71 @@
+{% extends 'admin/_layout.html.twig' %}
+{% block title %}{{ targetUser.email }} — Admin — SmartGPX{% endblock %}
+{% block admin_body %}
+    <a href="{{ path('app_admin_users_index') }}" class="text-sm text-muted-foreground hover:underline">&larr; Users</a>
+    <h1 class="mt-2 text-2xl font-semibold">{{ targetUser.email }}</h1>
+
+    <dl class="mt-4 grid grid-cols-2 gap-2 text-sm sm:grid-cols-4">
+        <div>
+            <dt class="text-muted-foreground">Roles</dt>
+            <dd>{{ targetUser.roles|join(', ') }}</dd>
+        </div>
+        <div>
+            <dt class="text-muted-foreground">Verified</dt>
+            <dd>{{ targetUser.verified ? 'Yes' : 'No' }}</dd>
+        </div>
+        <div>
+            <dt class="text-muted-foreground">Registered</dt>
+            <dd>{{ targetUser.createdAt|date('Y-m-d') }}</dd>
+        </div>
+        <div>
+            <dt class="text-muted-foreground">Balance</dt>
+            <dd>{{ creditAccount ? creditAccount.balance : '—' }}</dd>
+        </div>
+    </dl>
+
+    <h2 class="mt-8 text-lg font-semibold">Grant credits</h2>
+    {{ form_start(creditAdjustmentForm, { action: path('app_admin_users_credit_adjustment', { publicId: targetUser.publicId }), method: 'POST' }) }}
+        <div class="flex items-end gap-3">
+            {{ form_row(creditAdjustmentForm.amount) }}
+            <button type="submit" class="rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground">Grant</button>
+        </div>
+    {{ form_end(creditAdjustmentForm) }}
+
+    <h2 class="mt-8 text-lg font-semibold">Credit ledger</h2>
+    {% if ledger is null or ledger.items is empty %}
+        <p class="mt-2 text-sm text-muted-foreground">No credit account or no transactions yet.</p>
+    {% else %}
+        <table class="mt-4 w-full text-left text-sm">
+            <thead>
+                <tr class="border-b border-border text-muted-foreground">
+                    <th class="py-2 font-medium">Type</th>
+                    <th class="py-2 font-medium">Amount</th>
+                    <th class="py-2 font-medium">Balance after</th>
+                    <th class="py-2 font-medium">Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for transaction in ledger.items %}
+                    <tr class="border-b border-border">
+                        <td class="py-3">{{ transaction.type.value }}</td>
+                        <td class="py-3">{{ transaction.amount > 0 ? '+' ~ transaction.amount : transaction.amount }}</td>
+                        <td class="py-3">{{ transaction.balanceAfter }}</td>
+                        <td class="py-3">{{ transaction.createdAt|date('Y-m-d H:i') }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        {% if ledger.total > ledger.perPage %}
+            <div class="mt-4 flex items-center gap-4 text-sm">
+                {% if ledger.hasPrevious %}
+                    <a href="{{ path('app_admin_users_show', { publicId: targetUser.publicId, page: ledger.page - 1 }) }}">&larr; Previous</a>
+                {% endif %}
+                <span>Page {{ ledger.page }} of {{ ledger.lastPage }}</span>
+                {% if ledger.hasNext %}
+                    <a href="{{ path('app_admin_users_show', { publicId: targetUser.publicId, page: ledger.page + 1 }) }}">Next &rarr;</a>
+                {% endif %}
+            </div>
+        {% endif %}
+    {% endif %}
+{% endblock %}

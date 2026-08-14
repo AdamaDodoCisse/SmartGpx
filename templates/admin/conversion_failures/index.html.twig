@@ -1,0 +1,41 @@
+{% extends 'admin/_layout.html.twig' %}
+{% block title %}Failed Conversions — Admin — SmartGPX{% endblock %}
+{% block admin_body %}
+    <h1 class="text-2xl font-semibold">Failed Conversions</h1>
+    <table class="mt-6 w-full text-left text-sm">
+        <thead>
+            <tr class="border-b border-border text-muted-foreground">
+                <th class="py-2 font-medium">User</th>
+                <th class="py-2 font-medium">URL</th>
+                <th class="py-2 font-medium">Reason</th>
+                <th class="py-2 font-medium">Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for failure in result.items %}
+                <tr class="border-b border-border">
+                    <td class="py-3">
+                        <a href="{{ path('app_admin_users_show', { publicId: failure.user.publicId }) }}" class="hover:underline">
+                            {{ failure.user.email }}
+                        </a>
+                    </td>
+                    <td class="max-w-xs truncate py-3" title="{{ failure.sourceUrl }}">{{ failure.sourceUrl }}</td>
+                    <td class="py-3">{{ failure.reason.value }}</td>
+                    <td class="py-3">{{ failure.createdAt|date('Y-m-d H:i') }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    {% if result.total > result.perPage %}
+        <div class="mt-6 flex items-center gap-4 text-sm">
+            {% if result.hasPrevious %}
+                <a href="{{ path('app_admin_conversions_failed', { page: result.page - 1 }) }}">&larr; Previous</a>
+            {% endif %}
+            <span>Page {{ result.page }} of {{ result.lastPage }}</span>
+            {% if result.hasNext %}
+                <a href="{{ path('app_admin_conversions_failed', { page: result.page + 1 }) }}">Next &rarr;</a>
+            {% endif %}
+        </div>
+    {% endif %}
+{% endblock %}

@@ -5,12 +5,17 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>{% block title %}SmartGPX{% endblock %}</title>
         <meta name="description" content="{% block meta_description %}{{ 'layout.default_meta_description'|trans }}{% endblock %}">
-        {% set canonical_route = app.request.attributes.get('_canonical_route', app.request.attributes.get('_route')) %}
+        {# _canonical_route n'existe que pour les routes i18n enregistrées via le raccourci
+           #[Route(['en' => ..., 'fr' => ...])] — les routes internes non localisées (ex.
+           /admin/*, un seul chemin, jamais de pendant .fr) n'ont pas d'alternative de langue,
+           donc pas de balise hreflang à émettre pour elles. #}
+        {% set canonical_route = app.request.attributes.get('_canonical_route') %}
         {% if canonical_route %}
-            <link rel="canonical" href="{{ url(canonical_route) }}">
-            <link rel="alternate" hreflang="en" href="{{ url(canonical_route, {_locale: 'en'}) }}">
-            <link rel="alternate" hreflang="fr" href="{{ url(canonical_route, {_locale: 'fr'}) }}">
-            <link rel="alternate" hreflang="x-default" href="{{ url(canonical_route, {_locale: 'en'}) }}">
+            {% set route_params = app.request.attributes.get('_route_params', {}) %}
+            <link rel="canonical" href="{{ url(canonical_route, route_params) }}">
+            <link rel="alternate" hreflang="en" href="{{ url(canonical_route, route_params|merge({_locale: 'en'})) }}">
+            <link rel="alternate" hreflang="fr" href="{{ url(canonical_route, route_params|merge({_locale: 'fr'})) }}">
+            <link rel="alternate" hreflang="x-default" href="{{ url(canonical_route, route_params|merge({_locale: 'en'})) }}">
         {% endif %}
         {% block stylesheets %}
             {{ vite_entry_link_tags('app') }}

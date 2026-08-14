@@ -33,7 +33,10 @@ src/<Domaine>/
 `src/Routing/`, `src/Conversion/`, `src/Usage/` (Phase 2), `src/Extension/` (Phase 3) et
 `src/Billing/` (Phase 4) l'adaptent avec quelques sous-dossiers techniques supplémentaires
 propres à leur usage (`ValueObject/`, `Provider/`, `Result/`, `Parser/`, `Gpx/`,
-`EventListener/`) — même esprit que `Identity/Mailer/`. `Admin/` reste à construire (Phase 8).
+`EventListener/`) — même esprit que `Identity/Mailer/`. `src/Admin/` (Phase 8) est plus mince que
+les autres — `Controller/`, `Metrics/` et une seule `Action/` (`ComputeAdminMetricsAction`) — la
+plupart des mutations qu'un écran admin déclenche vivent dans le domaine qu'elles mutent, pas
+dans `Admin/` ; voir [ADR-007](../decisions/ADR-007-admin-access-control.md).
 
 `src/Shared/` contient uniquement du code réellement transverse à tous les domaines (ex.
 `Shared/Doctrine/TimestampableTrait.php`) — à ne pas utiliser comme fourre-tout.

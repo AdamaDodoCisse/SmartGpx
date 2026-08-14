@@ -23,8 +23,13 @@ doctrine:
 when@test:
     doctrine:
         dbal:
-            # "TEST_TOKEN" is typically set by ParaTest
-            dbname_suffix: '_test%env(default::TEST_TOKEN)%'
+            # SQLite plutôt que MySQL en test : pas de serveur à démarrer, schéma recréé à la
+            # volée via `doctrine:schema:update --force` (pas de migrations à rejouer).
+            url: '%env(resolve:DATABASE_URL)%'
+            driver: 'pdo_sqlite'
+            server_version: null
+            charset: null
+            default_table_options: []
 
 when@prod:
     doctrine:

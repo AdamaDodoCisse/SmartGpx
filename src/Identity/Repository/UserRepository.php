@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace App\Identity\Repository;
 
 use App\Identity\Entity\User;
+use App\Shared\Pagination\PaginatedResult;
+use App\Shared\Pagination\Paginator;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
@@ -34,6 +36,17 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         }
 
         return $this->findOneBy(['publicId' => $publicId]);
+    }
+
+    /**
+     * @return PaginatedResult<User>
+     */
+    public function findPageOrderedByCreatedAt(Paginator $paginator): PaginatedResult
+    {
+        /** @var PaginatedResult<User> $result */
+        $result = $paginator->paginate($this->createQueryBuilder('u')->orderBy('u.createdAt', 'DESC'));
+
+        return $result;
     }
 
     /**

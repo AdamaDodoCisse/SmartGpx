@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Tests\Extension\Controller;
 
+use App\Conversion\Enum\ConversionFailureReason;
+use App\Conversion\Repository\ConversionFailureRepository;
 use App\Extension\Action\GenerateExtensionAuthorizationAction;
 use App\Extension\Action\RevokeExtensionAuthorizationAction;
 use App\Extension\Repository\ExtensionAuthorizationRepository;
@@ -103,6 +105,25 @@ final class ExtensionConversionControllerTest extends WebTestCase
         self::assertSame(401, $client->getResponse()->getStatusCode());
     }
 
+    public function testUnsupportedUrlLogsAConversionFailure(): void
+    {
+        $client = static::createClient();
+        $user = $this->createUser();
+        $this->seedCredits($user, 1);
+        $token = $this->generateToken($user);
+
+        $client->request(
+            'POST',
+            '/api/extension/conversions/google-maps',
+            server: ['CONTENT_TYPE' => 'application/json', 'HTTP_AUTHORIZATION' => 'Bearer '.$token],
+            content: self::jsonBody(['url' => 'https://example.com/not-google-maps']),
+        );
+
+        $failures = static::getContainer()->get(ConversionFailureRepository::class)->findAll();
+        self::assertCount(1, $failures);
+        self::assertSame(ConversionFailureReason::UNSUPPORTED_URL, $failures[0]->getReason());
+    }
+
     private function createUser(): User
     {
         $container = static::getContainer();
@@ -164,6 +185,11 @@ final class ExtensionConversionControllerTest extends WebTestCase
     {
         $container = static::getContainer();
         $entityManager = $container->get(EntityManagerInterface::class);
+
+        foreach ($container->get(ConversionFailureRepository::class)->findAll() as $failure) {
+            $entityManager->remove($failure);
+        }
+        $entityManager->flush();
 
         foreach ($container->get(\App\Conversion\Repository\ConversionRepository::class)->findAll() as $conversion) {
             $entityManager->remove($conversion);

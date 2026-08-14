@@ -1,0 +1,43 @@
+{% extends 'admin/_layout.html.twig' %}
+{% block title %}Purchases — Admin — SmartGPX{% endblock %}
+{% block admin_body %}
+    <h1 class="text-2xl font-semibold">Purchases</h1>
+    <table class="mt-6 w-full text-left text-sm">
+        <thead>
+            <tr class="border-b border-border text-muted-foreground">
+                <th class="py-2 font-medium">User</th>
+                <th class="py-2 font-medium">Credits</th>
+                <th class="py-2 font-medium">Amount</th>
+                <th class="py-2 font-medium">Status</th>
+                <th class="py-2 font-medium">Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for purchase in result.items %}
+                <tr class="border-b border-border">
+                    <td class="py-3">
+                        <a href="{{ path('app_admin_users_show', { publicId: purchase.user.publicId }) }}" class="hover:underline">
+                            {{ purchase.user.email }}
+                        </a>
+                    </td>
+                    <td class="py-3">{{ purchase.credits }}</td>
+                    <td class="py-3">{{ (purchase.amountCents / 100)|number_format(2) }} {{ purchase.currency|upper }}</td>
+                    <td class="py-3">{{ purchase.status.value }}</td>
+                    <td class="py-3">{{ purchase.createdAt|date('Y-m-d H:i') }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    {% if result.total > result.perPage %}
+        <div class="mt-6 flex items-center gap-4 text-sm">
+            {% if result.hasPrevious %}
+                <a href="{{ path('app_admin_purchases_index', { page: result.page - 1 }) }}">&larr; Previous</a>
+            {% endif %}
+            <span>Page {{ result.page }} of {{ result.lastPage }}</span>
+            {% if result.hasNext %}
+                <a href="{{ path('app_admin_purchases_index', { page: result.page + 1 }) }}">Next &rarr;</a>
+            {% endif %}
+        </div>
+    {% endif %}
+{% endblock %}

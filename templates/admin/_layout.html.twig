@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="mx-auto max-w-6xl px-4 py-12">
+        <nav class="flex flex-wrap gap-4 border-b border-border pb-4 text-sm font-medium text-muted-foreground">
+            <a href="{{ path('app_admin_dashboard') }}" class="hover:text-foreground">Dashboard</a>
+            <a href="{{ path('app_admin_users_index') }}" class="hover:text-foreground">Users</a>
+            <a href="{{ path('app_admin_purchases_index') }}" class="hover:text-foreground">Purchases</a>
+            <a href="{{ path('app_admin_credit_packs_index') }}" class="hover:text-foreground">Credit Packs</a>
+            <a href="{{ path('app_admin_conversions_failed') }}" class="hover:text-foreground">Failed Conversions</a>
+        </nav>
+
+        <div class="mt-8">
+            {% block admin_body %}{% endblock %}
+        </div>
+    </div>
+{% endblock %}

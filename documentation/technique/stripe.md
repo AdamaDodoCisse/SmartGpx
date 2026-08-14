@@ -76,8 +76,6 @@ et n'agit que si son statut n'est pas déjà `COMPLETED`.
   crédits automatiquement (décision produit documentée dans l'ADR, pas un oubli).
 - Pas de clé publiable (`STRIPE_PUBLISHABLE_KEY`) : le flux Checkout hébergé ne charge aucun code
   Stripe côté client.
-- Pas d'interface d'administration pour éditer `CreditPack` (Phase 8) — la grille de lancement
-  est seedée par migration.
 - Pas de méthodes de paiement asynchrones (virements, etc.) : `payment_method_types` reste au
   défaut carte, ce qui évite d'avoir à gérer `checkout.session.async_payment_succeeded`.
 

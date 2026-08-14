@@ -48,8 +48,9 @@ atomique) — voir ADR-002 pour le raisonnement de concurrence complet.
 
 ## Ce qui n'est pas encore fait
 
-`PURCHASE` est implémenté (Phase 4, voir `documentation/technique/stripe.md`). `REFUND` :
-non traité (un remboursement Stripe ne reprend jamais de crédits automatiquement — décision
-produit documentée dans [ADR-006](../decisions/ADR-006-billing-provider.md), pas un oubli).
-`ADMIN_ADJUSTMENT` : Phase 8. L'enum `CreditTransactionType` définit déjà les deux derniers pour
-éviter une migration cassante, mais aucun code actuel ne les produit.
+`PURCHASE` est implémenté (Phase 4, voir `documentation/technique/stripe.md`). `ADMIN_ADJUSTMENT`
+est implémenté (Phase 8, voir `documentation/technique/admin.md` et
+[ADR-007](../decisions/ADR-007-admin-access-control.md)) — seul chemin de code qui le produit :
+`GrantAdminCreditAdjustmentAction`, toujours un crédit, jamais un débit. `REFUND` : non traité
+(un remboursement Stripe ne reprend jamais de crédits automatiquement — décision produit
+documentée dans [ADR-006](../decisions/ADR-006-billing-provider.md), pas un oubli).
