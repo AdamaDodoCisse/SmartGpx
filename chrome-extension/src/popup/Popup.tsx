@@ -7,6 +7,7 @@ import { ConnectPrompt } from './components/ConnectPrompt';
 import { CreditBadge } from './components/CreditBadge';
 import { ErrorState } from './components/ErrorState';
 import { ExportButton } from './components/ExportButton';
+import { CircleCheckIcon, RouteIcon } from './components/icons';
 import { RouteSummary } from './components/RouteSummary';
 
 type Status = 'loading' | 'not-connected' | 'ready' | 'error';
@@ -114,9 +115,14 @@ export function Popup() {
 
     return (
         <div className="popup">
-            <header className="popup-header">SmartGPX</header>
+            <header className="popup-header">
+                <span className="popup-header-mark">
+                    <RouteIcon width={13} height={13} />
+                </span>
+                <span className="popup-header-title">SmartGPX</span>
+            </header>
 
-            {'loading' === status && <p>{t('loading')}</p>}
+            {'loading' === status && <p className="muted-text">{t('loading')}</p>}
 
             {'not-connected' === status && <ConnectPrompt />}
 
@@ -124,7 +130,7 @@ export function Popup() {
 
             {'ready' === status && null !== account && (
                 <div className="state-block">
-                    {!onDirectionsPage && <p>{t('not_on_maps')}</p>}
+                    {!onDirectionsPage && <p className="muted-text">{t('not_on_maps')}</p>}
 
                     {onDirectionsPage && (
                         <>
@@ -132,7 +138,10 @@ export function Popup() {
 
                             {'success' === phase && null !== lastConversion ? (
                                 <>
-                                    <p>{t('export.success')}</p>
+                                    <p className="success-state">
+                                        <CircleCheckIcon />
+                                        {t('export.success')}
+                                    </p>
                                     <ExportButton label={t('export.another')} disabled={false} onClick={handleExportAnother} />
                                 </>
                             ) : (

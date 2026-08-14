@@ -7,7 +7,7 @@ export function CreditBadge({ account }: { account: AccountPayload }) {
 
     return (
         <div className="credit-badge">
-            <span>{creditLine(account.creditBalance, account.hasEverConverted)}</span>
+            <span className="credit-badge-count">{creditLine(account.creditBalance, account.hasEverConverted)}</span>
             {0 === account.creditBalance && (
                 <a href={`${webAppOrigin}/pricing`} target="_blank" rel="noreferrer">
                     {t('credit.get_more')}

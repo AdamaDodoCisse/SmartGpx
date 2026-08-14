@@ -1,3 +1,5 @@
+import { DownloadIcon } from './icons';
+
 export function ExportButton({
     label,
     disabled,
@@ -9,6 +11,7 @@ export function ExportButton({
 }) {
     return (
         <button type="button" className="primary-button" disabled={disabled} onClick={onClick}>
+            <DownloadIcon />
             {label}
         </button>
     );

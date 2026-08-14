@@ -1,9 +1,53 @@
+/*
+ * Mêmes tokens que assets/app/src/entries/app.css (palette "topo trail", voir CLAUDE.md) —
+ * dupliqués ici plutôt que partagés car l'extension est un build Vite entièrement séparé (voir
+ * ADR-005). Pas de police custom chargée à distance : le CSP par défaut d'une extension MV3
+ * interdit les ressources externes, donc on reste sur la pile système pour le texte et sur le
+ * monospace système pour les données (crédits, distance) — même logique que le site, sans le
+ * risque CSP.
+ */
 :root {
     color-scheme: light;
+    --background: oklch(0.985 0.004 150);
+    --foreground: oklch(0.17 0.018 150);
+    --primary: oklch(0.32 0.09 155);
+    --primary-foreground: oklch(0.98 0 0);
+    --secondary: oklch(0.96 0.006 150);
+    --muted-foreground: oklch(0.5 0.015 150);
+    --route: oklch(0.65 0.18 48);
+    --border: oklch(0.9 0.006 150);
+    --error-bg: oklch(0.96 0.03 25);
+    --error-fg: oklch(0.4 0.15 25);
+    --error-border: oklch(0.85 0.08 25);
+    --success-fg: oklch(0.35 0.1 150);
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        color-scheme: dark;
+        --background: oklch(0.15 0.018 150);
+        --foreground: oklch(0.96 0.006 150);
+        --primary: oklch(0.74 0.12 145);
+        --primary-foreground: oklch(0.14 0.02 150);
+        --secondary: oklch(0.23 0.015 150);
+        --muted-foreground: oklch(0.68 0.012 150);
+        --route: oklch(0.7 0.17 50);
+        --border: oklch(0.3 0.012 150);
+        --error-bg: oklch(0.28 0.05 25);
+        --error-fg: oklch(0.78 0.12 25);
+        --error-border: oklch(0.4 0.08 25);
+        --success-fg: oklch(0.75 0.1 150);
+    }
+}
+
+* {
+    box-sizing: border-box;
 }
 
 body {
     margin: 0;
+    background: var(--background);
+    color: var(--foreground);
 }
 
 .popup {
@@ -15,51 +59,113 @@ body {
         'Segoe UI',
         sans-serif;
     font-size: 14px;
-    color: #1a1a1a;
+    line-height: 1.4;
 }
 
 .popup-header {
-    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 14px;
+}
+
+.popup-header-mark {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    border-radius: 5px;
+    background: var(--primary);
+    color: var(--primary-foreground);
+    flex-shrink: 0;
+}
+
+.popup-header-title {
+    font-weight: 700;
     font-size: 15px;
-    margin-bottom: 12px;
+    letter-spacing: 0.02em;
 }
 
 .state-block {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 12px;
 }
 
-.route-summary {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    padding: 8px 10px;
-    background: #f5f5f7;
-    border-radius: 6px;
-}
-
-.route-summary-point {
+.muted-text {
+    color: var(--muted-foreground);
     font-size: 13px;
 }
 
+/* Reprend la logique visuelle du panneau "carte" de la landing page : départ -> étapes ->
+   arrivée reliés par une ligne verticale, plutôt qu'un bloc de texte plat. */
+.route-summary {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 12px;
+    background: var(--secondary);
+}
+
+.route-summary-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    min-height: 20px;
+}
+
+.route-summary-row .icon {
+    color: var(--route);
+    flex-shrink: 0;
+}
+
+.route-summary-connector {
+    width: 12px;
+    display: flex;
+    justify-content: center;
+}
+
+.route-summary-connector-line {
+    width: 1px;
+    height: 10px;
+    background: var(--border);
+    border-left: 1px dashed var(--border);
+}
+
 .route-summary-stop {
-    color: #666;
-    padding-left: 8px;
+    color: var(--muted-foreground);
 }
 
 .primary-button {
-    background: #2563eb;
-    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    background: var(--primary);
+    color: var(--primary-foreground);
     border: none;
     border-radius: 6px;
-    padding: 8px 12px;
+    padding: 9px 12px;
     font-size: 14px;
+    font-weight: 500;
     cursor: pointer;
+    font-family: inherit;
+}
+
+.primary-button:hover:not(:disabled) {
+    opacity: 0.92;
+}
+
+.primary-button:focus-visible {
+    outline: 2px solid var(--route);
+    outline-offset: 2px;
 }
 
 .primary-button:disabled {
-    background: #93a9d8;
+    opacity: 0.6;
     cursor: default;
 }
 
@@ -68,14 +174,47 @@ body {
     justify-content: space-between;
     align-items: center;
     font-size: 12px;
-    color: #555;
+    color: var(--muted-foreground);
+    padding-top: 10px;
+    border-top: 1px solid var(--border);
+}
+
+.credit-badge-count {
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
 }
 
 .credit-badge a {
-    color: #2563eb;
+    color: var(--primary);
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.credit-badge a:hover {
+    text-decoration: underline;
+}
+
+.success-state {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--success-fg);
+    font-size: 13px;
+    font-weight: 500;
 }
 
 .error-state {
-    color: #b91c1c;
+    display: flex;
+    align-items: flex-start;
+    gap: 6px;
+    color: var(--error-fg);
+    background: var(--error-bg);
+    border: 1px solid var(--error-border);
+    border-radius: 6px;
+    padding: 8px 10px;
     font-size: 13px;
+}
+
+.error-state .icon {
+    flex-shrink: 0;
+    margin-top: 1px;
 }
