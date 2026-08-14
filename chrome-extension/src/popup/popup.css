@@ -111,7 +111,7 @@ body {
 
 .route-summary-row {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     gap: 8px;
     font-size: 13px;
     min-height: 20px;
@@ -120,6 +120,9 @@ body {
 .route-summary-row .icon {
     color: var(--route);
     flex-shrink: 0;
+    /* Aligne le pictogramme avec la première ligne d'une adresse qui passe sur plusieurs
+       lignes (adresses longues réelles) plutôt que de le centrer sur tout le bloc de texte. */
+    margin-top: 2px;
 }
 
 .route-summary-connector {
