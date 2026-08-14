@@ -9,12 +9,14 @@ interface ExtensionConnectProps {
 
 type ConnectState = 'connecting' | 'success' | 'failure';
 
-function isReceivedResponse(response: unknown): response is { received: true } {
+// Miroir de ConnectHandoffResponse (chrome-extension/src/lib/messages.ts) — dupliqué plutôt que
+// partagé, l'extension étant un build Vite entièrement séparé (voir ADR-005).
+function isOkResponse(response: unknown): response is { ok: true } {
     return (
         'object' === typeof response
         && null !== response
-        && 'received' in response
-        && true === (response as { received: unknown }).received
+        && 'ok' in response
+        && true === (response as { ok: unknown }).ok
     );
 }
 
@@ -33,7 +35,7 @@ export function ExtensionConnect({ token, extensionId, apiOrigin }: ExtensionCon
             extensionId,
             { type: 'SMARTGPX_CONNECT', token, apiOrigin },
             (response) => {
-                if (chrome?.runtime?.lastError || !isReceivedResponse(response)) {
+                if (chrome?.runtime?.lastError || !isOkResponse(response)) {
                     setState('failure');
 
                     return;
