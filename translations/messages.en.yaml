@@ -45,6 +45,7 @@ layout:
 
 home:
     hero:
+        eyebrow: 'GPX · KML · TCX · FIT · GEOJSON'
         title: 'Google Maps to GPX in seconds.'
         subtitle: 'Paste your Google Maps route and export it as a standards-compliant GPX file.'
         input_label: 'Google Maps route URL'

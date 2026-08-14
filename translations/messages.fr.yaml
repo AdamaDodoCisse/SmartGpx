@@ -45,6 +45,7 @@ layout:
 
 home:
     hero:
+        eyebrow: 'GPX · KML · TCX · FIT · GEOJSON'
         title: 'Google Maps vers GPX en quelques secondes.'
         subtitle: "Collez votre itinéraire Google Maps et exportez-le au format GPX standard."
         input_label: 'URL de l’itinéraire Google Maps'

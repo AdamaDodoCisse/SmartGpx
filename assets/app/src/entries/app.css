@@ -2,6 +2,8 @@
 
 @theme {
     --font-sans: ui-sans-serif, system-ui, -apple-system, sans-serif;
+    --font-display: "Fjalla One", var(--font-sans);
+    --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
     --color-border: var(--border);
     --color-background: var(--background);
     --color-foreground: var(--foreground);
@@ -13,26 +15,36 @@
     --color-muted-foreground: var(--muted-foreground);
     --color-accent: var(--accent);
     --color-accent-foreground: var(--accent-foreground);
+    --color-route: var(--route);
+    --color-route-foreground: var(--route-foreground);
     --color-ring: var(--ring);
     --radius-sm: calc(var(--radius) - 4px);
     --radius-md: calc(var(--radius) - 2px);
     --radius-lg: var(--radius);
 }
 
+/*
+ * Palette "topo trail" (Phase 9) : un pin foncé en primaire (au lieu du bleu shadcn par
+ * défaut), un neutre pierre/sauge plutôt que le gris-bleu ou le beige crème générique, et un
+ * accent orange balise-de-sentier (--route) réservé à la ligne de route signature de l'accueil
+ * et aux quelques éléments qui s'y rattachent — jamais utilisé comme couleur de bouton générale.
+ */
 :root {
     --radius: 0.5rem;
-    --background: oklch(1 0 0);
-    --foreground: oklch(0.18 0.02 250);
-    --primary: oklch(0.32 0.14 255);
+    --background: oklch(0.985 0.004 150);
+    --foreground: oklch(0.17 0.018 150);
+    --primary: oklch(0.32 0.09 155);
     --primary-foreground: oklch(0.98 0 0);
-    --secondary: oklch(0.96 0.005 250);
-    --secondary-foreground: oklch(0.22 0.02 250);
-    --muted: oklch(0.96 0.005 250);
-    --muted-foreground: oklch(0.5 0.02 250);
-    --accent: oklch(0.96 0.02 230);
-    --accent-foreground: oklch(0.22 0.02 250);
-    --border: oklch(0.9 0.005 250);
-    --ring: oklch(0.6 0.08 250);
+    --secondary: oklch(0.96 0.006 150);
+    --secondary-foreground: oklch(0.22 0.015 150);
+    --muted: oklch(0.96 0.006 150);
+    --muted-foreground: oklch(0.5 0.015 150);
+    --accent: oklch(0.95 0.02 150);
+    --accent-foreground: oklch(0.22 0.015 150);
+    --route: oklch(0.65 0.18 48);
+    --route-foreground: oklch(0.98 0 0);
+    --border: oklch(0.9 0.006 150);
+    --ring: oklch(0.55 0.09 155);
     --success-bg: oklch(0.96 0.03 150);
     --success-fg: oklch(0.35 0.1 150);
     --success-border: oklch(0.85 0.06 150);
@@ -49,18 +61,20 @@
  */
 @media (prefers-color-scheme: dark) {
     :root:not([data-theme="light"]) {
-        --background: oklch(0.16 0.015 250);
-        --foreground: oklch(0.96 0.005 250);
-        --primary: oklch(0.72 0.12 250);
-        --primary-foreground: oklch(0.16 0.015 250);
-        --secondary: oklch(0.24 0.01 250);
-        --secondary-foreground: oklch(0.96 0.005 250);
-        --muted: oklch(0.24 0.01 250);
-        --muted-foreground: oklch(0.68 0.01 250);
-        --accent: oklch(0.28 0.03 240);
-        --accent-foreground: oklch(0.96 0.005 250);
-        --border: oklch(0.3 0.01 250);
-        --ring: oklch(0.6 0.08 250);
+        --background: oklch(0.15 0.018 150);
+        --foreground: oklch(0.96 0.006 150);
+        --primary: oklch(0.74 0.12 145);
+        --primary-foreground: oklch(0.14 0.02 150);
+        --secondary: oklch(0.23 0.015 150);
+        --secondary-foreground: oklch(0.96 0.006 150);
+        --muted: oklch(0.23 0.015 150);
+        --muted-foreground: oklch(0.68 0.012 150);
+        --accent: oklch(0.27 0.03 150);
+        --accent-foreground: oklch(0.96 0.006 150);
+        --route: oklch(0.7 0.17 50);
+        --route-foreground: oklch(0.14 0.02 150);
+        --border: oklch(0.3 0.012 150);
+        --ring: oklch(0.6 0.1 145);
         --success-bg: oklch(0.25 0.04 150);
         --success-fg: oklch(0.75 0.1 150);
         --success-border: oklch(0.35 0.05 150);
@@ -71,18 +85,20 @@
 }
 
 :root[data-theme="dark"] {
-    --background: oklch(0.16 0.015 250);
-    --foreground: oklch(0.96 0.005 250);
-    --primary: oklch(0.72 0.12 250);
-    --primary-foreground: oklch(0.16 0.015 250);
-    --secondary: oklch(0.24 0.01 250);
-    --secondary-foreground: oklch(0.96 0.005 250);
-    --muted: oklch(0.24 0.01 250);
-    --muted-foreground: oklch(0.68 0.01 250);
-    --accent: oklch(0.28 0.03 240);
-    --accent-foreground: oklch(0.96 0.005 250);
-    --border: oklch(0.3 0.01 250);
-    --ring: oklch(0.6 0.08 250);
+    --background: oklch(0.15 0.018 150);
+    --foreground: oklch(0.96 0.006 150);
+    --primary: oklch(0.74 0.12 145);
+    --primary-foreground: oklch(0.14 0.02 150);
+    --secondary: oklch(0.23 0.015 150);
+    --secondary-foreground: oklch(0.96 0.006 150);
+    --muted: oklch(0.23 0.015 150);
+    --muted-foreground: oklch(0.68 0.012 150);
+    --accent: oklch(0.27 0.03 150);
+    --accent-foreground: oklch(0.96 0.006 150);
+    --route: oklch(0.7 0.17 50);
+    --route-foreground: oklch(0.14 0.02 150);
+    --border: oklch(0.3 0.012 150);
+    --ring: oklch(0.6 0.1 145);
     --success-bg: oklch(0.25 0.04 150);
     --success-fg: oklch(0.75 0.1 150);
     --success-border: oklch(0.35 0.05 150);
@@ -118,6 +134,89 @@ body {
 }
 :root[data-theme="dark"] [data-theme-toggle] .icon-moon {
     display: none;
+}
+
+/*
+ * Élément signature de l'accueil (Phase 9) : une ligne de route GPX qui se trace au chargement,
+ * point de départ -> sommet, avec un point de position qui pulse à l'arrivée. Incarne la
+ * conversion "un trajet devient une vraie trace GPS". Purement décoratif (aria-hidden côté
+ * template) donc aucune information n'est perdue si les animations sont coupées.
+ */
+.route-line-path {
+    fill: none;
+    stroke: var(--route);
+    stroke-width: 3;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-dasharray: 900;
+    stroke-dashoffset: 900;
+    animation: route-draw 1.8s ease-out forwards;
+}
+
+.route-line-waypoint {
+    fill: var(--background);
+    stroke: var(--route);
+    stroke-width: 2.5;
+    opacity: 0;
+    animation: route-waypoint 0.5s ease-out forwards;
+    animation-delay: var(--delay, 0s);
+}
+
+.route-line-live {
+    fill: var(--route);
+    transform-origin: center;
+    transform-box: fill-box;
+    opacity: 0;
+    animation:
+        route-waypoint 0.5s ease-out forwards,
+        route-pulse 2s ease-in-out 1.9s infinite;
+    animation-delay: 1.7s, 1.9s;
+}
+
+@keyframes route-draw {
+    to {
+        stroke-dashoffset: 0;
+    }
+}
+
+@keyframes route-waypoint {
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes route-pulse {
+    0%,
+    100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.6);
+        opacity: 0.55;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .route-line-path {
+        stroke-dashoffset: 0;
+        animation: none;
+    }
+    .route-line-waypoint,
+    .route-line-live {
+        opacity: 1;
+        animation: none;
+    }
+}
+
+/* Courbes de niveau discrètes derrière la section "how it works" — motif carto, pas décoratif au hasard. */
+.contour-bg {
+    background-image: repeating-radial-gradient(
+        circle at 12% -20%,
+        transparent 0,
+        transparent 34px,
+        var(--border) 35px,
+        transparent 36px
+    );
 }
 
 @source "../../../../templates";

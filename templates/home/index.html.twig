@@ -5,37 +5,50 @@
 {% block meta_description %}{{ 'home.hero.subtitle'|trans }}{% endblock %}
 
 {% block body %}
-    <div class="mx-auto max-w-4xl px-4 py-16 text-center">
-        <div class="mx-auto flex size-14 items-center justify-center rounded-full bg-accent text-accent-foreground">
-            {{ icons.icon('route', 'size-7') }}
+    <div class="border-b border-border">
+        <div class="mx-auto grid max-w-6xl gap-12 px-4 py-16 lg:grid-cols-[1.1fr_0.9fr] lg:items-center lg:py-24">
+            <div>
+                <p class="font-mono text-xs font-medium tracking-[0.2em] text-route">{{ 'home.hero.eyebrow'|trans }}</p>
+                <h1 class="mt-4 font-display text-4xl leading-[1.05] tracking-tight sm:text-5xl lg:text-6xl">{{ 'home.hero.title'|trans }}</h1>
+                <p class="mt-5 max-w-md text-lg text-muted-foreground">{{ 'home.hero.subtitle'|trans }}</p>
+
+                <div
+                    id="convert-hero-root"
+                    class="mt-8"
+                    data-is-authenticated="{{ app.user ? '1' : '' }}"
+                    data-csrf-token="{{ csrf_token('convert_google_maps') }}"
+                    data-credit-balance="{{ creditBalance }}"
+                    data-locale="{{ app.request.locale }}"
+                ></div>
+
+                <p class="mt-6 text-sm text-muted-foreground">{{ 'home.compatibility'|trans }}</p>
+            </div>
+
+            {# Élément signature : une trace GPX qui se dessine du départ jusqu'au point de
+               position actuel — purement décoratif, aria-hidden car aucune information n'y est
+               encodée qui ne soit déjà dans le titre/sous-titre. #}
+            <svg viewBox="0 0 400 320" class="mx-auto hidden w-full max-w-sm sm:block lg:max-w-none" aria-hidden="true" focusable="false">
+                <path class="route-line-path" d="M20,290 C70,270 60,190 120,180 C170,172 175,235 225,205 C270,178 260,95 320,88 C345,85 355,55 380,32" />
+                <circle class="route-line-waypoint" cx="20" cy="290" r="6" style="--delay: 0.1s"/>
+                <circle class="route-line-waypoint" cx="225" cy="205" r="6" style="--delay: 0.9s"/>
+                <circle class="route-line-live" cx="380" cy="32" r="7"/>
+            </svg>
         </div>
-        <h1 class="mt-6 text-4xl font-semibold tracking-tight sm:text-5xl">SmartGPX</h1>
-        <p class="mt-4 text-xl text-muted-foreground">{{ 'home.hero.title'|trans }}</p>
-        <p class="mt-2 text-muted-foreground">{{ 'home.hero.subtitle'|trans }}</p>
-
-        <div
-            id="convert-hero-root"
-            data-is-authenticated="{{ app.user ? '1' : '' }}"
-            data-csrf-token="{{ csrf_token('convert_google_maps') }}"
-            data-credit-balance="{{ creditBalance }}"
-            data-locale="{{ app.request.locale }}"
-        ></div>
-
-        <p class="mt-12 text-sm text-muted-foreground">{{ 'home.compatibility'|trans }}</p>
     </div>
 
     {{ vite_entry_script_tags('convertHero', { dependency: 'react' }) }}
 
-    <div class="border-t border-border bg-secondary/40">
-        <div class="mx-auto max-w-5xl px-4 py-16">
-            <h2 class="text-center text-2xl font-semibold">{{ 'home.how_it_works.title'|trans }}</h2>
-            <ol class="mt-10 grid grid-cols-1 gap-8 sm:grid-cols-3">
+    <div class="contour-bg border-t border-border bg-secondary/40">
+        <div class="mx-auto max-w-5xl px-4 py-16 lg:py-20">
+            <h2 class="text-center font-display text-2xl tracking-tight sm:text-3xl">{{ 'home.how_it_works.title'|trans }}</h2>
+            <ol class="mt-12 grid grid-cols-1 gap-10 sm:grid-cols-3">
                 {% for step, icon in { 1: 'clipboard-paste', 2: 'route', 3: 'download' } %}
                     <li class="text-center">
-                        <div class="mx-auto flex size-12 items-center justify-center rounded-full bg-primary text-primary-foreground">
+                        <div class="mx-auto flex size-12 items-center justify-center rounded-full border border-route/30 bg-background text-route">
                             {{ icons.icon(icon, 'size-6') }}
                         </div>
-                        <h3 class="mt-4 font-semibold">{{ ('home.how_it_works.step_' ~ step ~ '_title')|trans }}</h3>
+                        <p class="mt-3 font-mono text-xs tracking-[0.2em] text-muted-foreground" aria-hidden="true">{{ '%02d'|format(step) }} / 03</p>
+                        <h3 class="mt-1 font-semibold">{{ ('home.how_it_works.step_' ~ step ~ '_title')|trans }}</h3>
                         <p class="mt-2 text-sm text-muted-foreground">{{ ('home.how_it_works.step_' ~ step ~ '_body')|trans }}</p>
                     </li>
                 {% endfor %}

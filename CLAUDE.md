@@ -50,6 +50,18 @@ there before re-deciding something already settled.
   --force` instead; see "Local development" below. `ROLE_ADMIN` is granted only via
   `bin/console app:user:promote-admin <email>`, never from the admin UI itself — see
   [ADR-007](documentation/decisions/ADR-007-admin-access-control.md).
+- **Avoid generic "AI-generated" visual design**, on this project and by default in general: warm
+  cream (`#F4F1EA`-ish) + serif + terracotta; near-black + a single neon/acid accent; centered
+  hero with a big stat + gradient blob; Inter/Space Grotesk as the safe default; emoji as section
+  markers; `rounded-lg` and rounded accent bars on everything. SmartGPX's own identity (Phase 9,
+  see `assets/app/src/entries/app.css`) is a "topo trail" palette instead — a pine-green
+  `--primary`, a cool stone/sage `--background` neutral (not warm cream), and a trail-blaze
+  orange `--route` accent reserved for the homepage's signature route-line visual and directly
+  related elements, never used as a general button/link color. Typography pairs `--font-display`
+  (Fjalla One, condensed — headings, the wordmark, short labels) with the system sans for body
+  text and `--font-mono` (IBM Plex Mono) for coordinate-like/data accents (eyebrow tags, step
+  counters). Extend this token system for new pages rather than reaching for a different palette
+  or typeface per page.
 
 ## Local development
 

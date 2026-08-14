@@ -16,6 +16,9 @@
                 }
             })();
         </script>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Fjalla+One&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
         <title>{% block title %}SmartGPX{% endblock %}</title>
         <meta name="description" content="{% block meta_description %}{{ 'layout.default_meta_description'|trans }}{% endblock %}">
         {# _canonical_route n'existe que pour les routes i18n enregistrées via le raccourci
@@ -42,7 +45,7 @@
 
         <header class="border-b border-border">
             <div class="mx-auto flex h-16 max-w-6xl items-center justify-between px-4">
-                <a href="{{ path('app_home') }}" class="text-lg font-semibold">SmartGPX</a>
+                <a href="{{ path('app_home') }}" class="font-display text-xl tracking-wide">SmartGPX</a>
 
                 <nav class="hidden items-center gap-6 md:flex" aria-label="{{ 'layout.main_navigation'|trans }}">
                     <a href="{{ path('app_home') }}#free-tools" class="text-sm font-medium text-muted-foreground hover:text-foreground">{{ 'layout.nav.tools'|trans }}</a>
