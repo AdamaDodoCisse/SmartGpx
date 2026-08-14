@@ -14,7 +14,10 @@ const buttonVariants = cva(
             size: {
                 default: 'h-10 px-4 py-2',
                 sm: 'h-9 px-3',
-                icon: 'h-10 w-10',
+                // 44px, pas 40 : seuil usuel de taille de cible tactile (Apple HIG / Material
+                // Design) — cette variante n'est utilisée que pour des boutons icône seule
+                // (ex. menu mobile), sans texte pour agrandir la zone cliquable autrement.
+                icon: 'h-11 w-11',
             },
         },
         defaultVariants: {
