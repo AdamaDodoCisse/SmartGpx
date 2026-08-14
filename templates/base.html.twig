@@ -1,8 +1,21 @@
+{% import '_macros/icons.html.twig' as icons %}
 <!DOCTYPE html>
 <html lang="{{ app.request.locale }}">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        {# Bloquant, avant tout CSS : pose data-theme depuis le choix explicite mémorisé pour
+           éviter un flash du mauvais thème au premier rendu. Rien à poser si l'utilisateur n'a
+           jamais cliqué sur le bouton — la préférence système (media query) fait déjà le travail
+           par défaut, voir app.css. #}
+        <script>
+            (function () {
+                var stored = localStorage.getItem('theme');
+                if ('light' === stored || 'dark' === stored) {
+                    document.documentElement.dataset.theme = stored;
+                }
+            })();
+        </script>
         <title>{% block title %}SmartGPX{% endblock %}</title>
         <meta name="description" content="{% block meta_description %}{{ 'layout.default_meta_description'|trans }}{% endblock %}">
         {# _canonical_route n'existe que pour les routes i18n enregistrées via le raccourci
@@ -38,13 +51,32 @@
                     <a href="{{ path('app_login') }}" class="text-sm font-medium text-muted-foreground hover:text-foreground">{{ 'layout.nav.login'|trans }}</a>
                 </nav>
 
-                <div id="nav-mobile-menu-root" data-locale="{{ app.request.locale }}"></div>
+                <div class="flex items-center gap-2">
+                    <button
+                        type="button"
+                        data-theme-toggle
+                        aria-label="{{ 'layout.nav.toggle_theme'|trans }}"
+                        class="inline-flex size-9 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                    >
+                        <span class="icon-sun">{{ icons.icon('sun', 'size-5') }}</span>
+                        <span class="icon-moon">{{ icons.icon('moon', 'size-5') }}</span>
+                    </button>
+                    <div id="nav-mobile-menu-root" data-locale="{{ app.request.locale }}"></div>
+                </div>
             </div>
         </header>
 
         {% for label, messages in app.flashes %}
             {% for message in messages %}
-                <p role="alert" class="flash flash-{{ label }} mx-auto max-w-6xl px-4 py-2 text-sm">{{ message|trans }}</p>
+                {% set flash_classes = {
+                    success: 'border-[var(--success-border)] bg-[var(--success-bg)] text-[var(--success-fg)]',
+                    error: 'border-[var(--error-border)] bg-[var(--error-bg)] text-[var(--error-fg)]',
+                } %}
+                <div class="mx-auto max-w-6xl px-4 pt-4">
+                    <p role="alert" class="flash flash-{{ label }} rounded-md border px-4 py-3 text-sm {{ flash_classes[label]|default('border-border bg-muted text-foreground') }}">
+                        {{ message|trans }}
+                    </p>
+                </div>
             {% endfor %}
         {% endfor %}
 
@@ -64,5 +96,17 @@
         </footer>
 
         {{ vite_entry_script_tags('nav', { dependency: 'react' }) }}
+
+        <script>
+            document.querySelector('[data-theme-toggle]').addEventListener('click', function () {
+                var systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                var current = document.documentElement.dataset.theme;
+                var effectiveIsDark = current ? 'dark' === current : systemPrefersDark;
+                var next = effectiveIsDark ? 'light' : 'dark';
+
+                document.documentElement.dataset.theme = next;
+                localStorage.setItem('theme', next);
+            });
+        </script>
     </body>
 </html>

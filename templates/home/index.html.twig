@@ -1,11 +1,15 @@
 {% extends 'base.html.twig' %}
+{% import '_macros/icons.html.twig' as icons %}
 
 {% block title %}SmartGPX — {{ 'home.hero.title'|trans }}{% endblock %}
 {% block meta_description %}{{ 'home.hero.subtitle'|trans }}{% endblock %}
 
 {% block body %}
     <div class="mx-auto max-w-4xl px-4 py-16 text-center">
-        <h1 class="text-4xl font-semibold tracking-tight sm:text-5xl">SmartGPX</h1>
+        <div class="mx-auto flex size-14 items-center justify-center rounded-full bg-accent text-accent-foreground">
+            {{ icons.icon('route', 'size-7') }}
+        </div>
+        <h1 class="mt-6 text-4xl font-semibold tracking-tight sm:text-5xl">SmartGPX</h1>
         <p class="mt-4 text-xl text-muted-foreground">{{ 'home.hero.title'|trans }}</p>
         <p class="mt-2 text-muted-foreground">{{ 'home.hero.subtitle'|trans }}</p>
 
@@ -25,26 +29,32 @@
     <div id="free-tools" class="mx-auto max-w-6xl px-4 pb-16">
         <h2 class="text-center text-2xl font-semibold">{{ 'home.free_tools.title'|trans }}</h2>
         <ul class="mt-6 grid grid-cols-2 gap-3 text-center text-sm text-muted-foreground sm:grid-cols-3 md:grid-cols-4">
-            {% for tool, route in {
-                gpx_to_google_maps: 'app_tools_gpx_to_google_maps',
-                gpx_simplify: 'app_tools_gpx_simplify',
-                gpx_merge: 'app_tools_gpx_merge',
-                kml_to_gpx: 'app_tools_kml_to_gpx',
-                gpx_to_kml: 'app_tools_gpx_to_kml',
-                kmz_to_gpx: 'app_tools_kmz_to_gpx',
-                tcx_to_gpx: 'app_tools_tcx_to_gpx',
-                gpx_to_tcx: 'app_tools_gpx_to_tcx',
-                fit_to_gpx: 'app_tools_fit_to_gpx',
-                gpx_to_fit: 'app_tools_gpx_to_fit',
-                geojson_to_gpx: 'app_tools_geojson_to_gpx',
-                gpx_to_geojson: 'app_tools_gpx_to_geojson',
-                gpx_viewer: 'app_gpx_viewer',
+            {% for tool, entry in {
+                gpx_to_google_maps: { route: 'app_tools_gpx_to_google_maps', icon: 'map-pin' },
+                gpx_simplify: { route: 'app_tools_gpx_simplify', icon: 'sparkles' },
+                gpx_merge: { route: 'app_tools_gpx_merge', icon: 'combine' },
+                kml_to_gpx: { route: 'app_tools_kml_to_gpx', icon: 'file-code' },
+                gpx_to_kml: { route: 'app_tools_gpx_to_kml', icon: 'file-code' },
+                kmz_to_gpx: { route: 'app_tools_kmz_to_gpx', icon: 'file-archive' },
+                tcx_to_gpx: { route: 'app_tools_tcx_to_gpx', icon: 'activity' },
+                gpx_to_tcx: { route: 'app_tools_gpx_to_tcx', icon: 'activity' },
+                fit_to_gpx: { route: 'app_tools_fit_to_gpx', icon: 'watch' },
+                gpx_to_fit: { route: 'app_tools_gpx_to_fit', icon: 'watch' },
+                geojson_to_gpx: { route: 'app_tools_geojson_to_gpx', icon: 'braces' },
+                gpx_to_geojson: { route: 'app_tools_gpx_to_geojson', icon: 'braces' },
+                gpx_viewer: { route: 'app_gpx_viewer', icon: 'map' },
             } %}
                 <li class="rounded-md border border-border px-3 py-4">
-                    {% if route is not null %}
-                        <a href="{{ path(route) }}" class="hover:text-foreground">{{ ('home.free_tools.' ~ tool)|trans }}</a>
+                    {% if entry.route is not null %}
+                        <a href="{{ path(entry.route) }}" class="flex flex-col items-center gap-2 hover:text-foreground">
+                            {{ icons.icon(entry.icon, 'size-5 text-primary') }}
+                            {{ ('home.free_tools.' ~ tool)|trans }}
+                        </a>
                     {% else %}
-                        {{ ('home.free_tools.' ~ tool)|trans }}
+                        <span class="flex flex-col items-center gap-2">
+                            {{ icons.icon(entry.icon, 'size-5') }}
+                            {{ ('home.free_tools.' ~ tool)|trans }}
+                        </span>
                     {% endif %}
                 </li>
             {% endfor %}

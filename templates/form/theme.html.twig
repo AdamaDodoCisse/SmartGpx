@@ -1,0 +1,68 @@
+{% use 'form_div_layout.html.twig' %}
+
+{# Thème de formulaire global — reprend exactement les classes de assets/app/src/components/ui/
+   {input,button}.tsx pour que tout formulaire Symfony Form (auth, admin) ait le même rendu que
+   les composants React shadcn/ui, sans dupliquer un design system côté Twig. #}
+
+{% block form_row %}
+    <div class="mb-4">
+        {{ form_label(form) }}
+        {{ form_widget(form) }}
+        {{ form_errors(form) }}
+        {{ form_help(form) }}
+    </div>
+{% endblock %}
+
+{% block form_label %}
+    {% if label is not same as(false) %}
+        <label{% if label_attr %} {{ block('attributes', 'form_div_layout.html.twig') }}{% endif %} for="{{ id }}" class="mb-1.5 block text-sm font-medium">
+            {{- translation_domain is same as(false) ? label : label|trans({}, translation_domain) -}}
+        </label>
+    {% endif %}
+{% endblock %}
+
+{% block form_widget_simple %}
+    {% set attr = attr|merge({class: (attr.class|default(''))|trim ~ ' flex h-10 w-full rounded-md border border-border bg-background px-4 py-2 text-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-60'}) %}
+    {{ parent() }}
+{% endblock %}
+
+{% block textarea_widget %}
+    {% set attr = attr|merge({class: (attr.class|default(''))|trim ~ ' flex w-full rounded-md border border-border bg-background px-4 py-2 text-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-60'}) %}
+    {{ parent() }}
+{% endblock %}
+
+{% block choice_widget_collapsed %}
+    {% set attr = attr|merge({class: (attr.class|default(''))|trim ~ ' flex h-10 w-full rounded-md border border-border bg-background px-4 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-60'}) %}
+    {{ parent() }}
+{% endblock %}
+
+{% block checkbox_row %}
+    <div class="mb-4 flex items-center gap-2">
+        {{ form_widget(form) }}
+        {{ form_label(form) }}
+        {{ form_errors(form) }}
+    </div>
+{% endblock %}
+
+{% block checkbox_widget %}
+    {% set attr = attr|merge({class: (attr.class|default(''))|trim ~ ' h-4 w-4 rounded border-border text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring'}) %}
+    {{ parent() }}
+{% endblock %}
+
+{% block form_errors %}
+    {% if errors|length > 0 %}
+        <ul class="mt-1.5 flex flex-col gap-0.5">
+            {% for error in errors %}
+                <li class="text-sm text-[var(--error-fg)]" role="alert">{{ error.message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+{% endblock %}
+
+{% block form_help %}
+    {% if help is not empty %}
+        <p class="mt-1.5 text-sm text-muted-foreground">
+            {{- translation_domain is same as(false) ? help : help|trans(help_translation_parameters, translation_domain) -}}
+        </p>
+    {% endif %}
+{% endblock %}

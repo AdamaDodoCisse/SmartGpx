@@ -3,17 +3,19 @@
 {% block title %}{{ 'identity.register.title'|trans }} — SmartGPX{% endblock %}
 
 {% block body %}
-    <main>
-        <h1>{{ 'identity.register.title'|trans }}</h1>
+    <div class="mx-auto max-w-md px-4 py-12">
+        <h1 class="text-3xl font-semibold">{{ 'identity.register.title'|trans }}</h1>
 
-        {{ form_start(registrationForm) }}
+        {{ form_start(registrationForm, { attr: { class: 'mt-8' } }) }}
             {{ form_row(registrationForm.email) }}
             {{ form_row(registrationForm.plainPassword) }}
-            <button type="submit" name="registration_submit">{{ 'identity.register.submit'|trans }}</button>
+            <button type="submit" name="registration_submit" class="inline-flex h-10 w-full items-center justify-center gap-2 whitespace-nowrap rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">
+                {{ 'identity.register.submit'|trans }}
+            </button>
         {{ form_end(registrationForm) }}
 
-        <p>
-            <a href="{{ path('app_login') }}">{{ 'identity.register.already_have_account'|trans }}</a>
+        <p class="mt-6 text-center text-sm text-muted-foreground">
+            <a href="{{ path('app_login') }}" class="text-primary hover:underline">{{ 'identity.register.already_have_account'|trans }}</a>
         </p>
-    </main>
+    </div>
 {% endblock %}

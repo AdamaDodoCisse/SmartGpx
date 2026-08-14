@@ -36,6 +36,7 @@ layout:
     nav:
         tools: 'Outils'
         guides: 'Guides'
+        toggle_theme: 'Basculer entre thème clair et sombre'
         pricing: 'Tarifs'
         login: 'Connexion'
     footer:

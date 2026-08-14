@@ -36,6 +36,7 @@ layout:
     nav:
         tools: 'Tools'
         guides: 'Guides'
+        toggle_theme: 'Toggle light and dark mode'
         pricing: 'Pricing'
         login: 'Login'
     footer:

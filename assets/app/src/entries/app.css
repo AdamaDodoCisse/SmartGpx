@@ -33,10 +33,22 @@
     --accent-foreground: oklch(0.22 0.02 250);
     --border: oklch(0.9 0.005 250);
     --ring: oklch(0.6 0.08 250);
+    --success-bg: oklch(0.96 0.03 150);
+    --success-fg: oklch(0.35 0.1 150);
+    --success-border: oklch(0.85 0.06 150);
+    --error-bg: oklch(0.96 0.03 25);
+    --error-fg: oklch(0.4 0.15 25);
+    --error-border: oklch(0.85 0.08 25);
 }
 
+/*
+ * Trois états : préférence système (media query, aucun attribut posé), et un choix explicite via
+ * le bouton clair/sombre qui pose data-theme sur <html> et doit gagner dans les deux sens — voir
+ * assets/app/src/entries/themeToggle.ts. Les valeurs sombres sont dupliquées une fois par état
+ * plutôt que factorisées, pour que chaque bloc reste indépendamment correct.
+ */
 @media (prefers-color-scheme: dark) {
-    :root {
+    :root:not([data-theme="light"]) {
         --background: oklch(0.16 0.015 250);
         --foreground: oklch(0.96 0.005 250);
         --primary: oklch(0.72 0.12 250);
@@ -49,7 +61,34 @@
         --accent-foreground: oklch(0.96 0.005 250);
         --border: oklch(0.3 0.01 250);
         --ring: oklch(0.6 0.08 250);
+        --success-bg: oklch(0.25 0.04 150);
+        --success-fg: oklch(0.75 0.1 150);
+        --success-border: oklch(0.35 0.05 150);
+        --error-bg: oklch(0.28 0.05 25);
+        --error-fg: oklch(0.78 0.12 25);
+        --error-border: oklch(0.4 0.08 25);
     }
+}
+
+:root[data-theme="dark"] {
+    --background: oklch(0.16 0.015 250);
+    --foreground: oklch(0.96 0.005 250);
+    --primary: oklch(0.72 0.12 250);
+    --primary-foreground: oklch(0.16 0.015 250);
+    --secondary: oklch(0.24 0.01 250);
+    --secondary-foreground: oklch(0.96 0.005 250);
+    --muted: oklch(0.24 0.01 250);
+    --muted-foreground: oklch(0.68 0.01 250);
+    --accent: oklch(0.28 0.03 240);
+    --accent-foreground: oklch(0.96 0.005 250);
+    --border: oklch(0.3 0.01 250);
+    --ring: oklch(0.6 0.08 250);
+    --success-bg: oklch(0.25 0.04 150);
+    --success-fg: oklch(0.75 0.1 150);
+    --success-border: oklch(0.35 0.05 150);
+    --error-bg: oklch(0.28 0.05 25);
+    --error-fg: oklch(0.78 0.12 25);
+    --error-border: oklch(0.4 0.08 25);
 }
 
 body {
@@ -57,3 +96,28 @@ body {
     color: var(--foreground);
     font-family: var(--font-sans);
 }
+
+/* Bouton clair/sombre : une seule icône visible à la fois, selon le thème effectif. */
+[data-theme-toggle] .icon-sun,
+[data-theme-toggle] .icon-moon {
+    display: none;
+}
+[data-theme-toggle] .icon-moon {
+    display: block;
+}
+@media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) [data-theme-toggle] .icon-sun {
+        display: block;
+    }
+    :root:not([data-theme="light"]) [data-theme-toggle] .icon-moon {
+        display: none;
+    }
+}
+:root[data-theme="dark"] [data-theme-toggle] .icon-sun {
+    display: block;
+}
+:root[data-theme="dark"] [data-theme-toggle] .icon-moon {
+    display: none;
+}
+
+@source "../../../../templates";
