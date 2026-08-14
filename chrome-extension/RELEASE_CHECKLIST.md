@@ -1,14 +1,25 @@
 # Release checklist
 
-## Manual end-to-end verification (do this before considering Phase 3 done)
+## Manual end-to-end verification
+
+**Done** — full pass completed against a real Chrome browser, real Google Maps route, real
+backend. One real bug found and fixed in the process: `ConnectPrompt.tsx` opened
+`/account/extensions/connect` directly (the POST-only, CSRF-protected handoff-completion route)
+instead of `/account/extensions` (the page carrying the actual "Connect a browser" button) —
+clicking "connect your account" from a disconnected popup 405'd. Fixed by pointing the popup at
+`/account/extensions` instead.
 
 Automated coverage stops at `npm run typecheck` + `vitest` unit tests for pure logic
 (`lib/mapsUrl.ts`, `lib/auth.ts`) and the backend's functional tests. The following requires a
 real Chrome browser and has not been automated — Puppeteer/Playwright browser automation is
 explicitly out of scope for this project (see `documentation/technique/chrome-extension.md`).
+Steps kept below for the next time this needs re-running (env changes, before a store
+submission, etc.):
 
 1. **Backend running locally**, reachable at `http://127.0.0.1:8000`.
-2. `cd chrome-extension && npm install && npm run build`.
+2. `cd chrome-extension && npm install && npx vite build --mode development` — plain
+   `npm run build` targets production (`PROD_API_ORIGIN`), which breaks `host_permissions` for
+   local testing; the dev-mode build is what points the manifest at `127.0.0.1:8000`.
 3. `chrome://extensions` → enable **Developer mode** → **Load unpacked** → select
    `chrome-extension/dist`. Note the generated extension ID.
 4. Set `EXTENSION_CHROME_ID=<that ID>` in the backend's `.env.local`, clear its cache

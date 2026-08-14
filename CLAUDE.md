@@ -158,9 +158,11 @@ connect a browser (handoff via `externally_connectable` + `chrome.runtime.sendMe
 copy-paste) and revoke it at any time. The extension itself (`chrome-extension/`, a separate npm
 project, Manifest V3) reuses `ConvertGoogleMapsToGpxAction` unchanged via
 `ExtensionConversionController`; its background service worker is the only code that ever reads
-the stored token. See `documentation/technique/chrome-extension.md`. **Manual end-to-end
-verification (real Chrome, real Google Maps route) is still pending** — see
-`chrome-extension/RELEASE_CHECKLIST.md`.
+the stored token. See `documentation/technique/chrome-extension.md`. **Manually verified
+end-to-end** against a real Chrome browser and a real Google Maps route — see
+`chrome-extension/RELEASE_CHECKLIST.md`. One real bug found and fixed in the process: the popup's
+"connect your account" button opened the POST-only handoff-completion route directly instead of
+the account page carrying the real button.
 
 **Phase 4 — Stripe billing**: credit-pack purchases via hosted Stripe Checkout.
 `BillingProviderInterface`/`StripeBillingProvider`/`FakeBillingProvider` (`src/Billing/`) mirror
