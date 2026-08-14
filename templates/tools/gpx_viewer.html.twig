@@ -3,6 +3,17 @@
 
 {% block title %}{{ 'tools.gpx_viewer.meta_title'|trans }} — SmartGPX{% endblock %}
 {% block meta_description %}{{ 'tools.gpx_viewer.meta_description'|trans }}{% endblock %}
+{# leaflet.css : vite_entry_script_tags() n'émet que le JS, jamais le CSS d'un entry point —
+   seul vite_entry_link_tags() lit le manifeste pour ça (voir EntrypointRenderer::renderLinks()
+   dans pentatrion/vite-bundle). Sans ce lien, les règles .leaflet-pane/.leaflet-tile-pane
+   n'existent jamais en production : les tuiles se peignent au mauvais endroit tant qu'une
+   interaction ne force pas Leaflet à recalculer son origine — c'était le bug visuel où seule une
+   partie de la carte s'affichait. Invisible avec `vite dev` (qui injecte le CSS via <style>, sans
+   <link>), donc seul un build réel + un serveur statique le révèle. #}
+{% block stylesheets %}
+    {{ parent() }}
+    {{ vite_entry_link_tags('gpxViewer') }}
+{% endblock %}
 
 {% block body %}
     {# max-w-5xl plutôt que le max-w-3xl des autres pages outil : une fois une trace chargée, la
@@ -12,6 +23,28 @@
         <h1 class="text-3xl font-display tracking-tight">{{ 'tools.gpx_viewer.title'|trans }}</h1>
         <p class="mt-2 text-muted-foreground">{{ 'tools.gpx_viewer.intro'|trans }}</p>
         <div id="gpx-viewer-root"></div>
+
+        <div class="prose mt-10">
+            {% if app.request.locale == 'fr' %}
+                <p>Un fichier GPX n'est au fond qu'une liste de coordonnées, chacune avec une
+                altitude et parfois un horodatage. Ce visualiseur transforme cette liste en tracé
+                affiché sur une carte, pour vérifier d'un coup d'œil qu'un fichier correspond bien
+                à l'itinéraire attendu avant de le charger sur un appareil GPS ou de le partager.</p>
+                <p>Tout se passe dans votre navigateur : le fichier n'est jamais envoyé à nos
+                serveurs. Si vous cherchez plutôt à transformer un lien Google Maps en fichier GPX,
+                c'est <a href="{{ path('app_home') }}#convert">le convertisseur principal</a> qu'il
+                vous faut, pas cet outil.</p>
+            {% else %}
+                <p>A GPX file is really just a list of coordinates, each with an elevation and
+                sometimes a timestamp. This viewer turns that list into a route drawn on a map, so
+                you can check at a glance that a file matches the route you expect before loading
+                it onto a GPS device or sharing it.</p>
+                <p>Everything runs in your browser — the file is never sent to our servers. If
+                you're looking to turn a Google Maps link into a GPX file in the first place,
+                that's <a href="{{ path('app_home') }}#convert">the main converter</a>, not this
+                viewer.</p>
+            {% endif %}
+        </div>
     </div>
     {{ vite_entry_script_tags('gpxViewer', { dependency: 'react' }) }}
 {% endblock %}
