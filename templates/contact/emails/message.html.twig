@@ -1,0 +1,8 @@
+{% block subject %}{{ 'contact.email.subject'|trans({ '%name%': name }) }}{% endblock %}
+
+{% block body %}
+    <p><strong>{{ 'contact.form.name'|trans }}:</strong> {{ name }}</p>
+    <p><strong>{{ 'contact.form.email'|trans }}:</strong> {{ submitterEmail }}</p>
+    <p><strong>{{ 'contact.form.message'|trans }}:</strong></p>
+    <p>{{ contactMessage|nl2br }}</p>
+{% endblock %}

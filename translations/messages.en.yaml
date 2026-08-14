@@ -51,6 +51,7 @@ layout:
         company_heading: 'Company'
         google_maps_to_gpx: 'Google Maps → GPX'
         faq: 'FAQ'
+        contact: 'Contact'
 
 home:
     meta_title: 'Google Maps to GPX Converter | SmartGPX'
@@ -336,6 +337,20 @@ legal:
     terms:
         title: 'Terms of Service'
         placeholder: 'This page will describe the terms governing use of SmartGPX, credits, and purchases.'
+
+contact:
+    title: 'Contact us'
+    intro: "Question, bug report, or something not working as expected? Tell us about it."
+    form:
+        name: 'Name'
+        email: 'Email address'
+        message: 'Message'
+    submit: 'Send message'
+    email:
+        subject: 'New contact message from %name%'
+    flash:
+        sent: "Your message has been sent. We'll get back to you by email."
+        rate_limited: 'Too many messages sent recently. Please try again later.'
 
 error:
     404:
