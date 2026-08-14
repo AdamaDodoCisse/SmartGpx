@@ -11,18 +11,6 @@ jobs:
     runs-on: ubuntu-latest
 
     services:
-      mysql:
-        image: mysql:8.0
-        env:
-          MYSQL_ALLOW_EMPTY_PASSWORD: yes
-          MYSQL_DATABASE: smartgpx
-        ports:
-          - 3306:3306
-        options: >-
-          --health-cmd="mysqladmin ping"
-          --health-interval=10s
-          --health-timeout=5s
-          --health-retries=5
       redis:
         image: redis:7-alpine
         ports:
@@ -33,9 +21,12 @@ jobs:
           --health-timeout=5s
           --health-retries=5
 
+    # Tests run against SQLite (see config/packages/doctrine.yaml's when@test block and
+    # CLAUDE.md), not MySQL — no DATABASE_URL override needed, .env.test's sqlite:/// path
+    # takes over from APP_ENV=test alone. Redis stays: the rate limiter (login throttling etc.)
+    # is backed by it even in test, to persist state across the test client's kernel reboots.
     env:
       APP_ENV: test
-      DATABASE_URL: "mysql://root@127.0.0.1:3306/smartgpx?serverVersion=8.0&charset=utf8mb4"
       REDIS_URL: "redis://127.0.0.1:6379"
       MAILER_DSN: "null://null"
 
@@ -46,7 +37,7 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: '8.4'
-          extensions: ctype, iconv, mbstring, pdo_mysql, redis
+          extensions: ctype, iconv, mbstring, pdo_sqlite, redis
           coverage: none
 
       - name: Set up Node
@@ -87,18 +78,14 @@ jobs:
         working-directory: assets/app
         run: npm run build
 
-      - name: Wait for MySQL
-        run: |
-          for i in $(seq 1 30); do
-            mysqladmin ping -h 127.0.0.1 -u root --silent && break
-            sleep 2
-          done
-
-      - name: Run database migrations
-        run: php bin/console doctrine:migrations:migrate --no-interaction --env=test
+      - name: Create test database schema
+        run: php bin/console doctrine:schema:update --force --env=test
 
       - name: Coding standard (php-cs-fixer)
         run: composer cs-check
+
+      - name: Warm the dev container (needed by phpstan-symfony)
+        run: php bin/console cache:warmup --env=dev
 
       - name: Static analysis (PHPStan)
         run: composer stan
