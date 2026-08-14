@@ -5,7 +5,9 @@
 {% block meta_description %}{{ 'tools.gpx_viewer.meta_description'|trans }}{% endblock %}
 
 {% block body %}
-    <div class="mx-auto max-w-3xl px-4 py-12">
+    {# max-w-5xl plutôt que le max-w-3xl des autres pages outil : une fois une trace chargée, la
+       carte doit pouvoir utiliser l'espace disponible sur desktop (voir GpxViewerTool.tsx). #}
+    <div class="mx-auto max-w-5xl px-4 py-12">
         <span class="mb-4 flex size-10 items-center justify-center rounded-full bg-accent text-primary">{{ icons.icon('map', 'size-5') }}</span>
         <h1 class="text-3xl font-display tracking-tight">{{ 'tools.gpx_viewer.title'|trans }}</h1>
         <p class="mt-2 text-muted-foreground">{{ 'tools.gpx_viewer.intro'|trans }}</p>

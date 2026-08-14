@@ -46,7 +46,7 @@ export function GpxMergeTool() {
             <FileDropzone accept=".gpx" multiple onFiles={handleFiles} label={t('tools.drop_file')} />
 
             {null !== error && (
-                <p role="alert" className="mt-3 text-sm text-red-600">
+                <p role="alert" className="mt-3 text-sm text-[var(--error-fg)]">
                     {error}
                 </p>
             )}

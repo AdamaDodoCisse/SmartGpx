@@ -86,7 +86,7 @@ export function SingleFileConverterTool({
             <FileDropzone accept={accept} onFiles={handleFiles} label={t('tools.drop_file')} />
 
             {'error' === state.status && (
-                <p role="alert" className="mt-3 text-sm text-red-600">
+                <p role="alert" className="mt-3 text-sm text-[var(--error-fg)]">
                     {state.message}
                 </p>
             )}
