@@ -7,7 +7,11 @@
         "pricing": "Pricing",
         "chrome_extension": "Chrome Extension",
         "guides": "Guides",
-        "login": "Login"
+        "login": "Login",
+        "account": "Account",
+        "credits": "Credits",
+        "extensions": "Extensions",
+        "logout": "Log out"
     },
     "convert": {
         "input_label": "Google Maps route URL",
@@ -23,13 +27,21 @@
         },
         "cta": "Convert to GPX",
         "cta_loading": "Converting…",
-        "sign_in_cta": "Sign in to convert",
-        "sign_in_required": "Create a free account to convert your first Google Maps route.",
+        "back_to_form": "Back",
         "credit_balance_one": "{{count}} credit remaining",
         "credit_balance_other": "{{count}} credits remaining",
         "no_credit": {
             "title": "You're out of credits.",
             "cta": "Get credits"
+        },
+        "sign_in_required": {
+            "title": "Create a free account to export this route",
+            "cta_register": "Sign up free",
+            "cta_login": "Log in"
+        },
+        "email_not_verified": {
+            "title": "Verify your email to export",
+            "body": "We sent a confirmation link to your inbox. Verify your email, then come back here to export your route."
         },
         "result": {
             "title": "Your route is ready",

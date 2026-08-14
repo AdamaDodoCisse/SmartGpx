@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
+import { HeroCard } from './HeroCard';
 
 export interface ConversionResult {
     publicId: string;
@@ -26,7 +27,7 @@ export function ConvertResult({ result, onReset }: ConvertResultProps) {
     const durationMinutes = Math.round(result.durationSeconds / 60);
 
     return (
-        <div className="mx-auto mt-8 max-w-xl rounded-lg border border-border p-6 text-left">
+        <HeroCard>
             <h2 className="text-lg font-semibold">{t('convert.result.title')}</h2>
 
             <dl className="mt-4 space-y-2 text-sm">
@@ -72,6 +73,6 @@ export function ConvertResult({ result, onReset }: ConvertResultProps) {
                     {t('convert.result.convert_another')}
                 </Button>
             </div>
-        </div>
+        </HeroCard>
     );
 }

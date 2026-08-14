@@ -17,8 +17,8 @@
 
                 <div
                     id="convert-hero-root"
-                    class="mt-8"
                     data-is-authenticated="{{ app.user ? '1' : '' }}"
+                    data-is-verified="{{ app.user and app.user.verified ? '1' : '' }}"
                     data-csrf-token="{{ csrf_token('convert_google_maps') }}"
                     data-credit-balance="{{ creditBalance }}"
                     data-locale="{{ app.request.locale }}"

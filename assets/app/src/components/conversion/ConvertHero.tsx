@@ -3,11 +3,13 @@ import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { ConvertResult, type ConversionResult } from './ConvertResult';
+import { HeroCard } from './HeroCard';
 
 type TravelMode = 'DRIVE' | 'WALK' | 'BICYCLE' | 'TRANSIT';
 
 interface ConvertHeroProps {
     isAuthenticated: boolean;
+    isVerified: boolean;
     csrfToken: string;
     creditBalance: number;
 }
@@ -17,9 +19,12 @@ type ConvertState =
     | { status: 'loading' }
     | { status: 'success'; result: ConversionResult }
     | { status: 'no_credit' }
+    | { status: 'sign_in_required' }
+    | { status: 'email_not_verified' }
     | { status: 'error'; message: string };
 
 const HTTP_PAYMENT_REQUIRED = 402;
+const HTTP_FORBIDDEN = 403;
 
 /**
  * Itinéraire réel (accepté par GoogleMapsUrlParser, voir GoogleMapsUrlParserTest) utilisé pour
@@ -28,29 +33,12 @@ const HTTP_PAYMENT_REQUIRED = 402;
  */
 const EXAMPLE_URL = 'https://www.google.com/maps/dir/?api=1&origin=Paris,+France&destination=Lyon,+France&travelmode=driving';
 
-export function ConvertHero({ isAuthenticated, csrfToken, creditBalance }: ConvertHeroProps) {
+export function ConvertHero({ isAuthenticated, isVerified, csrfToken, creditBalance }: ConvertHeroProps) {
     const { t } = useTranslation();
     const [url, setUrl] = useState('');
     const [travelMode, setTravelMode] = useState<TravelMode>('DRIVE');
     const [state, setState] = useState<ConvertState>({ status: 'idle' });
     const inputRef = useRef<HTMLInputElement>(null);
-
-    if (!isAuthenticated) {
-        return (
-            <div className="mx-auto mt-8 max-w-xl text-center">
-                <a
-                    href="/login"
-                    className="inline-block rounded-md bg-primary px-6 py-2 text-sm font-medium text-primary-foreground hover:opacity-90"
-                >
-                    {t('convert.sign_in_cta')}
-                </a>
-                <p className="mt-2 text-xs text-muted-foreground">{t('convert.sign_in_required')}</p>
-                <p className="mt-4 font-mono text-xs tracking-wide text-muted-foreground">
-                    {t('convert.free_conversion_notice')}
-                </p>
-            </div>
-        );
-    }
 
     if ('success' === state.status) {
         return (
@@ -66,15 +54,63 @@ export function ConvertHero({ isAuthenticated, csrfToken, creditBalance }: Conve
 
     if ('no_credit' === state.status) {
         return (
-            <div className="mx-auto mt-8 max-w-xl rounded-lg border border-border p-6 text-center">
-                <p className="font-medium">{t('convert.no_credit.title')}</p>
-                <a
-                    href="/pricing"
-                    className="mt-4 inline-block rounded-md bg-primary px-6 py-2 text-sm font-medium text-primary-foreground hover:opacity-90"
-                >
-                    {t('convert.no_credit.cta')}
-                </a>
-            </div>
+            <HeroCard>
+                <div className="text-center">
+                    <p className="font-medium">{t('convert.no_credit.title')}</p>
+                    <a
+                        href="/pricing"
+                        className="mt-4 inline-block rounded-md bg-primary px-6 py-2 text-sm font-medium text-primary-foreground hover:opacity-90"
+                    >
+                        {t('convert.no_credit.cta')}
+                    </a>
+                </div>
+            </HeroCard>
+        );
+    }
+
+    if ('sign_in_required' === state.status) {
+        return (
+            <HeroCard>
+                <div className="text-center">
+                    <p className="font-medium">{t('convert.sign_in_required.title')}</p>
+                    <div className="mt-4 flex flex-wrap items-center justify-center gap-3">
+                        <a
+                            href="/register"
+                            className="inline-block rounded-md bg-primary px-6 py-2 text-sm font-medium text-primary-foreground hover:opacity-90"
+                        >
+                            {t('convert.sign_in_required.cta_register')}
+                        </a>
+                        <a href="/login" className="text-sm font-medium text-muted-foreground hover:text-foreground">
+                            {t('convert.sign_in_required.cta_login')}
+                        </a>
+                    </div>
+                    <button
+                        type="button"
+                        onClick={() => setState({ status: 'idle' })}
+                        className="mt-4 text-xs text-muted-foreground underline decoration-dotted underline-offset-4 hover:text-foreground"
+                    >
+                        {t('convert.back_to_form')}
+                    </button>
+                </div>
+            </HeroCard>
+        );
+    }
+
+    if ('email_not_verified' === state.status) {
+        return (
+            <HeroCard>
+                <div className="text-center">
+                    <p className="font-medium">{t('convert.email_not_verified.title')}</p>
+                    <p className="mt-2 text-sm text-muted-foreground">{t('convert.email_not_verified.body')}</p>
+                    <button
+                        type="button"
+                        onClick={() => setState({ status: 'idle' })}
+                        className="mt-4 text-xs text-muted-foreground underline decoration-dotted underline-offset-4 hover:text-foreground"
+                    >
+                        {t('convert.back_to_form')}
+                    </button>
+                </div>
+            </HeroCard>
         );
     }
 
@@ -82,6 +118,19 @@ export function ConvertHero({ isAuthenticated, csrfToken, creditBalance }: Conve
 
     const handleSubmit = async (event: FormEvent): Promise<void> => {
         event.preventDefault();
+
+        if (!isAuthenticated) {
+            setState({ status: 'sign_in_required' });
+
+            return;
+        }
+
+        if (!isVerified) {
+            setState({ status: 'email_not_verified' });
+
+            return;
+        }
+
         setState({ status: 'loading' });
 
         try {
@@ -104,6 +153,14 @@ export function ConvertHero({ isAuthenticated, csrfToken, creditBalance }: Conve
                     return;
                 }
 
+                // Défense en profondeur : l'état client (isVerified) peut être obsolète si
+                // l'utilisateur a ouvert deux onglets ou attendu longtemps sur la page.
+                if (HTTP_FORBIDDEN === response.status) {
+                    setState({ status: 'email_not_verified' });
+
+                    return;
+                }
+
                 const message =
                     'object' === typeof data && null !== data && 'error' in data && 'string' === typeof data.error
                         ? data.error
@@ -120,7 +177,7 @@ export function ConvertHero({ isAuthenticated, csrfToken, creditBalance }: Conve
     };
 
     return (
-        <div className="mx-auto mt-8 max-w-xl">
+        <HeroCard>
             <form onSubmit={(event) => void handleSubmit(event)} className="flex flex-col gap-3 sm:flex-row">
                 <label htmlFor="maps-url" className="sr-only">
                     {t('convert.input_label')}
@@ -165,7 +222,9 @@ export function ConvertHero({ isAuthenticated, csrfToken, creditBalance }: Conve
                 >
                     {t('convert.example_cta')}
                 </button>
-                <p className="text-xs text-muted-foreground">{t('convert.credit_balance', { count: creditBalance })}</p>
+                <p className="text-xs text-muted-foreground">
+                    {isAuthenticated ? t('convert.credit_balance', { count: creditBalance }) : t('convert.free_conversion_notice')}
+                </p>
             </div>
 
             {'error' === state.status && (
@@ -173,6 +232,6 @@ export function ConvertHero({ isAuthenticated, csrfToken, creditBalance }: Conve
                     {state.message}
                 </p>
             )}
-        </div>
+        </HeroCard>
     );
 }

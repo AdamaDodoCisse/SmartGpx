@@ -7,7 +7,11 @@
         "pricing": "Tarifs",
         "chrome_extension": "Extension Chrome",
         "guides": "Guides",
-        "login": "Connexion"
+        "login": "Connexion",
+        "account": "Compte",
+        "credits": "Crédits",
+        "extensions": "Extensions",
+        "logout": "Déconnexion"
     },
     "convert": {
         "input_label": "URL de l'itinéraire Google Maps",
@@ -23,13 +27,21 @@
         },
         "cta": "Convertir en GPX",
         "cta_loading": "Conversion…",
-        "sign_in_cta": "Connectez-vous pour convertir",
-        "sign_in_required": "Créez un compte gratuit pour convertir votre premier itinéraire Google Maps.",
+        "back_to_form": "Retour",
         "credit_balance_one": "{{count}} crédit restant",
         "credit_balance_other": "{{count}} crédits restants",
         "no_credit": {
             "title": "Vous n'avez plus de crédits.",
             "cta": "Obtenir des crédits"
+        },
+        "sign_in_required": {
+            "title": "Créez un compte gratuit pour exporter cet itinéraire",
+            "cta_register": "Inscription gratuite",
+            "cta_login": "Connexion"
+        },
+        "email_not_verified": {
+            "title": "Vérifiez votre e-mail pour exporter",
+            "body": "Nous avons envoyé un lien de confirmation dans votre boîte de réception. Vérifiez votre e-mail, puis revenez ici pour exporter votre itinéraire."
         },
         "result": {
             "title": "Votre itinéraire est prêt",
