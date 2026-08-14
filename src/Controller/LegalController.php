@@ -5,20 +5,27 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
 final class LegalController extends AbstractController
 {
+    public function __construct(
+        #[Autowire(env: 'string:CONTACT_RECIPIENT_EMAIL')]
+        private readonly string $contactEmail,
+    ) {
+    }
+
     #[Route(['en' => '/privacy', 'fr' => '/fr/privacy'], name: 'app_privacy')]
     public function privacy(): Response
     {
-        return $this->render('legal/privacy.html.twig');
+        return $this->render('legal/privacy.html.twig', ['contactEmail' => $this->contactEmail]);
     }
 
     #[Route(['en' => '/terms', 'fr' => '/fr/terms'], name: 'app_terms')]
     public function terms(): Response
     {
-        return $this->render('legal/terms.html.twig');
+        return $this->render('legal/terms.html.twig', ['contactEmail' => $this->contactEmail]);
     }
 }

@@ -346,7 +346,6 @@ contact:
     submit: 'Envoyer le message'
     email:
         subject: 'Nouveau message de contact de %name%'
-        support: 'support@smartgpx.com'
     flash:
         sent: 'Votre message a été envoyé. Nous vous répondrons par e-mail.'
         rate_limited: 'Trop de messages envoyés récemment. Merci de réessayer plus tard.'
@@ -355,6 +354,10 @@ error:
     404:
         title: 'Page introuvable'
         description: "La page que vous cherchez n'existe pas ou a été déplacée."
+        back_home: "Retour à l'accueil"
+    generic:
+        title: "Une erreur s'est produite"
+        description: "Une erreur inattendue s'est produite. Réessayez, ou retournez à l'accueil."
         back_home: "Retour à l'accueil"
 
 identity:

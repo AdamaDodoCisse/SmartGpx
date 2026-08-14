@@ -95,7 +95,7 @@
 
             <h2>Nous contacter</h2>
             <p>Pour toute question sur ces conditions, écrivez-nous à
-            <a href="mailto:{{ 'contact.email.support'|trans }}">{{ 'contact.email.support'|trans }}</a>
+            <a href="mailto:{{ contactEmail }}">{{ contactEmail }}</a>
             ou via le <a href="{{ path('app_contact') }}">formulaire de contact</a>.</p>
         {% else %}
             <p class="rounded-md border border-border bg-secondary px-4 py-3 text-sm text-muted-foreground">
@@ -182,7 +182,7 @@
 
             <h2>Contact us</h2>
             <p>For any question about these terms, write to
-            <a href="mailto:{{ 'contact.email.support'|trans }}">{{ 'contact.email.support'|trans }}</a>
+            <a href="mailto:{{ contactEmail }}">{{ contactEmail }}</a>
             or use the <a href="{{ path('app_contact') }}">contact form</a>.</p>
         {% endif %}
     </div>

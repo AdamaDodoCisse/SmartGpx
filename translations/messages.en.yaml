@@ -346,7 +346,6 @@ contact:
     submit: 'Send message'
     email:
         subject: 'New contact message from %name%'
-        support: 'support@smartgpx.com'
     flash:
         sent: "Your message has been sent. We'll get back to you by email."
         rate_limited: 'Too many messages sent recently. Please try again later.'
@@ -355,6 +354,10 @@ error:
     404:
         title: 'Page not found'
         description: "The page you're looking for doesn't exist or has moved."
+        back_home: 'Back to homepage'
+    generic:
+        title: 'Something went wrong'
+        description: 'An unexpected error occurred. Please try again, or head back to the homepage.'
         back_home: 'Back to homepage'
 
 identity:

@@ -73,7 +73,7 @@
 
             <h2>Vos droits</h2>
             <p>Vous pouvez demander l'accès, la correction ou la suppression de vos données en nous
-            écrivant à <a href="mailto:{{ 'contact.email.support'|trans }}">{{ 'contact.email.support'|trans }}</a>.
+            écrivant à <a href="mailto:{{ contactEmail }}">{{ contactEmail }}</a>.
             L'accès de l'extension Chrome à votre compte peut être révoqué à tout moment depuis
             <a href="{{ path('app_account_extensions_index') }}">votre page Extensions</a>, sans nous
             contacter.</p>
@@ -88,7 +88,7 @@
 
             <h2>Nous contacter</h2>
             <p>Pour toute question sur cette politique, écrivez-nous à
-            <a href="mailto:{{ 'contact.email.support'|trans }}">{{ 'contact.email.support'|trans }}</a>
+            <a href="mailto:{{ contactEmail }}">{{ contactEmail }}</a>
             ou via le <a href="{{ path('app_contact') }}">formulaire de contact</a>.</p>
         {% else %}
             <p class="rounded-md border border-border bg-secondary px-4 py-3 text-sm text-muted-foreground">
@@ -152,7 +152,7 @@
 
             <h2>Your rights</h2>
             <p>You can request access to, correction of, or deletion of your data by writing to
-            <a href="mailto:{{ 'contact.email.support'|trans }}">{{ 'contact.email.support'|trans }}</a>.
+            <a href="mailto:{{ contactEmail }}">{{ contactEmail }}</a>.
             The Chrome extension's access to your account can be revoked at any time from
             <a href="{{ path('app_account_extensions_index') }}">your Extensions page</a>, with no
             need to contact us.</p>
@@ -167,7 +167,7 @@
 
             <h2>Contact us</h2>
             <p>For any question about this policy, write to
-            <a href="mailto:{{ 'contact.email.support'|trans }}">{{ 'contact.email.support'|trans }}</a>
+            <a href="mailto:{{ contactEmail }}">{{ contactEmail }}</a>
             or use the <a href="{{ path('app_contact') }}">contact form</a>.</p>
         {% endif %}
     </div>
