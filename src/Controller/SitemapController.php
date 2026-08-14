@@ -22,6 +22,7 @@ final class SitemapController extends AbstractController
         'app_pricing',
         'app_privacy',
         'app_terms',
+        'app_contact',
         'app_gpx_viewer',
         'app_tools_gpx_to_google_maps',
         'app_tools_gpx_simplify',
