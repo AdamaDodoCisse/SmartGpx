@@ -21,6 +21,14 @@
         <link href="https://fonts.googleapis.com/css2?family=Fjalla+One&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
         <title>{% block title %}SmartGPX{% endblock %}</title>
         <meta name="description" content="{% block meta_description %}{{ 'layout.default_meta_description'|trans }}{% endblock %}">
+        <meta property="og:type" content="website">
+        <meta property="og:site_name" content="SmartGPX">
+        <meta property="og:title" content="{% block og_title %}SmartGPX{% endblock %}">
+        <meta property="og:description" content="{% block og_description %}{{ 'layout.default_meta_description'|trans }}{% endblock %}">
+        <meta property="og:url" content="{{ app.request.uri }}">
+        <meta name="twitter:card" content="summary">
+        <meta name="twitter:title" content="{{ block('og_title') }}">
+        <meta name="twitter:description" content="{{ block('og_description') }}">
         {# _canonical_route n'existe que pour les routes i18n enregistrées via le raccourci
            #[Route(['en' => ..., 'fr' => ...])] — les routes internes non localisées (ex.
            /admin/*, un seul chemin, jamais de pendant .fr) n'ont pas d'alternative de langue,
@@ -47,11 +55,40 @@
             <div class="mx-auto flex h-16 max-w-6xl items-center justify-between px-4">
                 <a href="{{ path('app_home') }}" class="font-display text-xl tracking-wide">SmartGPX</a>
 
-                <nav class="hidden items-center gap-6 md:flex" aria-label="{{ 'layout.main_navigation'|trans }}">
-                    <a href="{{ path('app_home') }}#free-tools" class="text-sm font-medium text-muted-foreground hover:text-foreground">{{ 'layout.nav.tools'|trans }}</a>
+                <nav class="hidden items-center gap-6 lg:flex" aria-label="{{ 'layout.main_navigation'|trans }}">
+                    <a href="{{ path('app_home') }}#convert" class="text-sm font-medium text-muted-foreground hover:text-foreground">{{ 'layout.nav.convert'|trans }}</a>
+
+                    {# Menu "Tools" en HTML natif (details/summary) : le header reste du Twig
+                       statique et indexable (voir ADR-004), aucun JS n'est nécessaire pour un
+                       simple menu déroulant. #}
+                    <details class="group relative">
+                        <summary class="flex cursor-pointer list-none items-center gap-1 text-sm font-medium text-muted-foreground marker:content-none hover:text-foreground [&::-webkit-details-marker]:hidden">
+                            {{ 'layout.nav.tools'|trans }}
+                            {{ icons.icon('chevron-down', 'size-3.5 transition-transform group-open:rotate-180') }}
+                        </summary>
+                        <div class="absolute left-1/2 top-full z-20 mt-3 w-56 -translate-x-1/2 rounded-md border border-border bg-background p-2 shadow-lg">
+                            <a href="{{ path('app_gpx_viewer') }}" class="block rounded-sm px-3 py-2 text-sm hover:bg-secondary">{{ 'home.free_tools.gpx_viewer'|trans }}</a>
+                            <a href="{{ path('app_tools_gpx_to_google_maps') }}" class="block rounded-sm px-3 py-2 text-sm hover:bg-secondary">{{ 'home.free_tools.gpx_to_google_maps'|trans }}</a>
+                            <a href="{{ path('app_tools_gpx_simplify') }}" class="block rounded-sm px-3 py-2 text-sm hover:bg-secondary">{{ 'home.free_tools.gpx_simplify'|trans }}</a>
+                            <a href="{{ path('app_tools_gpx_merge') }}" class="block rounded-sm px-3 py-2 text-sm hover:bg-secondary">{{ 'home.free_tools.gpx_merge'|trans }}</a>
+                            <a href="{{ path('app_tools_kml_to_gpx') }}" class="block rounded-sm px-3 py-2 text-sm hover:bg-secondary">{{ 'home.free_tools.kml_to_gpx'|trans }}</a>
+                            <a href="{{ path('app_tools_kmz_to_gpx') }}" class="block rounded-sm px-3 py-2 text-sm hover:bg-secondary">{{ 'home.free_tools.kmz_to_gpx'|trans }}</a>
+                            <a href="{{ path('app_tools_tcx_to_gpx') }}" class="block rounded-sm px-3 py-2 text-sm hover:bg-secondary">{{ 'home.free_tools.tcx_to_gpx'|trans }}</a>
+                            <a href="{{ path('app_tools_fit_to_gpx') }}" class="block rounded-sm px-3 py-2 text-sm hover:bg-secondary">{{ 'home.free_tools.fit_to_gpx'|trans }}</a>
+                            <a href="{{ path('app_tools_geojson_to_gpx') }}" class="block rounded-sm px-3 py-2 text-sm hover:bg-secondary">{{ 'home.free_tools.geojson_to_gpx'|trans }}</a>
+                        </div>
+                    </details>
+
                     <a href="{{ path('app_guides_index') }}" class="text-sm font-medium text-muted-foreground hover:text-foreground">{{ 'layout.nav.guides'|trans }}</a>
                     <a href="{{ path('app_pricing') }}" class="text-sm font-medium text-muted-foreground hover:text-foreground">{{ 'layout.nav.pricing'|trans }}</a>
+                    <a href="{{ path('app_home') }}#chrome-extension" class="text-sm font-medium text-muted-foreground hover:text-foreground">{{ 'layout.nav.chrome_extension'|trans }}</a>
                     <a href="{{ path('app_login') }}" class="text-sm font-medium text-muted-foreground hover:text-foreground">{{ 'layout.nav.login'|trans }}</a>
+                    <a
+                        href="{{ path('app_home') }}#convert"
+                        class="inline-flex h-9 items-center justify-center whitespace-nowrap rounded-md bg-primary px-4 text-sm font-medium text-primary-foreground hover:opacity-90"
+                    >
+                        {{ 'layout.nav.convert_cta'|trans }}
+                    </a>
                 </nav>
 
                 <div class="flex items-center gap-2">
@@ -88,12 +125,45 @@
         </main>
 
         <footer class="mt-16 border-t border-border">
-            <div class="mx-auto max-w-6xl px-4 py-8 text-sm text-muted-foreground">
-                <p>&copy; {{ "now"|date("Y") }} SmartGPX</p>
-                <p>
-                    <a href="{{ path('app_privacy') }}" class="hover:text-foreground">{{ 'layout.footer.privacy'|trans }}</a>
-                    &middot;
-                    <a href="{{ path('app_terms') }}" class="hover:text-foreground">{{ 'layout.footer.terms'|trans }}</a>
+            <div class="mx-auto max-w-6xl px-4 py-12">
+                <div class="grid grid-cols-2 gap-8 text-sm sm:grid-cols-4">
+                    <div>
+                        <p class="font-mono text-xs tracking-wide text-muted-foreground">{{ 'layout.footer.product_heading'|trans }}</p>
+                        <ul class="mt-3 space-y-2">
+                            <li><a href="{{ path('app_home') }}#convert" class="text-muted-foreground hover:text-foreground">{{ 'layout.footer.google_maps_to_gpx'|trans }}</a></li>
+                            <li><a href="{{ path('app_gpx_viewer') }}" class="text-muted-foreground hover:text-foreground">{{ 'home.free_tools.gpx_viewer'|trans }}</a></li>
+                            <li><a href="{{ path('app_home') }}#chrome-extension" class="text-muted-foreground hover:text-foreground">{{ 'layout.nav.chrome_extension'|trans }}</a></li>
+                            <li><a href="{{ path('app_pricing') }}" class="text-muted-foreground hover:text-foreground">{{ 'layout.nav.pricing'|trans }}</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <p class="font-mono text-xs tracking-wide text-muted-foreground">{{ 'layout.footer.tools_heading'|trans }}</p>
+                        <ul class="mt-3 space-y-2">
+                            <li><a href="{{ path('app_tools_gpx_to_google_maps') }}" class="text-muted-foreground hover:text-foreground">{{ 'home.free_tools.gpx_to_google_maps'|trans }}</a></li>
+                            <li><a href="{{ path('app_tools_gpx_simplify') }}" class="text-muted-foreground hover:text-foreground">{{ 'home.free_tools.gpx_simplify'|trans }}</a></li>
+                            <li><a href="{{ path('app_tools_gpx_merge') }}" class="text-muted-foreground hover:text-foreground">{{ 'home.free_tools.gpx_merge'|trans }}</a></li>
+                            <li><a href="{{ path('app_tools_kml_to_gpx') }}" class="text-muted-foreground hover:text-foreground">{{ 'home.free_tools.kml_to_gpx'|trans }}</a></li>
+                            <li><a href="{{ path('app_tools_fit_to_gpx') }}" class="text-muted-foreground hover:text-foreground">{{ 'home.free_tools.fit_to_gpx'|trans }}</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <p class="font-mono text-xs tracking-wide text-muted-foreground">{{ 'layout.footer.resources_heading'|trans }}</p>
+                        <ul class="mt-3 space-y-2">
+                            <li><a href="{{ path('app_guides_index') }}" class="text-muted-foreground hover:text-foreground">{{ 'layout.nav.guides'|trans }}</a></li>
+                            <li><a href="{{ path('app_home') }}#faq" class="text-muted-foreground hover:text-foreground">{{ 'layout.footer.faq'|trans }}</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <p class="font-mono text-xs tracking-wide text-muted-foreground">{{ 'layout.footer.company_heading'|trans }}</p>
+                        <ul class="mt-3 space-y-2">
+                            <li><a href="{{ path('app_privacy') }}" class="text-muted-foreground hover:text-foreground">{{ 'layout.footer.privacy'|trans }}</a></li>
+                            <li><a href="{{ path('app_terms') }}" class="text-muted-foreground hover:text-foreground">{{ 'layout.footer.terms'|trans }}</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <p class="mt-10 border-t border-border pt-6 font-display text-sm tracking-wide text-muted-foreground">
+                    &copy; {{ "now"|date("Y") }} SmartGPX
                 </p>
             </div>
         </footer>

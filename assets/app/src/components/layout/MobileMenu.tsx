@@ -9,9 +9,11 @@ interface NavLink {
 }
 
 const NAV_LINKS: NavLink[] = [
+    { href: '/#convert', labelKey: 'nav.convert' },
     { href: '/#free-tools', labelKey: 'nav.tools' },
     { href: '/guides', labelKey: 'nav.guides' },
     { href: '/pricing', labelKey: 'nav.pricing' },
+    { href: '/#chrome-extension', labelKey: 'nav.chrome_extension' },
     { href: '/login', labelKey: 'nav.login' },
 ];
 
@@ -23,7 +25,7 @@ export function MobileMenu() {
     const { t } = useTranslation();
 
     return (
-        <div className="md:hidden">
+        <div className="lg:hidden">
             <Sheet>
                 <SheetTrigger asChild>
                     <Button variant="ghost" size="icon" aria-label={t('nav.open_menu')}>

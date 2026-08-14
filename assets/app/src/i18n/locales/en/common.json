@@ -11,7 +11,9 @@
     },
     "convert": {
         "input_label": "Google Maps route URL",
-        "input_placeholder": "Paste your Google Maps route",
+        "input_placeholder": "https://www.google.com/maps/dir/...",
+        "example_cta": "Try an example route",
+        "free_conversion_notice": "1 free conversion • No credit card required",
         "travel_mode_label": "Travel mode",
         "travel_mode": {
             "drive": "Driving",
@@ -25,6 +27,10 @@
         "sign_in_required": "Create a free account to convert your first Google Maps route.",
         "credit_balance_one": "{{count}} credit remaining",
         "credit_balance_other": "{{count}} credits remaining",
+        "no_credit": {
+            "title": "You're out of credits.",
+            "cta": "Get credits"
+        },
         "result": {
             "title": "Your route is ready",
             "origin": "Origin",

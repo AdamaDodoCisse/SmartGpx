@@ -11,7 +11,9 @@
     },
     "convert": {
         "input_label": "URL de l'itinéraire Google Maps",
-        "input_placeholder": "Collez votre itinéraire Google Maps",
+        "input_placeholder": "https://www.google.com/maps/dir/...",
+        "example_cta": "Essayer un itinéraire d'exemple",
+        "free_conversion_notice": "1 conversion gratuite • Sans carte bancaire",
         "travel_mode_label": "Mode de transport",
         "travel_mode": {
             "drive": "Voiture",
@@ -25,6 +27,10 @@
         "sign_in_required": "Créez un compte gratuit pour convertir votre premier itinéraire Google Maps.",
         "credit_balance_one": "{{count}} crédit restant",
         "credit_balance_other": "{{count}} crédits restants",
+        "no_credit": {
+            "title": "Vous n'avez plus de crédits.",
+            "cta": "Obtenir des crédits"
+        },
         "result": {
             "title": "Votre itinéraire est prêt",
             "origin": "Origine",

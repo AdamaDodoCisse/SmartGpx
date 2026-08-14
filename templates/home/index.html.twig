@@ -1,11 +1,14 @@
 {% extends 'base.html.twig' %}
 {% import '_macros/icons.html.twig' as icons %}
 
-{% block title %}SmartGPX — {{ 'home.hero.title'|trans }}{% endblock %}
-{% block meta_description %}{{ 'home.hero.subtitle'|trans }}{% endblock %}
+{% block title %}{{ 'home.meta_title'|trans }}{% endblock %}
+{% block meta_description %}{{ 'home.meta_description'|trans }}{% endblock %}
+{% block og_title %}{{ 'home.meta_title'|trans }}{% endblock %}
+{% block og_description %}{{ 'home.meta_description'|trans }}{% endblock %}
 
 {% block body %}
-    <div class="border-b border-border">
+    {# ============================== HERO ============================== #}
+    <div id="convert" class="scroll-mt-8 border-b border-border">
         <div class="mx-auto grid max-w-6xl gap-12 px-4 py-16 lg:grid-cols-[1.1fr_0.9fr] lg:items-center lg:py-24">
             <div>
                 <p class="font-mono text-xs font-medium tracking-[0.2em] text-route">{{ 'home.hero.eyebrow'|trans }}</p>
@@ -20,29 +23,36 @@
                     data-credit-balance="{{ creditBalance }}"
                     data-locale="{{ app.request.locale }}"
                 ></div>
-
-                <p class="mt-6 text-sm text-muted-foreground">{{ 'home.compatibility'|trans }}</p>
             </div>
 
-            {# Élément signature : une trace GPX qui se dessine du départ jusqu'au point de
-               position actuel — purement décoratif, aria-hidden car aucune information n'y est
-               encodée qui ne soit déjà dans le titre/sous-titre. #}
-            <svg viewBox="0 0 400 320" class="mx-auto hidden w-full max-w-sm sm:block lg:max-w-none" aria-hidden="true" focusable="false">
-                <path class="route-line-path" d="M20,290 C70,270 60,190 120,180 C170,172 175,235 225,205 C270,178 260,95 320,88 C345,85 355,55 380,32" />
-                <circle class="route-line-waypoint" cx="20" cy="290" r="6" style="--delay: 0.1s"/>
-                <circle class="route-line-waypoint" cx="225" cy="205" r="6" style="--delay: 0.9s"/>
-                <circle class="route-line-live" cx="380" cy="32" r="7"/>
-            </svg>
+            {# Le panneau "carte" explique visuellement Google Maps route -> trace GPX : mêmes
+               éléments (départ, arrivée, tracé) qu'un vrai fond de carte, sans en être une —
+               aucune tuile chargée, juste le motif signature déjà utilisé ailleurs sur le site. #}
+            <div class="relative mx-auto w-full max-w-sm overflow-hidden rounded-lg border border-border bg-secondary/30 lg:max-w-none" aria-hidden="true">
+                <div class="contour-bg absolute inset-0"></div>
+                <p class="relative border-b border-border bg-background/70 px-4 py-2 font-mono text-[0.65rem] tracking-[0.15em] text-muted-foreground">
+                    {{ 'home.hero.map_panel_label'|trans }}
+                </p>
+                <svg viewBox="0 0 400 320" class="relative w-full" focusable="false">
+                    <path class="route-line-path" d="M20,290 C70,270 60,190 120,180 C170,172 175,235 225,205 C270,178 260,95 320,88 C345,85 355,55 380,32" />
+                    <circle class="route-line-waypoint" cx="20" cy="290" r="6" style="--delay: 0.1s"/>
+                    <circle class="route-line-waypoint" cx="225" cy="205" r="6" style="--delay: 0.9s"/>
+                    <circle class="route-line-live" cx="380" cy="32" r="7"/>
+                    <text x="30" y="308" class="fill-muted-foreground font-mono" style="font-size: 11px;">PARIS</text>
+                    <text x="333" y="24" class="fill-muted-foreground font-mono" style="font-size: 11px;">LYON</text>
+                </svg>
+            </div>
         </div>
     </div>
 
     {{ vite_entry_script_tags('convertHero', { dependency: 'react' }) }}
 
-    <div class="contour-bg border-t border-border bg-secondary/40">
+    {# ============================== HOW IT WORKS ============================== #}
+    <div class="contour-bg border-b border-border bg-secondary/40">
         <div class="mx-auto max-w-5xl px-4 py-16 lg:py-20">
             <h2 class="text-center font-display text-2xl tracking-tight sm:text-3xl">{{ 'home.how_it_works.title'|trans }}</h2>
             <ol class="mt-12 grid grid-cols-1 gap-10 sm:grid-cols-3">
-                {% for step, icon in { 1: 'clipboard-paste', 2: 'route', 3: 'download' } %}
+                {% for step, icon in { 1: 'map', 2: 'clipboard-paste', 3: 'download' } %}
                     <li class="text-center">
                         <div class="mx-auto flex size-12 items-center justify-center rounded-full border border-route/30 bg-background text-route">
                             {{ icons.icon(icon, 'size-6') }}
@@ -56,55 +66,277 @@
         </div>
     </div>
 
-    <div class="mx-auto max-w-5xl px-4 py-16">
-        <ul class="grid grid-cols-1 gap-8 sm:grid-cols-3">
-            {% for benefit, icon in { device: 'watch', privacy: 'shield-check', credits: 'infinity' } %}
-                <li class="flex gap-3">
-                    <span class="mt-0.5 shrink-0 text-primary">
-                        {{ icons.icon(icon, 'size-5') }}
+    {# ============================== CHROME EXTENSION ============================== #}
+    <div id="chrome-extension" class="scroll-mt-8 border-b border-border">
+        <div class="mx-auto grid max-w-6xl items-center gap-12 px-4 py-16 lg:grid-cols-2 lg:py-24">
+            <div>
+                <p class="font-mono text-xs font-medium tracking-[0.2em] text-route">{{ 'home.chrome.eyebrow'|trans }}</p>
+                <h2 class="mt-4 font-display text-3xl tracking-tight sm:text-4xl">{{ 'home.chrome.title'|trans }}</h2>
+                <p class="mt-4 max-w-md text-muted-foreground">{{ 'home.chrome.subtitle'|trans }}</p>
+
+                <div class="mt-8 flex flex-wrap items-center gap-2 font-mono text-xs text-muted-foreground">
+                    <span class="flex items-center gap-1.5">{{ icons.icon('navigation', 'size-4 text-primary') }}{{ 'home.chrome.workflow_maps'|trans }}</span>
+                    {{ icons.icon('arrow-right', 'size-3.5') }}
+                    <span class="flex items-center gap-1.5">{{ icons.icon('puzzle', 'size-4 text-primary') }}{{ 'home.chrome.workflow_extension'|trans }}</span>
+                    {{ icons.icon('arrow-right', 'size-3.5') }}
+                    <span class="flex items-center gap-1.5">{{ icons.icon('download', 'size-4 text-primary') }}{{ 'home.chrome.workflow_gpx'|trans }}</span>
+                </div>
+
+                <div class="mt-8 flex flex-wrap items-center gap-x-6 gap-y-3">
+                    <a
+                        href="{{ path('app_account_extensions_index') }}"
+                        class="inline-flex h-10 items-center justify-center gap-2 rounded-md bg-primary px-5 text-sm font-medium text-primary-foreground hover:opacity-90"
+                    >
+                        {{ icons.icon('puzzle', 'size-4') }}
+                        {{ 'home.chrome.cta'|trans }}
+                    </a>
+                    <details>
+                        <summary class="cursor-pointer list-none text-sm font-medium text-muted-foreground marker:content-none hover:text-foreground [&::-webkit-details-marker]:hidden">
+                            {{ 'home.chrome.learn_more'|trans }}
+                        </summary>
+                        <p class="mt-3 max-w-md text-sm text-muted-foreground">{{ 'home.chrome.learn_more_body'|trans }}</p>
+                    </details>
+                </div>
+            </div>
+
+            {# Maquette de la popup d'extension : vraie composition HTML/CSS (pas une capture
+               d'écran). Les valeurs affichées (Paris -> Lyon, 465 km, 98 crédits) illustrent le
+               produit — ce ne sont pas des statistiques d'usage réelles. #}
+            <div class="mx-auto w-full max-w-xs overflow-hidden rounded-lg border border-border bg-background shadow-lg">
+                <div class="flex items-center gap-2 border-b border-border px-4 py-3">
+                    <span class="flex size-6 items-center justify-center rounded bg-primary text-primary-foreground">
+                        {{ icons.icon('route', 'size-3.5') }}
                     </span>
-                    <span>
-                        <span class="block font-medium">{{ ('home.benefits.' ~ benefit ~ '_title')|trans }}</span>
-                        <span class="mt-1 block text-sm text-muted-foreground">{{ ('home.benefits.' ~ benefit ~ '_body')|trans }}</span>
-                    </span>
-                </li>
-            {% endfor %}
-        </ul>
+                    <span class="font-display text-sm tracking-wide">SmartGPX</span>
+                </div>
+                <div class="px-4 py-4">
+                    <div class="flex items-center gap-2 text-sm">
+                        {{ icons.icon('map-pin', 'size-4 text-route') }}
+                        <span class="font-medium">{{ 'home.chrome.mockup_origin'|trans }}</span>
+                    </div>
+                    <div class="ml-2 h-4 border-l border-dashed border-border"></div>
+                    <div class="flex items-center gap-2 text-sm">
+                        {{ icons.icon('map-pin', 'size-4 text-route') }}
+                        <span class="font-medium">{{ 'home.chrome.mockup_destination'|trans }}</span>
+                    </div>
+                    <p class="mt-3 font-mono text-xs text-muted-foreground">
+                        {{ 'home.chrome.mockup_mode'|trans }} · {{ 'home.chrome.mockup_distance'|trans }}
+                    </p>
+                    <button
+                        type="button"
+                        tabindex="-1"
+                        class="mt-4 flex w-full items-center justify-center gap-2 rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground"
+                    >
+                        {{ icons.icon('download', 'size-4') }}
+                        {{ 'home.chrome.mockup_export'|trans }}
+                    </button>
+                    <p class="mt-3 text-center text-xs text-muted-foreground">{{ 'home.chrome.mockup_credits'|trans }}</p>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <div id="free-tools" class="mx-auto max-w-6xl px-4 pb-16">
-        <h2 class="text-center text-2xl font-semibold">{{ 'home.free_tools.title'|trans }}</h2>
-        <ul class="mt-6 grid grid-cols-2 gap-3 text-center text-sm text-muted-foreground sm:grid-cols-3 md:grid-cols-4">
-            {% for tool, entry in {
-                gpx_to_google_maps: { route: 'app_tools_gpx_to_google_maps', icon: 'map-pin' },
-                gpx_simplify: { route: 'app_tools_gpx_simplify', icon: 'sparkles' },
-                gpx_merge: { route: 'app_tools_gpx_merge', icon: 'combine' },
-                kml_to_gpx: { route: 'app_tools_kml_to_gpx', icon: 'file-code' },
-                gpx_to_kml: { route: 'app_tools_gpx_to_kml', icon: 'file-code' },
-                kmz_to_gpx: { route: 'app_tools_kmz_to_gpx', icon: 'file-archive' },
-                tcx_to_gpx: { route: 'app_tools_tcx_to_gpx', icon: 'activity' },
-                gpx_to_tcx: { route: 'app_tools_gpx_to_tcx', icon: 'activity' },
-                fit_to_gpx: { route: 'app_tools_fit_to_gpx', icon: 'watch' },
-                gpx_to_fit: { route: 'app_tools_gpx_to_fit', icon: 'watch' },
-                geojson_to_gpx: { route: 'app_tools_geojson_to_gpx', icon: 'braces' },
-                gpx_to_geojson: { route: 'app_tools_gpx_to_geojson', icon: 'braces' },
-                gpx_viewer: { route: 'app_gpx_viewer', icon: 'map' },
-            } %}
-                <li class="rounded-md border border-border px-3 py-4">
-                    {% if entry.route is not null %}
-                        <a href="{{ path(entry.route) }}" class="flex flex-col items-center gap-2 hover:text-foreground">
-                            {{ icons.icon(entry.icon, 'size-5 text-primary') }}
-                            {{ ('home.free_tools.' ~ tool)|trans }}
-                        </a>
-                    {% else %}
-                        <span class="flex flex-col items-center gap-2">
-                            {{ icons.icon(entry.icon, 'size-5') }}
-                            {{ ('home.free_tools.' ~ tool)|trans }}
-                        </span>
-                    {% endif %}
-                </li>
-            {% endfor %}
-        </ul>
-        <p class="mt-4 text-center text-xs text-muted-foreground">{{ 'home.free_tools.coming_soon'|trans }}</p>
+    {# ============================== COMPATIBILITY ============================== #}
+    <div class="border-b border-border">
+        <div class="mx-auto max-w-3xl px-4 py-16 text-center lg:py-20">
+            <h2 class="font-display text-2xl tracking-tight sm:text-3xl">{{ 'home.compatibility.title'|trans }}</h2>
+            <p class="mx-auto mt-3 max-w-md text-muted-foreground">{{ 'home.compatibility.subtitle'|trans }}</p>
+            <ul class="mt-8 flex flex-wrap items-center justify-center gap-3">
+                {% for device in ['Garmin', 'Wahoo', 'OsmAnd', 'Locus Map', 'Strava'] %}
+                    <li class="rounded-full border border-border px-4 py-1.5 font-mono text-sm">{{ device }}</li>
+                {% endfor %}
+                <li class="rounded-full border border-dashed border-border px-4 py-1.5 font-mono text-sm text-muted-foreground">{{ 'home.compatibility.and_more'|trans }}</li>
+            </ul>
+        </div>
+    </div>
+
+    {# ============================== USE CASES ============================== #}
+    <div class="border-b border-border bg-secondary/30">
+        <div class="mx-auto max-w-5xl px-4 py-16 lg:py-20">
+            <h2 class="text-center font-display text-2xl tracking-tight sm:text-3xl">{{ 'home.use_cases.title'|trans }}</h2>
+            <ul class="mt-10 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
+                {% for case, icon in { motorcycling: 'motorbike', cycling: 'bike', road_trips: 'car', outdoor: 'footprints' } %}
+                    <li>
+                        {{ icons.icon(icon, 'size-6 text-route') }}
+                        <h3 class="mt-3 font-semibold">{{ ('home.use_cases.' ~ case ~ '_title')|trans }}</h3>
+                        <p class="mt-1 text-sm text-muted-foreground">{{ ('home.use_cases.' ~ case ~ '_body')|trans }}</p>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+    {# ============================== FREE TOOLS DIRECTORY ============================== #}
+    <div id="free-tools" class="scroll-mt-8 border-b border-border">
+        <div class="mx-auto max-w-6xl px-4 py-16 lg:py-20">
+            <div class="mx-auto max-w-2xl text-center">
+                <h2 class="font-display text-2xl tracking-tight sm:text-3xl">{{ 'home.tools_directory.title'|trans }}</h2>
+                <p class="mt-3 text-muted-foreground">{{ 'home.tools_directory.subtitle'|trans }}</p>
+            </div>
+
+            <div class="mt-10 grid gap-px overflow-hidden rounded-lg border border-border bg-border lg:grid-cols-3">
+                <div class="bg-background p-5">
+                    <p class="font-mono text-xs tracking-[0.15em] text-muted-foreground">{{ 'home.tools_directory.category_maps'|trans }}</p>
+                    <ul class="mt-2">
+                        <li>
+                            <a href="{{ path('app_tools_gpx_to_google_maps') }}" class="flex items-center justify-between gap-2 py-2 text-sm hover:text-primary">
+                                <span class="flex items-center gap-2">{{ icons.icon('map-pin', 'size-4 text-primary') }}{{ 'home.free_tools.gpx_to_google_maps'|trans }}</span>
+                                {{ icons.icon('arrow-right', 'size-3.5 text-muted-foreground') }}
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="bg-background p-5">
+                    <p class="font-mono text-xs tracking-[0.15em] text-muted-foreground">{{ 'home.tools_directory.category_edit'|trans }}</p>
+                    <ul class="mt-2">
+                        {% for tool, entry in {
+                            gpx_viewer: { route: 'app_gpx_viewer', icon: 'map' },
+                            gpx_simplify: { route: 'app_tools_gpx_simplify', icon: 'sparkles' },
+                            gpx_merge: { route: 'app_tools_gpx_merge', icon: 'combine' },
+                        } %}
+                            <li>
+                                <a href="{{ path(entry.route) }}" class="flex items-center justify-between gap-2 py-2 text-sm hover:text-primary">
+                                    <span class="flex items-center gap-2">{{ icons.icon(entry.icon, 'size-4 text-primary') }}{{ ('home.free_tools.' ~ tool)|trans }}</span>
+                                    {{ icons.icon('arrow-right', 'size-3.5 text-muted-foreground') }}
+                                </a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+
+                <div class="bg-background p-5">
+                    <p class="font-mono text-xs tracking-[0.15em] text-muted-foreground">{{ 'home.tools_directory.category_convert'|trans }}</p>
+                    <ul class="mt-2">
+                        {% for tool, entry in {
+                            kml_to_gpx: { route: 'app_tools_kml_to_gpx', icon: 'file-code' },
+                            gpx_to_kml: { route: 'app_tools_gpx_to_kml', icon: 'file-code' },
+                            kmz_to_gpx: { route: 'app_tools_kmz_to_gpx', icon: 'file-archive' },
+                            tcx_to_gpx: { route: 'app_tools_tcx_to_gpx', icon: 'activity' },
+                            gpx_to_tcx: { route: 'app_tools_gpx_to_tcx', icon: 'activity' },
+                            fit_to_gpx: { route: 'app_tools_fit_to_gpx', icon: 'watch' },
+                            gpx_to_fit: { route: 'app_tools_gpx_to_fit', icon: 'watch' },
+                            geojson_to_gpx: { route: 'app_tools_geojson_to_gpx', icon: 'braces' },
+                            gpx_to_geojson: { route: 'app_tools_gpx_to_geojson', icon: 'braces' },
+                        } %}
+                            <li>
+                                <a href="{{ path(entry.route) }}" class="flex items-center justify-between gap-2 py-2 text-sm hover:text-primary">
+                                    <span class="flex items-center gap-2">{{ icons.icon(entry.icon, 'size-4 text-primary') }}{{ ('home.free_tools.' ~ tool)|trans }}</span>
+                                    {{ icons.icon('arrow-right', 'size-3.5 text-muted-foreground') }}
+                                </a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+
+            <p class="mt-6 text-center text-sm">
+                <a href="{{ path('app_guides_index') }}" class="text-muted-foreground underline decoration-dotted underline-offset-4 hover:text-foreground">
+                    {{ 'home.tools_directory.guides_cta'|trans }}
+                </a>
+            </p>
+        </div>
+    </div>
+
+    {# ============================== PRIVACY ============================== #}
+    <div class="border-b border-border bg-secondary/30">
+        <div class="mx-auto max-w-3xl px-4 py-16 text-center lg:py-20">
+            <span class="mx-auto flex w-fit items-center gap-1.5 rounded-full border border-border bg-background px-3 py-1 font-mono text-xs tracking-[0.1em] text-muted-foreground">
+                {{ icons.icon('shield-check', 'size-3.5 text-primary') }}
+                {{ 'home.privacy.badge'|trans }}
+            </span>
+            <h2 class="mt-4 font-display text-2xl tracking-tight sm:text-3xl">{{ 'home.privacy.title'|trans }}</h2>
+            <p class="mx-auto mt-3 max-w-lg text-muted-foreground">{{ 'home.privacy.body'|trans }}</p>
+            <p class="mx-auto mt-3 max-w-lg text-sm text-muted-foreground">{{ 'home.privacy.exception_note'|trans }}</p>
+        </div>
+    </div>
+
+    {# ============================== PRICING PREVIEW ============================== #}
+    <div class="border-b border-border">
+        <div class="mx-auto max-w-3xl px-4 py-16 text-center lg:py-20">
+            <h2 class="font-display text-2xl tracking-tight sm:text-3xl">{{ 'home.pricing_preview.title'|trans }}</h2>
+
+            <div class="mx-auto mt-8 max-w-sm rounded-lg border border-border p-6 text-left">
+                <div class="flex items-center justify-between text-sm">
+                    <span>{{ 'home.pricing_preview.free_line'|trans }}</span>
+                    <span class="font-mono text-muted-foreground">$0</span>
+                </div>
+                <div class="mt-3 flex items-center justify-between border-t border-border pt-3 text-sm">
+                    <span>{{ 'home.pricing_preview.pack_line'|trans }}</span>
+                    <span class="font-mono text-xs text-muted-foreground">{{ 'home.pricing_preview.per_conversion_note'|trans }}</span>
+                </div>
+                <p class="mt-4 text-xs text-muted-foreground">
+                    {{ 'home.pricing_preview.never_expire'|trans }}
+                    {{ 'home.pricing_preview.no_subscription'|trans }}
+                </p>
+                <a
+                    href="{{ path('app_pricing') }}"
+                    class="mt-5 flex h-10 w-full items-center justify-center rounded-md bg-primary text-sm font-medium text-primary-foreground hover:opacity-90"
+                >
+                    {{ 'home.pricing_preview.cta'|trans }}
+                </a>
+            </div>
+        </div>
+    </div>
+
+    {# ============================== FAQ ============================== #}
+    {% set faq_keys = ['q_gpx', 'q_convert', 'q_garmin', 'q_wahoo', 'q_gpx_to_maps', 'q_credits_expire', 'q_subscription', 'q_privacy', 'q_chrome'] %}
+    <div id="faq" class="scroll-mt-8 border-b border-border">
+        <div class="mx-auto max-w-3xl px-4 py-16 lg:py-20">
+            <h2 class="text-center font-display text-2xl tracking-tight sm:text-3xl">{{ 'home.faq.title'|trans }}</h2>
+            <div class="mt-8 divide-y divide-border border-t border-border">
+                {% for key in faq_keys %}
+                    <details class="group py-4">
+                        <summary class="flex cursor-pointer list-none items-center justify-between gap-4 text-sm font-medium marker:content-none [&::-webkit-details-marker]:hidden">
+                            {{ ('home.faq.' ~ key ~ '_title')|trans }}
+                            {{ icons.icon('chevron-down', 'size-4 shrink-0 text-muted-foreground transition-transform group-open:rotate-180') }}
+                        </summary>
+                        <p class="mt-3 text-sm text-muted-foreground">{{ ('home.faq.' ~ key ~ '_body')|trans }}</p>
+                    </details>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            "mainEntity": [
+                {% for key in faq_keys %}
+                    {
+                        "@type": "Question",
+                        "name": {{ ('home.faq.' ~ key ~ '_title')|trans|json_encode|raw }},
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": {{ ('home.faq.' ~ key ~ '_body')|trans|json_encode|raw }}
+                        }
+                    }{% if not loop.last %},{% endif %}
+                {% endfor %}
+            ]
+        }
+    </script>
+
+    {# ============================== FINAL CTA ============================== #}
+    <div class="relative overflow-hidden bg-secondary/30 text-center">
+        <div class="contour-bg absolute inset-0" aria-hidden="true"></div>
+        <div class="relative mx-auto max-w-2xl px-4 py-20">
+            <h2 class="font-display text-3xl tracking-tight sm:text-4xl">{{ 'home.final_cta.title'|trans }}</h2>
+            <p class="mt-2 text-xl text-muted-foreground">{{ 'home.final_cta.subtitle'|trans }}</p>
+            <div class="mt-8 flex flex-wrap items-center justify-center gap-4">
+                <a
+                    href="#convert"
+                    class="inline-flex h-11 items-center justify-center rounded-md bg-primary px-6 text-sm font-medium text-primary-foreground hover:opacity-90"
+                >
+                    {{ 'home.final_cta.primary_cta'|trans }}
+                </a>
+                <a
+                    href="#chrome-extension"
+                    class="inline-flex h-11 items-center justify-center rounded-md border border-border px-6 text-sm font-medium hover:bg-secondary"
+                >
+                    {{ 'home.chrome.cta'|trans }}
+                </a>
+            </div>
+        </div>
     </div>
 {% endblock %}
