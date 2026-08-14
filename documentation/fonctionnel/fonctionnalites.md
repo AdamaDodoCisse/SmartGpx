@@ -18,16 +18,15 @@ coordonnées, jamais envoyée comme une adresse littérale au fournisseur de rou
 
 Tous les outils suivants sont détaillés dans `documentation/fonctionnel/free-tools.md` et
 s'exécutent côté navigateur (voir
-[ADR-003](../decisions/ADR-003-browser-conversions.md)) — **statut Phase 5/6, non implémenté**,
-seule la page d'accueil les liste déjà (Phase 1) :
+[ADR-003](../decisions/ADR-003-browser-conversions.md)) — **statut : implémentés (Phase 5/6)** :
 
 GPX → Google Maps, GPX Simplify, GPX Merge, KML → GPX, KMZ → GPX, TCX ↔ GPX, FIT ↔ GPX,
 GeoJSON ↔ GPX, GPX Viewer.
 
 ## Extension Chrome
 
-Détaillée dans `documentation/fonctionnel/chrome-extension.md`. **Statut : Phase 3, non
-implémenté.**
+Détaillée dans `documentation/fonctionnel/chrome-extension.md`. **Statut : implémenté
+(Phase 3), vérifié de bout en bout en Chrome réel.**
 
 ## Compte et authentification
 
@@ -41,9 +40,9 @@ migration destructive).
 1 conversion Google Maps → GPX gratuite à l'inscription, puis 1 crédit par conversion réussie
 (jamais en cas d'échec) — **le crédit de bienvenue et le décompte par conversion sont
 implémentés et vérifiés (Phase 2)**, voir [ADR-002](../decisions/ADR-002-credit-ledger.md).
-L'achat de packs de crédits payants (Stripe, sans abonnement) reste **Phase 4, non implémenté**
-— voir `documentation/fonctionnel/pricing.md` pour la grille tarifaire exacte, déjà affichée à
-titre informatif sur `/pricing`.
+L'achat de packs de crédits payants (Stripe, sans abonnement) est **implémenté (Phase 4)** —
+voir `documentation/fonctionnel/pricing.md` pour la grille tarifaire exacte, éditable depuis
+`/admin/credit-packs` (Phase 8).
 
 ## Admin
 

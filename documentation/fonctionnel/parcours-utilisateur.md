@@ -48,7 +48,7 @@ Voir `documentation/technique/google-maps-to-gpx.md` et
 Voir `documentation/technique/stripe.md` et
 [ADR-006](../decisions/ADR-006-billing-provider.md).
 
-## Utilisation d'un outil gratuit (Phase 5/6, non implémenté)
+## Utilisation d'un outil gratuit (implémenté, Phase 5/6)
 
 ```
 /tools/... → dépôt d'un fichier (glisser-déposer ou sélection)
@@ -57,7 +57,7 @@ Voir `documentation/technique/stripe.md` et
   → téléchargement
 ```
 
-## Flux extension Chrome (Phase 3, non implémenté)
+## Flux extension Chrome (implémenté, Phase 3)
 
 ```
 Google Maps (itinéraire ouvert) → icône SmartGPX
@@ -65,3 +65,5 @@ Google Maps (itinéraire ouvert) → icône SmartGPX
   → itinéraire détecté, crédits restants affichés
   → Export GPX → terminé
 ```
+
+Vérifié de bout en bout en Chrome réel — voir `chrome-extension/RELEASE_CHECKLIST.md`.
