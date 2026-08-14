@@ -4,35 +4,39 @@
 {% block title %}Purchases — Admin — SmartGPX{% endblock %}
 {% block admin_body %}
     <h1 class="text-2xl font-semibold">Purchases</h1>
-    <div class="mt-6 overflow-x-auto">
-        <table class="w-full text-left text-sm">
-            <thead>
-                <tr class="border-b border-border text-muted-foreground">
-                    <th class="whitespace-nowrap py-2 pr-6 font-medium">User</th>
-                    <th class="whitespace-nowrap py-2 pr-6 font-medium">Credits</th>
-                    <th class="whitespace-nowrap py-2 pr-6 font-medium">Amount</th>
-                    <th class="whitespace-nowrap py-2 pr-6 font-medium">Status</th>
-                    <th class="whitespace-nowrap py-2 font-medium">Date</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for purchase in result.items %}
-                    {% set status_tone = purchase.status.value == 'completed' ? 'success' : (purchase.status.value == 'failed' ? 'error' : 'neutral') %}
-                    <tr class="border-b border-border">
-                        <td class="whitespace-nowrap py-3 pr-6">
-                            <a href="{{ path('app_admin_users_show', { publicId: purchase.user.publicId }) }}" class="font-medium hover:underline">
-                                {{ purchase.user.email }}
-                            </a>
-                        </td>
-                        <td class="whitespace-nowrap py-3 pr-6 [font-variant-numeric:tabular-nums]">{{ purchase.credits }}</td>
-                        <td class="whitespace-nowrap py-3 pr-6 [font-variant-numeric:tabular-nums]">{{ (purchase.amountCents / 100)|number_format(2) }} {{ purchase.currency|upper }}</td>
-                        <td class="whitespace-nowrap py-3 pr-6">{{ pill.pill(purchase.status.value, status_tone) }}</td>
-                        <td class="whitespace-nowrap py-3 text-muted-foreground [font-variant-numeric:tabular-nums]">{{ purchase.createdAt|date('Y-m-d H:i') }}</td>
+    {% if result.items is empty %}
+        <p class="mt-6 text-sm text-muted-foreground">No purchases yet.</p>
+    {% else %}
+        <div class="mt-6 overflow-x-auto">
+            <table class="w-full text-left text-sm">
+                <thead>
+                    <tr class="border-b border-border text-muted-foreground">
+                        <th class="whitespace-nowrap py-2 pr-6 font-medium">User</th>
+                        <th class="whitespace-nowrap py-2 pr-6 font-medium">Credits</th>
+                        <th class="whitespace-nowrap py-2 pr-6 font-medium">Amount</th>
+                        <th class="whitespace-nowrap py-2 pr-6 font-medium">Status</th>
+                        <th class="whitespace-nowrap py-2 font-medium">Date</th>
                     </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
+                </thead>
+                <tbody>
+                    {% for purchase in result.items %}
+                        {% set status_tone = purchase.status.value == 'completed' ? 'success' : (purchase.status.value == 'failed' ? 'error' : 'neutral') %}
+                        <tr class="border-b border-border">
+                            <td class="whitespace-nowrap py-3 pr-6">
+                                <a href="{{ path('app_admin_users_show', { publicId: purchase.user.publicId }) }}" class="font-medium hover:underline">
+                                    {{ purchase.user.email }}
+                                </a>
+                            </td>
+                            <td class="whitespace-nowrap py-3 pr-6 [font-variant-numeric:tabular-nums]">{{ purchase.credits }}</td>
+                            <td class="whitespace-nowrap py-3 pr-6 [font-variant-numeric:tabular-nums]">{{ (purchase.amountCents / 100)|number_format(2) }} {{ purchase.currency|upper }}</td>
+                            <td class="whitespace-nowrap py-3 pr-6">{{ pill.pill(purchase.status.value, status_tone) }}</td>
+                            <td class="whitespace-nowrap py-3 text-muted-foreground [font-variant-numeric:tabular-nums]">{{ purchase.createdAt|date('Y-m-d H:i') }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% endif %}
 
     {% if result.total > result.perPage %}
         <div class="mt-6 flex items-center gap-4 text-sm">
