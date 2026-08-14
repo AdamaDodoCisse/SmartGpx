@@ -10,6 +10,23 @@
         <h1 class="text-3xl font-display tracking-tight">{{ 'tools.gpx_to_geojson.title'|trans }}</h1>
         <p class="mt-2 text-muted-foreground">{{ 'tools.gpx_to_geojson.intro'|trans }}</p>
         <div id="gpx-to-geojson-root"></div>
+
+        <div class="prose mt-10">
+            {% if app.request.locale == 'fr' %}
+                <p>Si vous développez avec Mapbox, Leaflet ou une autre bibliothèque cartographique
+                web, ces outils attendent du GeoJSON, pas du GPX. Cet outil convertit votre trace
+                en une <code>FeatureCollection</code> GeoJSON standard, prête à charger dans
+                n'importe quelle carte web.</p>
+                <p><a href="{{ path('app_guides_gpx_vs_geojson') }}">GPX vs GeoJSON</a> détaille
+                les différences entre les deux formats.</p>
+            {% else %}
+                <p>If you're building with Mapbox, Leaflet, or another web mapping library, those
+                tools expect GeoJSON, not GPX. This tool converts your track into a standard
+                GeoJSON <code>FeatureCollection</code>, ready to load into any web map.</p>
+                <p><a href="{{ path('app_guides_gpx_vs_geojson') }}">GPX vs GeoJSON</a> covers the
+                differences between the two formats.</p>
+            {% endif %}
+        </div>
     </div>
     {{ vite_entry_script_tags('gpxToGeojson', { dependency: 'react' }) }}
 {% endblock %}

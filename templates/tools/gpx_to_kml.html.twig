@@ -10,6 +10,24 @@
         <h1 class="text-3xl font-display tracking-tight">{{ 'tools.gpx_to_kml.title'|trans }}</h1>
         <p class="mt-2 text-muted-foreground">{{ 'tools.gpx_to_kml.intro'|trans }}</p>
         <div id="gpx-to-kml-root"></div>
+
+        <div class="prose mt-10">
+            {% if app.request.locale == 'fr' %}
+                <p>Si vous préparez une carte à visualiser ou partager dans Google Earth ou Google
+                My Maps, le KML est mieux adapté que le GPX : il permet de styliser les repères et
+                les zones, ce que le format GPX ne gère pas. Cet outil convertit votre trace GPX
+                en KML pour l'ouvrir directement dans Google Earth.</p>
+                <p><a href="{{ path('app_guides_gpx_vs_kml') }}">GPX vs KML</a> détaille les
+                différences entre les deux formats et quand utiliser lequel.</p>
+            {% else %}
+                <p>If you're building a map to view or share in Google Earth or Google My Maps,
+                KML is the better fit than GPX — it supports styled placemarks and colored areas,
+                which GPX doesn't handle. This tool converts your GPX track to KML so you can open
+                it directly in Google Earth.</p>
+                <p><a href="{{ path('app_guides_gpx_vs_kml') }}">GPX vs KML</a> covers the
+                differences between the two formats and when to use each.</p>
+            {% endif %}
+        </div>
     </div>
     {{ vite_entry_script_tags('gpxToKml', { dependency: 'react' }) }}
 {% endblock %}

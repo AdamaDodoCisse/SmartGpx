@@ -10,6 +10,25 @@
         <h1 class="text-3xl font-display tracking-tight">{{ 'tools.kmz_to_gpx.title'|trans }}</h1>
         <p class="mt-2 text-muted-foreground">{{ 'tools.kmz_to_gpx.intro'|trans }}</p>
         <div id="kmz-to-gpx-root"></div>
+
+        <div class="prose mt-10">
+            {% if app.request.locale == 'fr' %}
+                <p>Un fichier KMZ est simplement un fichier KML compressé en ZIP — souvent avec des
+                icônes ou images embarquées — c'est le format que Google Earth utilise pour
+                exporter une carte complète en un seul fichier. Cet outil extrait le KML à
+                l'intérieur et le convertit en GPX, sans jamais envoyer le fichier à un serveur :
+                le dézippage se fait entièrement dans votre navigateur.</p>
+                <p><a href="{{ path('app_guides_kmz') }}">Qu'est-ce qu'un fichier KMZ ?</a> explique
+                sa structure en détail.</p>
+            {% else %}
+                <p>A KMZ file is just a KML file zipped up — often with embedded icons or images —
+                it's the format Google Earth uses to export a whole map as one file. This tool
+                extracts the KML inside and converts it to GPX, without ever sending the file to a
+                server: the unzipping happens entirely in your browser.</p>
+                <p><a href="{{ path('app_guides_kmz') }}">What is a KMZ file?</a> covers its
+                structure in more detail.</p>
+            {% endif %}
+        </div>
     </div>
     {{ vite_entry_script_tags('kmzToGpx', { dependency: 'react' }) }}
 {% endblock %}

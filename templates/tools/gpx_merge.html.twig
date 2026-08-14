@@ -10,6 +10,26 @@
         <h1 class="text-3xl font-display tracking-tight">{{ 'tools.gpx_merge.title'|trans }}</h1>
         <p class="mt-2 text-muted-foreground">{{ 'tools.gpx_merge.intro'|trans }}</p>
         <div id="gpx-merge-root"></div>
+
+        <div class="prose mt-10">
+            {% if app.request.locale == 'fr' %}
+                <p>Un appareil GPS coupe parfois un enregistrement en plusieurs fichiers — une
+                pause, une batterie rechargée, un arrêt de l'appli — et vous vous retrouvez avec
+                trois ou quatre GPX pour ce qui était une seule sortie. Cet outil les recolle en un
+                seul fichier, dans l'ordre chronologique, en gardant tous les points de chaque
+                trace source.</p>
+                <p><a href="{{ path('app_guides_merge_tracks') }}">Le guide complet</a> explique
+                comment l'ordre est déterminé et ce qui se passe pour les fichiers sans
+                horodatage.</p>
+            {% else %}
+                <p>A GPS device sometimes splits a recording into several files — a pause, a
+                battery swap, the app restarting — and you end up with three or four GPX files for
+                what was really one outing. This tool stitches them back into a single file in
+                chronological order, keeping every point from each source track.</p>
+                <p><a href="{{ path('app_guides_merge_tracks') }}">The full guide</a> explains how
+                the order is determined and what happens with files that have no timestamps.</p>
+            {% endif %}
+        </div>
     </div>
     {{ vite_entry_script_tags('gpxMerge', { dependency: 'react' }) }}
 {% endblock %}

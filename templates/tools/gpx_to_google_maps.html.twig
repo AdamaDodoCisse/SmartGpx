@@ -10,6 +10,27 @@
         <h1 class="text-3xl font-display tracking-tight">{{ 'tools.gpx_to_google_maps.title'|trans }}</h1>
         <p class="mt-2 text-muted-foreground">{{ 'tools.gpx_to_google_maps.intro'|trans }}</p>
         <div id="gpx-to-google-maps-root"></div>
+
+        <div class="prose mt-10">
+            {% if app.request.locale == 'fr' %}
+                <p>Google Maps n'accepte pas un fichier GPX directement — ce n'est pas son format —
+                donc cet outil relit les points de votre trace et reconstruit un lien d'itinéraire
+                Google Maps que vous pouvez ouvrir, partager ou suivre depuis votre téléphone. Les
+                étapes intermédiaires gardent leur ordre d'origine.</p>
+                <p>Pratique pour partager un itinéraire préparé ailleurs (export d'un appareil GPS,
+                trace enregistrée par une autre application) sans avoir à recliquer chaque point à
+                la main dans Google Maps. Tout se passe dans votre navigateur, aucun fichier n'est
+                envoyé à nos serveurs.</p>
+            {% else %}
+                <p>Google Maps doesn't accept a GPX file directly — it's not their format — so this
+                tool reads the points in your track and rebuilds them as a Google Maps directions
+                link you can open, share, or follow from your phone. Intermediate stops keep their
+                original order.</p>
+                <p>Useful for sharing a route you prepared elsewhere — exported from a GPS device,
+                or recorded by another app — without re-clicking every point by hand in Google
+                Maps. Everything runs in your browser; no file is sent to our servers.</p>
+            {% endif %}
+        </div>
     </div>
     {{ vite_entry_script_tags('gpxToGoogleMaps', { dependency: 'react' }) }}
 {% endblock %}

@@ -10,6 +10,26 @@
         <h1 class="text-3xl font-display tracking-tight">{{ 'tools.kml_to_gpx.title'|trans }}</h1>
         <p class="mt-2 text-muted-foreground">{{ 'tools.kml_to_gpx.intro'|trans }}</p>
         <div id="kml-to-gpx-root"></div>
+
+        <div class="prose mt-10">
+            {% if app.request.locale == 'fr' %}
+                <p>Le KML est le format de Google Earth et Google My Maps — pensé pour la
+                visualisation, avec des options de style que le GPX n'a pas. Si vous voulez charger
+                une carte préparée dans Google Earth ou My Maps sur une montre Garmin, un compteur
+                Wahoo ou une application comme OsmAnd, il vous faut d'abord la convertir en GPX,
+                le format que ces appareils comprennent nativement.</p>
+                <p><a href="{{ path('app_guides_gpx_vs_kml') }}">GPX vs KML</a> détaille les
+                différences entre les deux formats et quand utiliser lequel.</p>
+            {% else %}
+                <p>KML is Google Earth and Google My Maps' format — built for visualization, with
+                styling options GPX doesn't have. If you want to load a map you built in Google
+                Earth or My Maps onto a Garmin watch, a Wahoo bike computer, or an app like OsmAnd,
+                you need to convert it to GPX first — the format those devices actually
+                understand.</p>
+                <p><a href="{{ path('app_guides_gpx_vs_kml') }}">GPX vs KML</a> covers the
+                differences between the two formats and when to use each.</p>
+            {% endif %}
+        </div>
     </div>
     {{ vite_entry_script_tags('kmlToGpx', { dependency: 'react' }) }}
 {% endblock %}

@@ -10,6 +10,25 @@
         <h1 class="text-3xl font-display tracking-tight">{{ 'tools.gpx_simplify.title'|trans }}</h1>
         <p class="mt-2 text-muted-foreground">{{ 'tools.gpx_simplify.intro'|trans }}</p>
         <div id="gpx-simplify-root"></div>
+
+        <div class="prose mt-10">
+            {% if app.request.locale == 'fr' %}
+                <p>Une trace GPS enregistrée en continu peut accumuler des milliers de points,
+                dont beaucoup n'ajoutent rien : une ligne droite n'a besoin que de ses deux
+                extrémités. Cet outil applique l'algorithme de Douglas-Peucker pour retirer les
+                points redondants tout en gardant la forme réelle du tracé, ce qui donne un
+                fichier plus léger, plus rapide à charger sur un appareil GPS.</p>
+                <p><a href="{{ path('app_guides_simplify_track') }}">Le guide complet</a> détaille
+                comment fonctionne cette simplification et comment choisir la bonne tolérance.</p>
+            {% else %}
+                <p>A GPS track recorded continuously can pile up thousands of points, many of which
+                add nothing — a straight line only needs its two ends. This tool runs the
+                Douglas-Peucker algorithm to drop redundant points while keeping the track's real
+                shape, producing a smaller file that loads faster on a GPS device.</p>
+                <p><a href="{{ path('app_guides_simplify_track') }}">The full guide</a> covers how
+                this simplification works and how to pick the right tolerance.</p>
+            {% endif %}
+        </div>
     </div>
     {{ vite_entry_script_tags('gpxSimplify', { dependency: 'react' }) }}
 {% endblock %}
