@@ -297,6 +297,27 @@ pricing:
     one_credit_equals: '1 crédit = 1 conversion Google Maps vers GPX.'
     credits_never_expire: 'Les crédits n’expirent jamais.'
 
+usage:
+    credits:
+        title: 'Historique des crédits'
+        buy_more: 'Acheter plus de crédits'
+        balance_label: 'Solde actuel'
+        history_title: 'Transactions'
+        empty: "Vous n'avez encore aucune activité de crédit."
+        column_type: 'Type'
+        column_amount: 'Montant'
+        column_balance_after: 'Solde après'
+        column_date: 'Date'
+        previous: 'Précédent'
+        next: 'Suivant'
+        page_of: 'Page %page% sur %last_page%'
+        type:
+            welcome: 'Crédit de bienvenue'
+            purchase: 'Achat'
+            conversion: 'Conversion'
+            refund: 'Remboursement'
+            admin_adjustment: 'Ajustement'
+
 billing:
     checkout:
         error: 'Impossible de contacter le prestataire de paiement. Merci de réessayer.'

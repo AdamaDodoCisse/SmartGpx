@@ -297,6 +297,27 @@ pricing:
     one_credit_equals: '1 credit = 1 Google Maps to GPX conversion.'
     credits_never_expire: 'Credits never expire.'
 
+usage:
+    credits:
+        title: 'Credit history'
+        buy_more: 'Buy more credits'
+        balance_label: 'Current balance'
+        history_title: 'Transactions'
+        empty: "You don't have any credit activity yet."
+        column_type: 'Type'
+        column_amount: 'Amount'
+        column_balance_after: 'Balance after'
+        column_date: 'Date'
+        previous: 'Previous'
+        next: 'Next'
+        page_of: 'Page %page% of %last_page%'
+        type:
+            welcome: 'Welcome credit'
+            purchase: 'Purchase'
+            conversion: 'Conversion'
+            refund: 'Refund'
+            admin_adjustment: 'Adjustment'
+
 billing:
     checkout:
         error: 'Unable to reach the payment provider. Please try again.'

@@ -1,6 +1,6 @@
 {% extends 'admin/_layout.html.twig' %}
 {% import '_macros/icons.html.twig' as icons %}
-{% import 'admin/_macros.html.twig' as admin %}
+{% import '_macros/pill.html.twig' as pill %}
 {% block title %}Failed Conversions — Admin — SmartGPX{% endblock %}
 {% block admin_body %}
     <h1 class="text-2xl font-semibold">Failed Conversions</h1>
@@ -23,7 +23,7 @@
                             </a>
                         </td>
                         <td class="max-w-xs truncate py-3 pr-6 font-mono text-xs text-muted-foreground" title="{{ failure.sourceUrl }}">{{ failure.sourceUrl }}</td>
-                        <td class="whitespace-nowrap py-3 pr-6">{{ admin.pill(failure.reason.value|replace({'_': ' '}), 'error') }}</td>
+                        <td class="whitespace-nowrap py-3 pr-6">{{ pill.pill(failure.reason.value|replace({'_': ' '}), 'error') }}</td>
                         <td class="whitespace-nowrap py-3 text-muted-foreground [font-variant-numeric:tabular-nums]">{{ failure.createdAt|date('Y-m-d H:i') }}</td>
                     </tr>
                 {% endfor %}

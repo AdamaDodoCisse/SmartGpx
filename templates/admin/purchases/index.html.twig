@@ -1,6 +1,6 @@
 {% extends 'admin/_layout.html.twig' %}
 {% import '_macros/icons.html.twig' as icons %}
-{% import 'admin/_macros.html.twig' as admin %}
+{% import '_macros/pill.html.twig' as pill %}
 {% block title %}Purchases — Admin — SmartGPX{% endblock %}
 {% block admin_body %}
     <h1 class="text-2xl font-semibold">Purchases</h1>
@@ -26,7 +26,7 @@
                         </td>
                         <td class="whitespace-nowrap py-3 pr-6 [font-variant-numeric:tabular-nums]">{{ purchase.credits }}</td>
                         <td class="whitespace-nowrap py-3 pr-6 [font-variant-numeric:tabular-nums]">{{ (purchase.amountCents / 100)|number_format(2) }} {{ purchase.currency|upper }}</td>
-                        <td class="whitespace-nowrap py-3 pr-6">{{ admin.pill(purchase.status.value, status_tone) }}</td>
+                        <td class="whitespace-nowrap py-3 pr-6">{{ pill.pill(purchase.status.value, status_tone) }}</td>
                         <td class="whitespace-nowrap py-3 text-muted-foreground [font-variant-numeric:tabular-nums]">{{ purchase.createdAt|date('Y-m-d H:i') }}</td>
                     </tr>
                 {% endfor %}

@@ -1,6 +1,6 @@
 {% extends 'admin/_layout.html.twig' %}
 {% import '_macros/icons.html.twig' as icons %}
-{% import 'admin/_macros.html.twig' as admin %}
+{% import '_macros/pill.html.twig' as pill %}
 {% block title %}{{ targetUser.email }} — Admin — SmartGPX{% endblock %}
 {% block admin_body %}
     <a href="{{ path('app_admin_users_index') }}" class="flex w-fit items-center gap-1 text-sm text-muted-foreground hover:text-foreground">
@@ -9,7 +9,7 @@
     </a>
     <div class="mt-2 flex flex-wrap items-center gap-3">
         <h1 class="text-2xl font-semibold">{{ targetUser.email }}</h1>
-        {{ admin.pill(targetUser.verified ? 'Verified' : 'Unverified', targetUser.verified ? 'success' : 'neutral') }}
+        {{ pill.pill(targetUser.verified ? 'Verified' : 'Unverified', targetUser.verified ? 'success' : 'neutral') }}
     </div>
 
     <dl class="mt-6 grid grid-cols-2 gap-4 text-sm sm:grid-cols-4">
@@ -55,7 +55,7 @@
                 <tbody>
                     {% for transaction in ledger.items %}
                         <tr class="border-b border-border">
-                            <td class="whitespace-nowrap py-3 pr-6">{{ admin.pill(transaction.type.value|replace({'_': ' '}), transaction.amount > 0 ? 'success' : 'neutral') }}</td>
+                            <td class="whitespace-nowrap py-3 pr-6">{{ pill.pill(transaction.type.value|replace({'_': ' '}), transaction.amount > 0 ? 'success' : 'neutral') }}</td>
                             <td class="whitespace-nowrap py-3 pr-6 [font-variant-numeric:tabular-nums] {{ transaction.amount > 0 ? 'text-[var(--success-fg)]' : '' }}">
                                 {{ transaction.amount > 0 ? '+' ~ transaction.amount : transaction.amount }}
                             </td>

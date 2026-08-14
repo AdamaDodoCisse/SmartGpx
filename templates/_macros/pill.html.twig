@@ -1,7 +1,7 @@
 {#
-    Puce de statut réutilisée sur tous les écrans admin (Vrai/Faux, statut d'achat, raison
-    d'échec…) — encode l'état par la forme (pastille) en plus du texte, pas seulement par la
-    couleur, voir CLAUDE.md / a11y.
+    Puce de statut réutilisée sur tout écran affichant des données tabulaires (admin, historique
+    de crédits utilisateur…) — encode l'état par la forme (pastille) en plus du texte, pas
+    seulement par la couleur, voir CLAUDE.md / a11y.
 #}
 {% macro pill(label, tone = 'neutral') %}
     {% set tones = {

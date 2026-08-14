@@ -1,6 +1,6 @@
 {% extends 'admin/_layout.html.twig' %}
 {% import '_macros/icons.html.twig' as icons %}
-{% import 'admin/_macros.html.twig' as admin %}
+{% import '_macros/pill.html.twig' as pill %}
 {% block title %}Credit Packs — Admin — SmartGPX{% endblock %}
 {% block admin_body %}
     <div class="flex flex-wrap items-center justify-between gap-3">
@@ -31,9 +31,9 @@
                     <tr class="border-b border-border">
                         <td class="whitespace-nowrap py-3 pr-6 [font-variant-numeric:tabular-nums]">{{ pack.credits }}</td>
                         <td class="whitespace-nowrap py-3 pr-6 [font-variant-numeric:tabular-nums]">{{ (pack.priceCents / 100)|number_format(2) }} {{ pack.currency|upper }}</td>
-                        <td class="whitespace-nowrap py-3 pr-6">{{ pack.badge ? admin.pill(pack.badge.value|replace({'_': ' '}), 'neutral') : '—' }}</td>
+                        <td class="whitespace-nowrap py-3 pr-6">{{ pack.badge ? pill.pill(pack.badge.value|replace({'_': ' '}), 'neutral') : '—' }}</td>
                         <td class="whitespace-nowrap py-3 pr-6 [font-variant-numeric:tabular-nums] text-muted-foreground">{{ pack.displayOrder }}</td>
-                        <td class="whitespace-nowrap py-3 pr-6">{{ admin.pill(pack.active ? 'Active' : 'Inactive', pack.active ? 'success' : 'neutral') }}</td>
+                        <td class="whitespace-nowrap py-3 pr-6">{{ pill.pill(pack.active ? 'Active' : 'Inactive', pack.active ? 'success' : 'neutral') }}</td>
                         <td class="whitespace-nowrap py-3 text-right">
                             <a href="{{ path('app_admin_credit_packs_edit', { publicId: pack.publicId }) }}" class="font-medium hover:underline">Edit</a>
                         </td>

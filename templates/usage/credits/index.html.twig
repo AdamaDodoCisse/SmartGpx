@@ -1,0 +1,79 @@
+{% extends 'base.html.twig' %}
+{% import '_macros/icons.html.twig' as icons %}
+{% import '_macros/pill.html.twig' as pill %}
+
+{% block title %}{{ 'usage.credits.title'|trans }} — SmartGPX{% endblock %}
+
+{% block body %}
+    <div class="mx-auto max-w-3xl px-4 py-12">
+        <div class="flex flex-wrap items-center justify-between gap-3">
+            <h1 class="text-2xl font-semibold">{{ 'usage.credits.title'|trans }}</h1>
+            <a
+                href="{{ path('app_pricing') }}"
+                class="whitespace-nowrap rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:opacity-90"
+            >
+                {{ 'usage.credits.buy_more'|trans }}
+            </a>
+        </div>
+
+        <div class="mt-6 rounded-md border border-border p-4">
+            <p class="text-sm text-muted-foreground">{{ 'usage.credits.balance_label'|trans }}</p>
+            <p class="mt-1 text-2xl font-semibold [font-variant-numeric:tabular-nums]">
+                {{ creditAccount ? creditAccount.balance : 0 }}
+            </p>
+        </div>
+
+        <h2 class="mt-10 text-lg font-semibold">{{ 'usage.credits.history_title'|trans }}</h2>
+
+        {% if ledger is null or ledger.items is empty %}
+            <p class="mt-2 text-sm text-muted-foreground">{{ 'usage.credits.empty'|trans }}</p>
+        {% else %}
+            <div class="mt-4 overflow-x-auto">
+                <table class="w-full text-left text-sm">
+                    <thead>
+                        <tr class="border-b border-border text-muted-foreground">
+                            <th class="whitespace-nowrap py-2 pr-6 font-medium">{{ 'usage.credits.column_type'|trans }}</th>
+                            <th class="whitespace-nowrap py-2 pr-6 font-medium">{{ 'usage.credits.column_amount'|trans }}</th>
+                            <th class="whitespace-nowrap py-2 pr-6 font-medium">{{ 'usage.credits.column_balance_after'|trans }}</th>
+                            <th class="whitespace-nowrap py-2 font-medium">{{ 'usage.credits.column_date'|trans }}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for transaction in ledger.items %}
+                            <tr class="border-b border-border">
+                                <td class="whitespace-nowrap py-3 pr-6">
+                                    {{ pill.pill(('usage.credits.type.' ~ transaction.type.value)|trans, transaction.amount > 0 ? 'success' : 'neutral') }}
+                                </td>
+                                <td class="whitespace-nowrap py-3 pr-6 [font-variant-numeric:tabular-nums] {{ transaction.amount > 0 ? 'text-[var(--success-fg)]' : '' }}">
+                                    {{ transaction.amount > 0 ? '+' ~ transaction.amount : transaction.amount }}
+                                </td>
+                                <td class="whitespace-nowrap py-3 pr-6 [font-variant-numeric:tabular-nums]">{{ transaction.balanceAfter }}</td>
+                                <td class="whitespace-nowrap py-3 text-muted-foreground [font-variant-numeric:tabular-nums]">{{ transaction.createdAt|date('Y-m-d H:i') }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            {% if ledger.total > ledger.perPage %}
+                <div class="mt-4 flex items-center gap-4 text-sm">
+                    <a
+                        href="{{ ledger.hasPrevious ? path('app_account_credits', { page: ledger.page - 1 }) : '#' }}"
+                        class="flex items-center gap-1 rounded-md border border-border px-3 py-1.5 {{ ledger.hasPrevious ? 'hover:bg-secondary' : 'pointer-events-none opacity-40' }}"
+                    >
+                        {{ icons.icon('arrow-left', 'size-3.5') }}
+                        {{ 'usage.credits.previous'|trans }}
+                    </a>
+                    <span class="text-muted-foreground">{{ 'usage.credits.page_of'|trans({ '%page%': ledger.page, '%last_page%': ledger.lastPage }) }}</span>
+                    <a
+                        href="{{ ledger.hasNext ? path('app_account_credits', { page: ledger.page + 1 }) : '#' }}"
+                        class="flex items-center gap-1 rounded-md border border-border px-3 py-1.5 {{ ledger.hasNext ? 'hover:bg-secondary' : 'pointer-events-none opacity-40' }}"
+                    >
+                        {{ 'usage.credits.next'|trans }}
+                        {{ icons.icon('arrow-right', 'size-3.5') }}
+                    </a>
+                </div>
+            {% endif %}
+        {% endif %}
+    </div>
+{% endblock %}
