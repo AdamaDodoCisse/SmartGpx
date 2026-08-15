@@ -186,6 +186,23 @@ body {
     font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
 }
 
+.popup-footer {
+    margin-top: 14px;
+    padding-top: 10px;
+    border-top: 1px solid var(--border);
+    text-align: center;
+}
+
+.popup-footer a {
+    color: var(--muted-foreground);
+    text-decoration: none;
+    font-size: 12px;
+}
+
+.popup-footer a:hover {
+    color: var(--primary);
+}
+
 .credit-badge a {
     color: var(--primary);
     text-decoration: none;

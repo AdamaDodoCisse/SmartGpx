@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
+import { DEV_API_ORIGIN, PROD_API_ORIGIN } from '@/lib/env';
 import { t } from '@/lib/i18n';
 import { isGoogleMapsRouteUrl, parseRoutePreview } from '@/lib/mapsUrl';
 import { sendExtensionRequest } from '@/lib/messages';
@@ -12,6 +13,8 @@ import { RouteSummary } from './components/RouteSummary';
 
 type Status = 'loading' | 'not-connected' | 'ready' | 'error';
 type ExportPhase = 'idle' | 'converting' | 'success';
+
+const WEB_APP_ORIGIN = import.meta.env.DEV ? DEV_API_ORIGIN : PROD_API_ORIGIN;
 
 export function Popup() {
     const [status, setStatus] = useState<Status>('loading');
@@ -158,6 +161,12 @@ export function Popup() {
                     <CreditBadge account={account} />
                 </div>
             )}
+
+            <footer className="popup-footer">
+                <a href={WEB_APP_ORIGIN} target="_blank" rel="noreferrer">
+                    {t('footer.visit_site')}
+                </a>
+            </footer>
         </div>
     );
 }

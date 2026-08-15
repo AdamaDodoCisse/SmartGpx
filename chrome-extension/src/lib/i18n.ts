@@ -17,6 +17,7 @@ const translations = {
         'error.generic': 'Something went wrong. Please try again.',
         'error.reconnect': 'Your connection expired. Please reconnect.',
         'loading': 'Loading…',
+        'footer.visit_site': 'smartgpx.com',
     },
     fr: {
         'connect.prompt': 'Connectez votre compte SmartGPX pour exporter vos itinéraires.',
@@ -33,6 +34,7 @@ const translations = {
         'error.generic': 'Une erreur est survenue. Merci de réessayer.',
         'error.reconnect': 'Votre connexion a expiré. Merci de vous reconnecter.',
         'loading': 'Chargement…',
+        'footer.visit_site': 'smartgpx.com',
     },
 } as const;
 
