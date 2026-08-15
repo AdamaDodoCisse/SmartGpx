@@ -210,13 +210,27 @@ submission — Chrome Web Store validates it.
 
 ## Screenshots
 
-**Done.** Four real screenshots in `store-assets/`, composed onto a 1280×800 canvas framed like a
-Chrome toolbar dropdown (a raw 320px-wide popup image alone reads too small/bare for a store
-listing): `screenshot-1-popup-disconnected.png`, `screenshot-2-popup-route-detected.png`,
-`screenshot-3-popup-export-success.png` (all captured against the real built extension loaded
-unpacked, with `chrome.tabs.query`/`chrome.runtime.sendMessage` mocked so no live backend or
-account was needed — see `documentation/technique/chrome-extension.md` for how), and
-`screenshot-4-account-extensions.png` (`/account/extensions`, a real logged-in page, no mocking).
+**Done**, all four at the exact required dimensions (**1280×800, 24-bit, no alpha channel** — the
+first attempt at these was rejected by the upload form for being off-size at 1280×720/1280×700 and
+carrying an alpha channel; regenerated with the exact pixel dimensions enforced and
+`hasAlpha: no` verified via `sips` before finalizing). In `store-assets/`:
+
+- `screenshot-1-popup-disconnected.png`, `screenshot-2-popup-route-detected.png`,
+  `screenshot-3-popup-export-success.png` — each a real popup screenshot (captured against the
+  actual built extension loaded unpacked, `chrome.tabs.query`/`chrome.runtime.sendMessage` mocked
+  so no live backend or account was needed for these three) composited onto a 1280×800 canvas
+  framed like a real Chrome toolbar dropdown, using the exact same browser-chrome mockup pattern
+  as the homepage's extension preview card (address bar + a highlighted extension icon + a
+  speech-bubble pointer connecting it to the popup) — a raw 320px-wide popup image alone reads
+  too small/bare for a store listing. Each has a short caption naming what that state
+  demonstrates.
+- `screenshot-4-account-extensions.png` — `/account/extensions`, a real logged-in page against a
+  real local account and a real `ExtensionAuthorization` row, no mocking, showing what a connected
+  browser actually looks like in account management (device label, connected date, revoke link)
+  rather than the empty "no browser connected yet" state.
+
+See `documentation/technique/chrome-extension.md` for the general approach to driving the real
+extension via Playwright (`chromium.launchPersistentContext` + `--load-extension`).
 
 ## Icons
 
