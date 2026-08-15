@@ -12,7 +12,7 @@
         {% if app.request.locale == 'fr' %}
             <p>Un fichier KMZ est une archive ZIP contenant un fichier KML (le format de Google
             Earth), généralement accompagné d'icônes ou d'images. C'est le format que Google Earth
-            et Google My Maps utilisent par défaut pour exporter une carte — d'où son omniprésence
+            et Google My Maps utilisent par défaut pour exporter une carte, d'où son omniprésence
             dès qu'on partage un itinéraire préparé sur ces outils.</p>
 
             <h2>Pourquoi convertir un KMZ en GPX ?</h2>
@@ -23,8 +23,8 @@
 
             <h2>Convertir un KMZ en GPX</h2>
             <p>Utilisez notre <a href="{{ path('app_tools_kmz_to_gpx') }}">convertisseur KMZ →
-            GPX</a> gratuit : le fichier est traité entièrement dans votre navigateur — extraction de
-            l'archive et conversion du KML incluses — il ne quitte jamais votre appareil.</p>
+            GPX</a> gratuit : le fichier est traité entièrement dans votre navigateur (extraction de
+            l'archive et conversion du KML incluses). Il ne quitte jamais votre appareil.</p>
 
             <h2>Ce qu'il faut savoir</h2>
             <p>Une archive KMZ réelle contient presque toujours un unique fichier <code>doc.kml</code>
@@ -34,7 +34,7 @@
         {% else %}
             <p>A KMZ file is a ZIP archive containing a KML file (Google Earth's format), usually
             bundled with icons or images. It's the default format Google Earth and Google My Maps
-            use when exporting a map — which is why it shows up so often when someone shares a route
+            use when exporting a map, which is why it shows up so often when someone shares a route
             they built in those tools.</p>
 
             <h2>Why convert KMZ to GPX?</h2>
@@ -43,9 +43,9 @@
             on a GPS device, you first need to extract the KML and then convert it to GPX.</p>
 
             <h2>Converting a KMZ to GPX</h2>
-            <p>Use our free <a href="{{ path('app_tools_kmz_to_gpx') }}">KMZ → GPX converter</a> —
-            the file is processed entirely in your browser, archive extraction and KML conversion
-            included — it never leaves your device.</p>
+            <p>Use our free <a href="{{ path('app_tools_kmz_to_gpx') }}">KMZ → GPX converter</a>:
+            the file is processed entirely in your browser (archive extraction and KML conversion
+            included). It never leaves your device.</p>
 
             <h2>What to know</h2>
             <p>A real KMZ archive almost always contains a single <code>doc.kml</code> file at its

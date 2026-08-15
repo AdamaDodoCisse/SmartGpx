@@ -19,32 +19,32 @@
             <p>Notre outil utilise l'algorithme de Ramer-Douglas-Peucker, une méthode standard qui
             supprime les points les moins significatifs pour la forme de la trace, en ne conservant
             que ceux qui définissent réellement sa géométrie. Plus la tolérance choisie est élevée,
-            plus la réduction est importante — au prix d'une fidélité légèrement moindre à la trace
-            d'origine.</p>
+            plus la réduction est importante (au prix d'une fidélité légèrement moindre à la trace
+            d'origine).</p>
 
             <h2>Simplifier une trace</h2>
             <p>Utilisez notre <a href="{{ path('app_tools_gpx_simplify') }}">outil GPX Simplify</a>
             gratuit : déposez votre fichier, ajustez la tolérance, et l'outil affiche le nombre de
-            points avant/après ainsi que le taux de réduction — pour rester transparent sur ce que
+            points avant/après ainsi que le taux de réduction, pour rester transparent sur ce que
             vous perdez en simplifiant.</p>
 
             <p class="text-sm text-muted-foreground">Le traitement se fait entièrement dans votre
             navigateur ; votre trace GPS ne quitte jamais votre appareil.</p>
         {% else %}
-            <p>A GPX file recorded by a GPS device can log a point every second — thousands of points
+            <p>A GPX file recorded by a GPS device can log a point every second: thousands of points
             for a multi-hour outing. That level of detail is rarely necessary, and an oversized file
             can slow down some apps or exceed the import limits of certain devices.</p>
 
             <h2>How simplification works</h2>
             <p>Our tool uses the Ramer-Douglas-Peucker algorithm, a standard method that drops the
             points least significant to the track's shape, keeping only those that actually define
-            its geometry. The higher the tolerance you choose, the bigger the reduction — at the cost
-            of slightly lower fidelity to the original track.</p>
+            its geometry. The higher the tolerance you choose, the bigger the reduction (at the cost
+            of slightly lower fidelity to the original track).</p>
 
             <h2>Simplifying a track</h2>
             <p>Use our free <a href="{{ path('app_tools_gpx_simplify') }}">GPX Simplify tool</a>:
             drop your file, adjust the tolerance, and the tool shows the point count before/after
-            along with the reduction rate — staying honest about what you're trading away by
+            along with the reduction rate, staying honest about what you're trading away by
             simplifying.</p>
 
             <p class="text-sm text-muted-foreground">Processing happens entirely in your browser;
