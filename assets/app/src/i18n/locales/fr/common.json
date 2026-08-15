@@ -23,11 +23,72 @@
             "drive": "Voiture",
             "walk": "À pied",
             "bicycle": "Vélo",
-            "transit": "Transports en commun"
+            "transit": "Transports en commun",
+            "two_wheeler": "Moto"
         },
         "cta": "Convertir en GPX",
         "cta_loading": "Conversion…",
         "back_to_form": "Retour",
+        "advanced": {
+            "toggle": "Options avancées",
+            "heading": "OPTIONS D'ITINÉRAIRE",
+            "reset": "Réinitialiser",
+            "presets": {
+                "label": "Style d'itinéraire",
+                "fastest": "Le plus rapide",
+                "road_trip": "Road trip",
+                "motorcycle": "Moto",
+                "custom": "Personnalisé"
+            },
+            "avoid": {
+                "label": "Éviter",
+                "avoidHighways": "Autoroutes",
+                "avoidHighways_tooltip": "Privilégier les itinéraires sans autoroute.",
+                "avoidTolls": "Péages",
+                "avoidTolls_tooltip": "Privilégier les itinéraires sans péage lorsqu'une alternative raisonnable existe.",
+                "avoidFerries": "Ferries",
+                "avoidFerries_tooltip": "Privilégier les itinéraires sans ferry."
+            },
+            "routing_preference": {
+                "label": "Calcul de l'itinéraire",
+                "traffic_unaware": "Standard",
+                "traffic_unaware_tooltip": "Calcul rapide, sans tenir compte du trafic actuel.",
+                "traffic_aware": "Avec trafic",
+                "traffic_aware_tooltip": "Utilise les conditions de trafic actuelles pour calculer l'itinéraire.",
+                "traffic_aware_optimal": "Meilleur itinéraire avec trafic",
+                "traffic_aware_optimal_tooltip": "Utilise le calcul d'itinéraire de Google le plus précis en tenant compte du trafic."
+            },
+            "stops": {
+                "label": "Étapes",
+                "optimize": "Optimiser l'ordre des étapes",
+                "move_up": "Monter",
+                "move_down": "Descendre",
+                "type_stop": "Étape",
+                "type_via": "Passage",
+                "optimized_notice": "Étapes optimisées",
+                "original": "Ordre initial",
+                "optimized": "Ordre optimisé"
+            },
+            "output": {
+                "label": "Résultat",
+                "high_quality": "Détail d'itinéraire haute qualité",
+                "show_alternatives": "Afficher les itinéraires alternatifs",
+                "show_fuel_efficient": "Afficher l'itinéraire économe en carburant",
+                "estimated_tolls": "Péages estimés",
+                "toll_estimate": "{{currency}} {{amount}}"
+            },
+            "route_selection": {
+                "title": "Choisissez votre itinéraire",
+                "label_fastest": "Le plus rapide",
+                "label_alternate": "Alternatif",
+                "label_fuel_efficient": "Éco",
+                "avoids_highways": "Évite les autoroutes",
+                "avoids_tolls": "Évite les péages",
+                "export": "Exporter cet itinéraire",
+                "preferences_applied": "Préférences d'itinéraire",
+                "preview_expired": "Cet aperçu d'itinéraire a expiré. Merci de relancer la conversion."
+            }
+        },
         "credit_balance_one": "{{count}} crédit restant",
         "credit_balance_other": "{{count}} crédits restants",
         "no_credit": {

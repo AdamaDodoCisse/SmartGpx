@@ -12,7 +12,7 @@ interface HeroCardProps {
  */
 export function HeroCard({ children }: HeroCardProps) {
     return (
-        <div className="hero-card-scope relative mx-auto mt-8 max-w-xl overflow-hidden rounded-lg border border-border bg-background shadow-lg">
+        <div className="hero-card-scope relative mx-auto mt-8 max-w-xl overflow-hidden rounded-lg border border-border bg-background text-foreground shadow-lg">
             <div className="h-1 bg-route" aria-hidden="true" />
             <div className="p-6">{children}</div>
         </div>

@@ -31,6 +31,13 @@ interface RoutingProviderInterface
 }
 ```
 
+*(Interface telle qu'acceptée en Phase 2. Étendue en Phase 10 avec `computeRoutes()` — options
+avancées, plusieurs itinéraires candidats — et `capabilities()` ; voir
+[ADR-008](ADR-008-routing-provider-capabilities.md) et
+`documentation/technique/routing-provider.md` pour la forme actuelle. Les principes ci-dessous —
+aucun type Google ne fuit hors de `GoogleRoutesProvider`, DTO indépendants du fournisseur —
+restent inchangés.)*
+
 `RouteResult`/`RouteLeg`/`RoutePoint` (`App\Routing\Result\`) sont des DTO indépendants de tout
 fournisseur — aucun type ni message d'erreur spécifique à Google ne fuit hors de
 `GoogleRoutesProvider`. Deux implémentations existent : `GoogleRoutesProvider` (réelle) et
@@ -102,3 +109,15 @@ fournisseurs ne sont pas retenus au lancement (Google Routes est déjà choisi p
 mais **différés, pas rejetés** : rien dans la conception de `RouteLocation`/`RouteResult` ne
 suppose Google, ce qui rend un changement de fournisseur ultérieur une simple nouvelle
 implémentation de l'interface.
+
+**Mise à jour (Phase 10)** : cette affirmation reposait sur une seule implémentation réelle
+(Google) plus une implémentation de test (`FakeRoutingProvider`), donc sur une conception jamais
+mise à l'épreuve d'un second jeu de fonctionnalités différent. `RoutingProviderCapabilities` (voir
+[ADR-008](ADR-008-routing-provider-capabilities.md)) rapproche cette affirmation d'une preuve
+réelle : chaque option avancée (évitements, trafic, alternatives, route économe en carburant,
+péages) est désormais conditionnée à ce que `capabilities()` déclare supporté, avec un filtrage
+appliqué côté serveur — pas seulement une convention suivie par un unique fournisseur. Un futur
+`ValhallaRoutingProvider` avec un jeu de fonctionnalités plus restreint (probablement pas
+d'itinéraires alternatifs, pas de route économe en carburant) fonctionnerait sans qu'aucune
+interface ni composant frontend ne change. Reste non prouvé tant qu'un second fournisseur réel
+n'existe pas.

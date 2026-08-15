@@ -1,22 +1,25 @@
-import { useRef, useState, type FormEvent } from 'react';
+import { useEffect, useRef, useState, type FormEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { AdvancedRouteOptions } from './AdvancedRouteOptions';
 import { ConvertResult, type ConversionResult } from './ConvertResult';
 import { HeroCard } from './HeroCard';
-
-type TravelMode = 'DRIVE' | 'WALK' | 'BICYCLE' | 'TRANSIT';
+import { RouteSelection } from './RouteSelection';
+import { DEFAULT_ROUTE_OPTIONS, type ParsedWaypoint, type RouteCandidate, type RouteOptionsState, type RoutingProviderCapabilities } from './routing/types';
 
 interface ConvertHeroProps {
     isAuthenticated: boolean;
     isVerified: boolean;
     csrfToken: string;
     creditBalance: number;
+    capabilities: RoutingProviderCapabilities;
 }
 
 type ConvertState =
     | { status: 'idle' }
     | { status: 'loading' }
+    | { status: 'choosing_route'; previewId: string; candidates: RouteCandidate[] }
     | { status: 'success'; result: ConversionResult }
     | { status: 'no_credit' }
     | { status: 'sign_in_required' }
@@ -25,6 +28,8 @@ type ConvertState =
 
 const HTTP_PAYMENT_REQUIRED = 402;
 const HTTP_FORBIDDEN = 403;
+const HTTP_GONE = 410;
+const PARSE_DEBOUNCE_MS = 500;
 
 /**
  * Itinéraire réel (accepté par GoogleMapsUrlParser, voir GoogleMapsUrlParserTest) utilisé pour
@@ -33,12 +38,77 @@ const HTTP_FORBIDDEN = 403;
  */
 const EXAMPLE_URL = 'https://www.google.com/maps/dir/?api=1&origin=Paris,+France&destination=Lyon,+France&travelmode=driving';
 
-export function ConvertHero({ isAuthenticated, isVerified, csrfToken, creditBalance }: ConvertHeroProps) {
+/**
+ * @returns le corps JSON commun aux endpoints convert/preview — les champs d'options avancées
+ * sont toujours envoyés (le backend filtre lui-même selon les capabilities actives), le preset
+ * n'est envoyé que lorsqu'il n'a pas été personnalisé (voir GoogleMapsRouteOptionsMapper).
+ */
+function buildRequestBody(url: string, options: RouteOptionsState, waypoints: ParsedWaypoint[]): Record<string, unknown> {
+    return {
+        url,
+        travelMode: options.travelMode,
+        preset: 'CUSTOM' === options.preset ? null : options.preset,
+        avoidHighways: options.avoidHighways,
+        avoidTolls: options.avoidTolls,
+        avoidFerries: options.avoidFerries,
+        routingPreference: options.routingPreference,
+        optimizeWaypointOrder: options.optimizeWaypointOrder,
+        routeDetail: options.routeDetail,
+        showAlternativeRoutes: options.showAlternativeRoutes,
+        showFuelEfficientRoute: options.showFuelEfficientRoute,
+        waypointTypes: waypoints.map((waypoint) => waypoint.type),
+    };
+}
+
+export function ConvertHero({ isAuthenticated, isVerified, csrfToken, creditBalance, capabilities }: ConvertHeroProps) {
     const { t } = useTranslation();
     const [url, setUrl] = useState('');
-    const [travelMode, setTravelMode] = useState<TravelMode>('DRIVE');
+    const [options, setOptions] = useState<RouteOptionsState>(DEFAULT_ROUTE_OPTIONS);
+    const [waypoints, setWaypoints] = useState<ParsedWaypoint[]>([]);
+    const [advancedOpen, setAdvancedOpen] = useState(false);
     const [state, setState] = useState<ConvertState>({ status: 'idle' });
     const inputRef = useRef<HTMLInputElement>(null);
+
+    // Peuple la liste des étapes STOP/VIA sans jamais appeler la route de calcul payante — voir
+    // ParseGoogleMapsUrlController. Ne se déclenche que lorsque le panneau est ouvert : un
+    // utilisateur qui n'ouvre jamais "Advanced options" ne déclenche aucun appel supplémentaire.
+    useEffect(() => {
+        if (!advancedOpen || '' === url.trim()) {
+            setWaypoints([]);
+
+            return;
+        }
+
+        const timer = window.setTimeout(() => {
+            fetch('/api/conversions/google-maps/parse', {
+                method: 'POST',
+                credentials: 'same-origin',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ url }),
+            })
+                .then((response) => (response.ok ? response.json() : null))
+                .then((data: unknown) => {
+                    if (
+                        'object' === typeof data &&
+                        null !== data &&
+                        'stops' in data &&
+                        Array.isArray((data as { stops: unknown }).stops)
+                    ) {
+                        const stops = (data as { stops: { label: string; index: number }[] }).stops;
+                        setWaypoints((previous) =>
+                            stops.map((stop) => ({
+                                label: stop.label,
+                                index: stop.index,
+                                type: previous.find((waypoint) => waypoint.index === stop.index)?.type ?? 'STOP',
+                            })),
+                        );
+                    }
+                })
+                .catch(() => undefined);
+        }, PARSE_DEBOUNCE_MS);
+
+        return () => window.clearTimeout(timer);
+    }, [url, advancedOpen]);
 
     if ('success' === state.status) {
         return (
@@ -114,7 +184,63 @@ export function ConvertHero({ isAuthenticated, isVerified, csrfToken, creditBala
         );
     }
 
+    if ('choosing_route' === state.status) {
+        return (
+            <HeroCard>
+                <RouteSelection
+                    candidates={state.candidates}
+                    isSubmitting={false}
+                    onBack={() => setState({ status: 'idle' })}
+                    onExport={(selectedIndex) => {
+                        void exportPreviewedRoute(state.previewId, selectedIndex);
+                    }}
+                />
+            </HeroCard>
+        );
+    }
+
     const isLoading = 'loading' === state.status;
+
+    async function exportPreviewedRoute(previewId: string, selectedIndex: number): Promise<void> {
+        setState({ status: 'loading' });
+
+        try {
+            const response = await fetch('/api/conversions/google-maps/export', {
+                method: 'POST',
+                credentials: 'same-origin',
+                headers: { 'Content-Type': 'application/json', 'X-CSRF-Token': csrfToken },
+                body: JSON.stringify({ previewId, selectedIndex }),
+            });
+
+            const data: unknown = await response.json();
+
+            if (!response.ok) {
+                if (HTTP_PAYMENT_REQUIRED === response.status) {
+                    setState({ status: 'no_credit' });
+
+                    return;
+                }
+
+                if (HTTP_GONE === response.status) {
+                    setState({ status: 'error', message: t('convert.advanced.route_selection.preview_expired') });
+
+                    return;
+                }
+
+                const message =
+                    'object' === typeof data && null !== data && 'error' in data && 'string' === typeof data.error
+                        ? data.error
+                        : t('convert.error.generic');
+                setState({ status: 'error', message });
+
+                return;
+            }
+
+            setState({ status: 'success', result: data as ConversionResult });
+        } catch {
+            setState({ status: 'error', message: t('convert.error.generic') });
+        }
+    }
 
     const handleSubmit = async (event: FormEvent): Promise<void> => {
         event.preventDefault();
@@ -133,15 +259,18 @@ export function ConvertHero({ isAuthenticated, isVerified, csrfToken, creditBala
 
         setState({ status: 'loading' });
 
+        const wantsRouteChoice = options.showAlternativeRoutes || options.showFuelEfficientRoute;
+        const endpoint = wantsRouteChoice ? '/api/conversions/google-maps/preview' : '/api/conversions/google-maps';
+
         try {
-            const response = await fetch('/api/conversions/google-maps', {
+            const response = await fetch(endpoint, {
                 method: 'POST',
                 credentials: 'same-origin',
                 headers: {
                     'Content-Type': 'application/json',
                     'X-CSRF-Token': csrfToken,
                 },
-                body: JSON.stringify({ url, travelMode }),
+                body: JSON.stringify(buildRequestBody(url, options, waypoints)),
             });
 
             const data: unknown = await response.json();
@@ -170,6 +299,13 @@ export function ConvertHero({ isAuthenticated, isVerified, csrfToken, creditBala
                 return;
             }
 
+            if (wantsRouteChoice) {
+                const preview = data as { previewId: string; candidates: RouteCandidate[] };
+                setState({ status: 'choosing_route', previewId: preview.previewId, candidates: preview.candidates });
+
+                return;
+            }
+
             setState({ status: 'success', result: data as ConversionResult });
         } catch {
             setState({ status: 'error', message: t('convert.error.generic') });
@@ -193,22 +329,21 @@ export function ConvertHero({ isAuthenticated, isVerified, csrfToken, creditBala
                     disabled={isLoading}
                     className="flex-1 font-mono text-sm"
                 />
-                <select
-                    aria-label={t('convert.travel_mode_label')}
-                    value={travelMode}
-                    onChange={(event) => setTravelMode(event.target.value as TravelMode)}
-                    disabled={isLoading}
-                    className="rounded-md border border-border bg-background px-3 py-2 text-sm"
-                >
-                    <option value="DRIVE">{t('convert.travel_mode.drive')}</option>
-                    <option value="WALK">{t('convert.travel_mode.walk')}</option>
-                    <option value="BICYCLE">{t('convert.travel_mode.bicycle')}</option>
-                    <option value="TRANSIT">{t('convert.travel_mode.transit')}</option>
-                </select>
                 <Button type="submit" disabled={isLoading}>
                     {isLoading ? t('convert.cta_loading') : t('convert.cta')}
                 </Button>
             </form>
+
+            <AdvancedRouteOptions
+                capabilities={capabilities}
+                options={options}
+                onChange={setOptions}
+                waypoints={waypoints}
+                onWaypointsChange={setWaypoints}
+                open={advancedOpen}
+                onOpenChange={setAdvancedOpen}
+                disabled={isLoading}
+            />
 
             <div className="mt-3 flex flex-wrap items-center justify-between gap-2">
                 <button

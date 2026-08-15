@@ -23,11 +23,72 @@
             "drive": "Driving",
             "walk": "Walking",
             "bicycle": "Cycling",
-            "transit": "Transit"
+            "transit": "Transit",
+            "two_wheeler": "Motorcycle"
         },
         "cta": "Convert to GPX",
         "cta_loading": "Converting…",
         "back_to_form": "Back",
+        "advanced": {
+            "toggle": "Advanced options",
+            "heading": "ROUTE OPTIONS",
+            "reset": "Reset to defaults",
+            "presets": {
+                "label": "Route style",
+                "fastest": "Fastest",
+                "road_trip": "Road trip",
+                "motorcycle": "Motorcycle",
+                "custom": "Custom"
+            },
+            "avoid": {
+                "label": "Avoid",
+                "avoidHighways": "Highways",
+                "avoidHighways_tooltip": "Prefer routes that don't use highways.",
+                "avoidTolls": "Tolls",
+                "avoidTolls_tooltip": "Prefer routes without toll roads when a reasonable alternative is available.",
+                "avoidFerries": "Ferries",
+                "avoidFerries_tooltip": "Prefer routes that don't use ferries."
+            },
+            "routing_preference": {
+                "label": "Route calculation",
+                "traffic_unaware": "Standard",
+                "traffic_unaware_tooltip": "Fast route calculation without current traffic.",
+                "traffic_aware": "Traffic aware",
+                "traffic_aware_tooltip": "Use current traffic conditions when calculating the route.",
+                "traffic_aware_optimal": "Best route with traffic",
+                "traffic_aware_optimal_tooltip": "Use Google's highest-quality traffic-aware route calculation."
+            },
+            "stops": {
+                "label": "Stops",
+                "optimize": "Optimize stop order",
+                "move_up": "Move up",
+                "move_down": "Move down",
+                "type_stop": "Stop",
+                "type_via": "Via",
+                "optimized_notice": "Stops optimized",
+                "original": "Original",
+                "optimized": "Optimized"
+            },
+            "output": {
+                "label": "Route output",
+                "high_quality": "High-quality route detail",
+                "show_alternatives": "Show alternative routes",
+                "show_fuel_efficient": "Show fuel-efficient route",
+                "estimated_tolls": "Estimated tolls",
+                "toll_estimate": "{{currency}} {{amount}}"
+            },
+            "route_selection": {
+                "title": "Choose your route",
+                "label_fastest": "Fastest",
+                "label_alternate": "Alternative",
+                "label_fuel_efficient": "Eco",
+                "avoids_highways": "Avoids highways",
+                "avoids_tolls": "Avoids tolls",
+                "export": "Export selected route",
+                "preferences_applied": "Route preferences",
+                "preview_expired": "This route preview has expired. Please convert again."
+            }
+        },
         "credit_balance_one": "{{count}} credit remaining",
         "credit_balance_other": "{{count}} credits remaining",
         "no_credit": {

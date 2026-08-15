@@ -30,6 +30,7 @@
                     data-csrf-token="{{ csrf_token('convert_google_maps') }}"
                     data-credit-balance="{{ creditBalance }}"
                     data-locale="{{ app.request.locale }}"
+                    data-capabilities="{{ routingCapabilities|json_encode }}"
                 ></div>
 
                 {# Bandeau de repères concrets — chiffres réels, pas de valeurs inventées pour
