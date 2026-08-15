@@ -46,6 +46,7 @@ layout:
         pricing: 'Pricing'
         chrome_extension: 'Chrome Extension'
         login: 'Login'
+        signup: 'Sign up'
         account: 'Account'
         credits: 'Credits'
         extensions: 'Extensions'

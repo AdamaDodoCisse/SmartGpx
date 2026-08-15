@@ -16,6 +16,7 @@ interface MobileMenuProps {
     chromeExtensionHref: string;
     isAuthenticated: boolean;
     loginHref: string;
+    signupHref: string;
     creditsHref: string;
     extensionsHref: string;
     logoutHref: string;
@@ -37,6 +38,7 @@ export function MobileMenu({
     chromeExtensionHref,
     isAuthenticated,
     loginHref,
+    signupHref,
     creditsHref,
     extensionsHref,
     logoutHref,
@@ -95,9 +97,17 @@ export function MobileMenu({
                                 </div>
                             </div>
                         ) : (
-                            <a href={loginHref} className="text-base font-medium">
-                                {t('nav.login')}
-                            </a>
+                            <div className="flex flex-col gap-3">
+                                <a href={loginHref} className="text-base font-medium">
+                                    {t('nav.login')}
+                                </a>
+                                <a
+                                    href={signupHref}
+                                    className="inline-flex h-9 items-center justify-center rounded-md border border-primary px-4 text-sm font-medium text-primary"
+                                >
+                                    {t('nav.signup')}
+                                </a>
+                            </div>
                         )}
                     </nav>
                 </SheetContent>

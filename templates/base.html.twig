@@ -107,6 +107,12 @@
                         </details>
                     {% else %}
                         <a href="{{ path('app_login') }}" class="nav-link text-sm font-medium text-muted-foreground hover:text-foreground">{{ 'layout.nav.login'|trans }}</a>
+                        <a
+                            href="{{ path('app_register') }}"
+                            class="inline-flex h-9 items-center justify-center whitespace-nowrap rounded-md border border-primary px-4 text-sm font-medium text-primary hover:bg-primary/10"
+                        >
+                            {{ 'layout.nav.signup'|trans }}
+                        </a>
                     {% endif %}
 
                     <a
@@ -169,6 +175,7 @@
                         data-chrome-extension-href="{{ path('app_home') }}#chrome-extension"
                         data-is-authenticated="{{ app.user ? '1' : '' }}"
                         data-login-href="{{ path('app_login') }}"
+                        data-signup-href="{{ path('app_register') }}"
                         data-credits-href="{{ path('app_account_credits') }}"
                         data-extensions-href="{{ path('app_account_extensions_index') }}"
                         data-logout-href="{{ path('app_logout') }}"

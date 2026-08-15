@@ -10,6 +10,7 @@ mountIsland('nav-mobile-menu-root', (props) => (
         chromeExtensionHref={props.chromeExtensionHref ?? '/'}
         isAuthenticated={'1' === props.isAuthenticated}
         loginHref={props.loginHref ?? '/'}
+        signupHref={props.signupHref ?? '/'}
         creditsHref={props.creditsHref ?? '/'}
         extensionsHref={props.extensionsHref ?? '/'}
         logoutHref={props.logoutHref ?? '/'}
