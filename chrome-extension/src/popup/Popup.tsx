@@ -118,6 +118,7 @@ export function Popup() {
             <header className="popup-header">
                 <LogoMark width={22} height={22} className="popup-header-mark" />
                 <span className="popup-header-title">SmartGPX</span>
+                <span className="popup-header-version">v{chrome.runtime.getManifest().version}</span>
             </header>
 
             {'loading' === status && <p className="muted-text">{t('loading')}</p>}

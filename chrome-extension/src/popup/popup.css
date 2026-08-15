@@ -80,6 +80,13 @@ body {
     letter-spacing: 0.02em;
 }
 
+.popup-header-version {
+    margin-left: auto;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 11px;
+    color: var(--muted-foreground);
+}
+
 .state-block {
     display: flex;
     flex-direction: column;
