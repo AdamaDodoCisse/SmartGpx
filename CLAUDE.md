@@ -69,6 +69,20 @@ there before re-deciding something already settled.
   Phase 9) is defined once per stack, `templates/_macros/logo.html.twig` (Twig) and `LogoMark` in
   `chrome-extension/src/popup/components/icons.tsx` (React) — reuse these rather than re-drawing
   it or reaching for a generic icon.
+- **Tailwind v4 `@theme` gotcha**: `--color-background: var(--background)` (and the other
+  `--color-*` tokens `@theme` generates `bg-background`/`text-muted-foreground`/etc. from) does
+  **not** dynamically re-resolve `var(--background)` per descendant element — it inherits
+  whatever value was already resolved at `:root`. To scope a light-themed card inside a
+  dark-themed section (or vice versa) regardless of the page's own light/dark mode, override the
+  `--color-*` variables directly on that element, never the intermediate semantic tokens
+  (`--background`, `--foreground`, …) — overriding only the latter has no effect on the generated
+  utility classes. See `.hero-card-scope` in `assets/app/src/entries/app.css` (Phase 9) for the
+  working pattern, applied to both the hero's decorative panel and the homepage pricing cards.
+  Also in `app.css`: the hero-specific tokens (`--hero-bg-start`, `--hero-fg`, …) are deliberately
+  defined once in `:root` only, *not* duplicated in the dark-mode override blocks used elsewhere
+  — the hero and the dark pricing section always render the same rich dark look regardless of the
+  site's own theme, a deliberate exception to the app's usual three-state
+  light/dark/system theming, not an oversight.
 
 ## Local development
 
@@ -303,6 +317,24 @@ plus explicit follow-up requests, rather than a pre-written spec. Several distin
   and `/contact` (a new `src/Contact/` domain — request/form/mailer/action, rate-limited like
   registration) plus `/account/credits` (a credit-ledger page, `src/Usage/Controller/`) were built
   where no such page existed before.
+- **Homepage redesign, taking structural and visual-identity inspiration from a competitor**
+  (gpx2maps.com) while deliberately keeping SmartGPX's own "topo trail" palette rather than
+  copying theirs (violet + photography) — a bolder *treatment* in SmartGPX's own colors, not a
+  reskin. The hero got a deep pine-green gradient background (`.hero-gradient`) with a large
+  abstract terrain-silhouette SVG standing in for a photo (`.hero-terrain`, zero licensing risk,
+  infinitely scalable, consistent with the existing `.contour-bg` motif) and a stat strip (13
+  free tools, 2 languages, 1 free conversion — real numbers, not padded to match a competitor's).
+  The small pricing-preview card was replaced with a real, dark-toned pricing showcase
+  (`.dark-section`) built from live `CreditPack` data; the pack-card markup itself was extracted
+  into `templates/pricing/_pack_grid.html.twig`, `{% include %}`d from both `/pricing` and the
+  homepage, so there's one source of truth for a pricing card. A condensed guide section
+  (`home.guide.*`) was added between pricing and the FAQ — real prose explaining *why* the
+  conversion needs a paid routing call, distinct from the FAQ's one-liners, ending in a link to
+  the full `/guides/google-maps-to-gpx` guide. Deliberately **not** built: a second "features
+  grid" duplicating differentiators (compatibility, privacy, no-subscription) that already have
+  their own full sections further up the same page — judged as page bloat rather than a genuine
+  gap, since gpx2maps needed that grid for content this page already had spread across dedicated
+  sections.
 
 Also worth knowing: `documentation/technique/seo.md` documents a real regression this phase found
 and fixed — canonical/hreflang tags were silently missing site-wide since Phase 8, because the
