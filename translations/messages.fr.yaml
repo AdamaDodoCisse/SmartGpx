@@ -398,6 +398,8 @@ error:
         back_home: "Retour à l'accueil"
 
 identity:
+    continue_with_google: 'Continuer avec Google'
+    or_divider: 'ou'
     form:
         email: 'Adresse e-mail'
         password: 'Mot de passe'
@@ -427,6 +429,7 @@ identity:
         password_reset_requested: "Si un compte existe pour cette adresse e-mail, vous recevrez sous peu un lien de réinitialisation."
         reset_password_invalid: 'Ce lien de réinitialisation est invalide ou a expiré.'
         reset_password_success: 'Votre mot de passe a été modifié. Vous pouvez maintenant vous connecter.'
+        google_email_not_verified: "Google indique que cette adresse e-mail n'est pas vérifiée, nous ne pouvons donc pas la lier à votre compte existant. Connectez-vous plutôt avec votre mot de passe."
     email:
         confirm:
             subject: 'Merci de confirmer votre adresse e-mail'

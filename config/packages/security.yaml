@@ -38,6 +38,8 @@ security:
                 check_path: app_login
                 enable_csrf: true
                 default_target_path: app_home
+            custom_authenticators:
+                - App\Identity\Security\GoogleAuthenticator
             logout:
                 path: app_logout
                 target: app_home
@@ -50,6 +52,7 @@ security:
     access_control:
         - { path: ^/(fr/)?login, roles: PUBLIC_ACCESS }
         - { path: ^/(fr/)?register, roles: PUBLIC_ACCESS }
+        - { path: ^/connect/google, roles: PUBLIC_ACCESS }
         - { path: ^/(fr/)?verify/email, roles: PUBLIC_ACCESS }
         - { path: ^/(fr/)?forgot-password, roles: PUBLIC_ACCESS }
         - { path: ^/(fr/)?reset-password, roles: PUBLIC_ACCESS }

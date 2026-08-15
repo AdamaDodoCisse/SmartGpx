@@ -398,6 +398,8 @@ error:
         back_home: 'Back to homepage'
 
 identity:
+    continue_with_google: 'Continue with Google'
+    or_divider: 'or'
     form:
         email: 'Email address'
         password: 'Password'
@@ -427,6 +429,7 @@ identity:
         password_reset_requested: 'If an account exists for this email address, you will receive a link to reset your password shortly.'
         reset_password_invalid: 'This password reset link is invalid or has expired.'
         reset_password_success: 'Your password has been changed. You can now log in.'
+        google_email_not_verified: "Google reports this email address as unverified, so we can't link it to your existing account. Please log in with your password instead."
     email:
         confirm:
             subject: 'Please confirm your email address'

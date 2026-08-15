@@ -41,10 +41,32 @@ qu'il ne se retrouve dans l'historique du navigateur.
 
 ## Google Sign-In
 
-**Non implémenté en Phase 1.** Le schéma de `User` (mot de passe nullable, colonne
-`authProvider`, colonne `googleId`) est prêt pour l'ajouter plus tard sans migration
-destructive, via un `Authenticator` Symfony additionnel enregistré sur le même firewall — voir
-`documentation/technique/architecture.md` (section « Interfaces aux frontières externes »).
+Implémenté via `App\Identity\Security\GoogleAuthenticator`, un `Authenticator` Symfony
+additionnel enregistré sur le firewall `main` existant (aucune nouvelle interface de domaine —
+voir `documentation/technique/architecture.md`, section « Interfaces aux frontières externes » :
+Google Sign-In n'a qu'un seul fournisseur réel, contrairement à Routing/Billing). Le bouton
+« Continue with Google » apparaît sur `/login` et `/register` : un seul flux couvre les deux cas,
+il n'existe pas de « inscription Google » distincte de la « connexion Google ».
+
+Comportement exact (`App\Identity\Action\AuthenticateWithGoogleAction`) :
+
+1. Un `googleId` déjà connu → reconnexion, aucune donnée modifiée.
+2. Sinon, une adresse e-mail déjà utilisée par un compte local (mot de passe) → **liaison
+   automatique** si Google rapporte cette adresse comme vérifiée (`email_verified: true`) : le
+   `googleId` est enregistré sur le compte existant, le mot de passe reste intact (les deux modes
+   de connexion continuent de fonctionner ensuite). C'est le comportement standard (GitHub,
+   Auth0, Firebase Auth font pareil) — sûr ici car c'est Google lui-même qui garantit la
+   possession de l'adresse. Si Google rapporte l'adresse comme **non vérifiée** (cas rare, comptes
+   Google Workspace), la liaison est refusée avec un message clair plutôt que silencieusement
+   acceptée.
+3. Sinon, création d'un nouveau compte : `AuthProvider::GOOGLE`, pas de mot de passe,
+   **vérifié immédiatement** (`isVerified = true`) — Google a déjà prouvé la possession de
+   l'adresse, inutile de renvoyer un e-mail de confirmation SmartGPX. `UserRegisteredEvent` est
+   émis exactement comme pour une inscription classique, donc le crédit de bienvenue est accordé
+   de la même façon (voir plus bas).
+
+Voir `documentation/technique/google-sign-in.md` pour le détail technique (routes, configuration
+`knpu_oauth2_client.yaml`, mise en place des identifiants Google Cloud Console).
 
 ## Utilisation par d'autres domaines
 
