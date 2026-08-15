@@ -1,0 +1,31 @@
+# SmartGPX
+
+> Convert Google Maps routes to GPX in seconds, plus a full suite of free, browser-side GPS format conversion tools.
+
+SmartGPX has two parts. The paid core converts a Google Maps route into a GPX file, ready to load
+onto a Garmin, Wahoo, OsmAnd, Strava, or any GPS app or device that reads GPX — 1 credit per
+conversion, also available as a Chrome extension that works directly on a Google Maps page.
+Everything else on the site is a free, client-side GPS/GPX format tool: files are parsed and
+converted entirely in the visitor's browser and never uploaded to a server. SmartGPX is not
+affiliated with Garmin, Wahoo, OsmAnd, Strava, or Google; references to those names describe file
+format compatibility only.
+
+## Product
+- [{{ 'home.meta_title'|trans({}, null, 'en') }}]({{ homeUrl }}): {{ 'home.meta_description'|trans({}, null, 'en') }}
+- [Pricing]({{ pricingUrl }}): {{ 'pricing.subtitle'|trans({}, null, 'en') }}
+- [Chrome extension]({{ chromeExtensionUrl }}): Convert a Google Maps route to GPX in one click, without leaving Google Maps.
+
+## Free tools
+{% for tool in tools %}
+- [{{ ('tools.' ~ tool.key ~ '.meta_title')|trans({}, null, 'en') }}]({{ tool.url }}): {{ ('tools.' ~ tool.key ~ '.meta_description')|trans({}, null, 'en') }}
+{% endfor %}
+
+## Guides
+{% for guide in guides %}
+- [{{ ('guides.' ~ guide.key ~ '.meta_title')|trans({}, null, 'en') }}]({{ guide.url }}): {{ ('guides.' ~ guide.key ~ '.meta_description')|trans({}, null, 'en') }}
+{% endfor %}
+
+## Company
+- [Privacy Policy]({{ privacyUrl }})
+- [Terms of Service]({{ termsUrl }})
+- [Contact]({{ contactUrl }})
