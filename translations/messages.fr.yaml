@@ -60,6 +60,7 @@ layout:
         google_maps_to_gpx: 'Google Maps → GPX'
         faq: 'FAQ'
         contact: 'Contact'
+        made_with_love: 'Fait avec amour par'
 
 home:
     meta_title: 'Convertisseur Google Maps vers GPX | SmartGPX'

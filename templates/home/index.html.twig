@@ -14,7 +14,13 @@
             <path fill="currentColor" fill-opacity="0.35" d="M0,200 L0,170 L150,120 L280,160 L400,100 L560,155 L700,110 L850,165 L1000,115 L1200,160 L1200,200 Z" />
         </svg>
 
-        <div class="relative mx-auto grid max-w-6xl gap-12 px-4 py-16 lg:grid-cols-[1.1fr_0.9fr] lg:items-center lg:py-24">
+        {# lg:items-start, pas items-center : la colonne de gauche grandit quand "Advanced
+           options" s'ouvre (formulaire + panneau replié) — avec items-center, la ligne de grille
+           se recentre sur la nouvelle hauteur et fait sauter le panneau décoratif de droite de
+           plusieurs centaines de pixels à chaque ouverture/fermeture. items-start ancre les deux
+           colonnes en haut une bonne fois pour toutes : le panneau ne bouge plus jamais, quelle
+           que soit la hauteur du formulaire. #}
+        <div class="relative mx-auto grid max-w-6xl gap-12 px-4 py-16 lg:grid-cols-[1.1fr_0.9fr] lg:items-start lg:py-24">
             <div>
                 <p class="inline-block rounded-full border border-route/40 bg-route/10 px-3 py-1 font-mono text-xs font-medium tracking-[0.2em] text-route">{{ 'home.hero.eyebrow'|trans }}</p>
                 <h1 class="mt-4 font-display text-4xl leading-[1.05] tracking-tight sm:text-5xl lg:text-6xl" style="color: var(--hero-fg)">
@@ -64,8 +70,16 @@
                     <circle class="route-line-waypoint" cx="20" cy="290" r="6" style="--delay: 0.1s"/>
                     <circle class="route-line-waypoint" cx="225" cy="205" r="6" style="--delay: 0.9s"/>
                     <circle class="route-line-live" cx="380" cy="32" r="7"/>
-                    <text x="30" y="308" class="fill-muted-foreground font-mono" style="font-size: 11px;">PARIS</text>
-                    <text x="333" y="24" class="fill-muted-foreground font-mono" style="font-size: 11px;">LYON</text>
+                    {# Repère purement décoratif (aria-hidden plus haut) : deux villes réelles
+                       plutôt qu'un nom générique, adaptées à la locale pour rester parlantes —
+                       Paris/Lyon en français, une paire américaine reconnaissable en anglais. #}
+                    {% if 'fr' == app.request.locale %}
+                        <text x="30" y="308" class="fill-muted-foreground font-mono" style="font-size: 11px;">PARIS</text>
+                        <text x="333" y="24" class="fill-muted-foreground font-mono" style="font-size: 11px;">LYON</text>
+                    {% else %}
+                        <text x="30" y="308" class="fill-muted-foreground font-mono" style="font-size: 11px;">BOSTON</text>
+                        <text x="325" y="24" class="fill-muted-foreground font-mono" style="font-size: 11px;">MIAMI</text>
+                    {% endif %}
                 </svg>
             </div>
         </div>
