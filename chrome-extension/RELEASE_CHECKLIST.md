@@ -55,11 +55,17 @@ development:
       placeholder) with the real production domain, once one exists.
 - [x] Produce real screenshots for `STORE_LISTING.md` — done, see `store-assets/` and
       `STORE_LISTING.md`'s "Screenshots" section.
+- [x] Write the full store listing copy (name/summary/description in EN+FR, category, single
+      purpose statement, per-permission justifications, data-usage disclosure answers) — done,
+      see `STORE_LISTING.md`. Ready to paste directly into the dashboard once the account exists.
 - [ ] Remove any `CRX_DEV_PUBLIC_KEY` usage from your local environment — a production build
       must never embed a `key` field (see the "Stabilizing the extension ID" section in
       `README.md`); confirm `dist/manifest.json` has no `"key"` after a `npm run build` with
       `CRX_DEV_PUBLIC_KEY` unset.
 - [ ] Register a Chrome Web Store developer account and complete the store's own privacy and
-      permissions questionnaire, using `PRIVACY_DISCLOSURE.md` as the source of truth.
+      permissions questionnaire, using `PRIVACY_DISCLOSURE.md` and `STORE_LISTING.md` as the
+      source of truth.
+- [ ] Optional: generate promotional images (440×280 small tile, 1400×560 marquee) — see
+      `STORE_LISTING.md`'s "Promotional images" section; not required to submit.
 - [ ] Re-run the full manual end-to-end pass above against the production API origin, not
       `127.0.0.1`.
