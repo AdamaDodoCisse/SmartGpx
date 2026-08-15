@@ -27,7 +27,10 @@ utilisateur qui ne l'ouvre jamais ne voit rien de nouveau.
   halte réelle) ou "Via" (l'itinéraire doit y passer sans que ce soit un arrêt) et réordonnée
   manuellement (boutons haut/bas — voir la note sur le glisser-déposer plus bas).
 - **Résultat** : détail de tracé standard ou haute qualité, affichage des itinéraires alternatifs,
-  affichage d'un itinéraire économe en carburant.
+  affichage d'un itinéraire économe en carburant, et estimation des péages — avec, une fois cette
+  case cochée seulement, un type de véhicule facultatif (essence/diesel/électrique/hybride, qui
+  peut affecter le tarif des péages dans certaines régions). Toujours affiché comme "Estimated
+  tolls", jamais comme un prix garanti.
 
 Quand plusieurs itinéraires sont demandés (alternatives et/ou économe en carburant), un écran
 « Choose your route » les présente avant l'export — durée, distance, ce qu'ils évitent, péage

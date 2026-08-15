@@ -14,6 +14,8 @@ export type WaypointType = 'STOP' | 'VIA';
 
 export type RoutePreset = 'FASTEST' | 'ROAD_TRIP' | 'MOTORCYCLE' | 'CUSTOM';
 
+export type VehicleEmissionType = 'GASOLINE' | 'DIESEL' | 'ELECTRIC' | 'HYBRID';
+
 export interface RoutingProviderCapabilities {
     supportedTravelModes: TravelMode[];
     avoidHighways: boolean;
@@ -38,6 +40,8 @@ export interface RouteOptionsState {
     routeDetail: RouteDetail;
     showAlternativeRoutes: boolean;
     showFuelEfficientRoute: boolean;
+    showTollEstimates: boolean;
+    vehicleEmissionType: VehicleEmissionType | null;
     preset: RoutePreset;
 }
 
@@ -51,6 +55,8 @@ export const DEFAULT_ROUTE_OPTIONS: RouteOptionsState = {
     routeDetail: 'STANDARD',
     showAlternativeRoutes: false,
     showFuelEfficientRoute: false,
+    showTollEstimates: false,
+    vehicleEmissionType: null,
     preset: 'FASTEST',
 };
 

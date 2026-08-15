@@ -74,6 +74,14 @@
                 "high_quality": "High-quality route detail",
                 "show_alternatives": "Show alternative routes",
                 "show_fuel_efficient": "Show fuel-efficient route",
+                "show_toll_estimates": "Show estimated tolls",
+                "vehicle_type_label": "Vehicle type (optional, affects toll pricing in some regions)",
+                "vehicle_type": {
+                    "gasoline": "Gasoline",
+                    "diesel": "Diesel",
+                    "electric": "Electric",
+                    "hybrid": "Hybrid"
+                },
                 "estimated_tolls": "Estimated tolls",
                 "toll_estimate": "{{currency}} {{amount}}"
             },

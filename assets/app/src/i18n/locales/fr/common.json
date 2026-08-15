@@ -74,6 +74,14 @@
                 "high_quality": "Détail d'itinéraire haute qualité",
                 "show_alternatives": "Afficher les itinéraires alternatifs",
                 "show_fuel_efficient": "Afficher l'itinéraire économe en carburant",
+                "show_toll_estimates": "Afficher une estimation des péages",
+                "vehicle_type_label": "Type de véhicule (facultatif, affecte le tarif des péages dans certaines régions)",
+                "vehicle_type": {
+                    "gasoline": "Essence",
+                    "diesel": "Diesel",
+                    "electric": "Électrique",
+                    "hybrid": "Hybride"
+                },
                 "estimated_tolls": "Péages estimés",
                 "toll_estimate": "{{currency}} {{amount}}"
             },

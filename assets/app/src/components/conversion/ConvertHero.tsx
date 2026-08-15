@@ -56,6 +56,8 @@ function buildRequestBody(url: string, options: RouteOptionsState, waypoints: Pa
         routeDetail: options.routeDetail,
         showAlternativeRoutes: options.showAlternativeRoutes,
         showFuelEfficientRoute: options.showFuelEfficientRoute,
+        showTollEstimates: options.showTollEstimates,
+        vehicleEmissionType: options.vehicleEmissionType,
         waypointTypes: waypoints.map((waypoint) => waypoint.type),
     };
 }

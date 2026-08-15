@@ -303,7 +303,44 @@ export function AdvancedRouteOptions({
                                     {t('convert.advanced.output.show_fuel_efficient')}
                                 </label>
                             )}
+                            {capabilities.tollEstimation && trafficCapableMode && (
+                                <label className="flex items-center gap-2 text-sm">
+                                    <Checkbox
+                                        checked={options.showTollEstimates}
+                                        disabled={disabled}
+                                        onCheckedChange={(checked) =>
+                                            patch({
+                                                showTollEstimates: true === checked,
+                                                vehicleEmissionType: true === checked ? options.vehicleEmissionType : null,
+                                            })
+                                        }
+                                    />
+                                    {t('convert.advanced.output.show_toll_estimates')}
+                                </label>
+                            )}
                         </div>
+
+                        {/* Progressive disclosure : uniquement affiché quand les péages sont
+                           demandés, jamais 15 réglages véhicule à tout le monde (voir le brief). */}
+                        {options.showTollEstimates && (
+                            <div className="mt-3 pl-7">
+                                <p className="text-xs text-muted-foreground">{t('convert.advanced.output.vehicle_type_label')}</p>
+                                <ToggleGroup
+                                    type="single"
+                                    value={options.vehicleEmissionType ?? ''}
+                                    onValueChange={(value) =>
+                                        patch({ vehicleEmissionType: (value || null) as RouteOptionsState['vehicleEmissionType'] })
+                                    }
+                                    className="mt-1.5"
+                                >
+                                    {(['GASOLINE', 'DIESEL', 'ELECTRIC', 'HYBRID'] as const).map((type) => (
+                                        <ToggleGroupItem key={type} value={type} disabled={disabled}>
+                                            {t(`convert.advanced.output.vehicle_type.${type.toLowerCase()}`)}
+                                        </ToggleGroupItem>
+                                    ))}
+                                </ToggleGroup>
+                            </div>
+                        )}
                     </section>
 
                     <button
