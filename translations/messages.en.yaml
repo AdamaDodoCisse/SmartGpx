@@ -63,7 +63,8 @@ home:
     meta_description: 'Convert Google Maps routes to GPX in seconds. Export routes for Garmin, Wahoo, OsmAnd and other GPS apps, or use SmartGPX''s free GPX tools.'
     hero:
         eyebrow: 'GOOGLE MAPS → GPX'
-        title: 'Take your route anywhere.'
+        title_prefix: 'Take your route'
+        title_highlight: 'anywhere.'
         subtitle: 'Turn any Google Maps route into a GPX file ready for Garmin, Wahoo, OsmAnd and your favorite GPS apps.'
         input_label: 'Google Maps route URL'
         input_placeholder: 'https://www.google.com/maps/dir/...'
@@ -72,6 +73,9 @@ home:
         free_conversion_notice: '1 free conversion • No credit card required'
         map_panel_label: 'GOOGLE MAPS ROUTE → GPX TRACK'
         coming_soon: 'Coming soon — the converter is not available yet.'
+        stat_tools_label: 'Free tools'
+        stat_languages_label: 'Languages'
+        stat_free_label: 'Free conversion to start'
     how_it_works:
         title: 'From Google Maps to GPX in seconds.'
         step_1_title: 'Plan your route'
@@ -128,13 +132,18 @@ home:
         outdoor_title: 'Outdoor & GPS'
         outdoor_body: 'Turn route files into formats your tools can actually use.'
     pricing_preview:
+        eyebrow: 'PRICING'
         title: 'Start free. Pay only when you need more.'
-        free_line: '1 free conversion'
-        pack_line: '100 conversions for $9.99'
-        per_conversion_note: '$0.10 / conversion'
+        subtitle: 'One free conversion to try it. After that, buy a credit pack whenever you need one — never a subscription.'
         never_expire: 'Credits never expire.'
         no_subscription: 'No subscription. Buy credits once, use them whenever you need them.'
-        cta: 'View pricing'
+        cta: 'Full pricing details →'
+    guide:
+        eyebrow: 'THE GUIDE'
+        title: "Why Google Maps doesn't export a GPX file."
+        body_1: "A Google Maps route is just a link — not a file your GPS can read. Getting a real track out of it means recomputing the route point by point, the same way Google's own navigation does. That routing computation is the one part of SmartGPX that needs a paid credit; every other tool on this page runs free, in your browser."
+        body_2: "The result is a plain, open GPX file — the format Garmin, Wahoo, OsmAnd, Locus Map and most GPS tools already read natively, so importing it back onto your device just works."
+        cta: 'Read the full step-by-step guide →'
     faq:
         title: 'Frequently asked questions'
         q_gpx_title: 'What is a GPX file?'

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Billing\Repository\CreditPackRepository;
 use App\Identity\Entity\User;
 use App\Usage\Repository\CreditAccountRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -14,6 +15,7 @@ final class HomeController extends AbstractController
 {
     public function __construct(
         private readonly CreditAccountRepository $creditAccountRepository,
+        private readonly CreditPackRepository $creditPackRepository,
     ) {
     }
 
@@ -30,6 +32,7 @@ final class HomeController extends AbstractController
 
         return $this->render('home/index.html.twig', [
             'creditBalance' => $creditBalance,
+            'packs' => $this->creditPackRepository->findActiveOrderedForDisplay(),
         ]);
     }
 }

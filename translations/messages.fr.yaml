@@ -63,7 +63,8 @@ home:
     meta_description: "Convertissez vos itinéraires Google Maps en GPX en quelques secondes. Exportez-les pour Garmin, Wahoo, OsmAnd et d'autres applications GPS, ou utilisez les outils GPX gratuits de SmartGPX."
     hero:
         eyebrow: 'GOOGLE MAPS → GPX'
-        title: 'Emportez votre itinéraire partout.'
+        title_prefix: 'Emportez votre itinéraire'
+        title_highlight: 'partout.'
         subtitle: "Transformez n'importe quel itinéraire Google Maps en fichier GPX prêt pour Garmin, Wahoo, OsmAnd et vos applications GPS préférées."
         input_label: 'URL de l’itinéraire Google Maps'
         input_placeholder: 'https://www.google.com/maps/dir/...'
@@ -72,6 +73,9 @@ home:
         free_conversion_notice: '1 conversion gratuite • Sans carte bancaire'
         map_panel_label: 'ITINÉRAIRE GOOGLE MAPS → TRACE GPX'
         coming_soon: 'Bientôt disponible — le convertisseur n’est pas encore actif.'
+        stat_tools_label: 'Outils gratuits'
+        stat_languages_label: 'Langues'
+        stat_free_label: 'Conversion offerte pour démarrer'
     how_it_works:
         title: 'De Google Maps au GPX en quelques secondes.'
         step_1_title: 'Planifiez votre itinéraire'
@@ -128,13 +132,18 @@ home:
         outdoor_title: 'Outdoor & GPS'
         outdoor_body: "Transformez vos fichiers d'itinéraire dans les formats que vos outils savent lire."
     pricing_preview:
+        eyebrow: 'TARIFS'
         title: 'Commencez gratuitement. Payez seulement si vous en avez besoin.'
-        free_line: '1 conversion gratuite'
-        pack_line: '100 conversions pour 9,99 $'
-        per_conversion_note: '0,10 $ / conversion'
+        subtitle: "Une conversion gratuite pour essayer. Ensuite, achetez un pack de crédits quand vous en avez besoin — jamais d'abonnement."
         never_expire: 'Les crédits n’expirent jamais.'
         no_subscription: "Pas d'abonnement. Achetez des crédits une fois, utilisez-les quand vous voulez."
-        cta: 'Voir les tarifs'
+        cta: 'Tous les tarifs →'
+    guide:
+        eyebrow: 'LE GUIDE'
+        title: "Pourquoi Google Maps n'exporte pas de fichier GPX."
+        body_1: "Un itinéraire Google Maps n'est qu'un lien — pas un fichier que votre GPS peut lire. En extraire une vraie trace suppose de recalculer l'itinéraire point par point, comme le fait la navigation de Google elle-même. Ce calcul d'itinéraire réel est la seule partie de SmartGPX qui nécessite un crédit payant ; tous les autres outils de cette page sont gratuits et s'exécutent dans votre navigateur."
+        body_2: "Le résultat est un fichier GPX ouvert et standard — le format que Garmin, Wahoo, OsmAnd, Locus Map et la plupart des outils GPS lisent déjà nativement, donc l'import sur votre appareil fonctionne directement."
+        cta: 'Lire le guide complet →'
     faq:
         title: 'Questions fréquentes'
         q_gpx_title: "Qu'est-ce qu'un fichier GPX ?"
