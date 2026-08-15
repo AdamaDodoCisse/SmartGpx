@@ -17,7 +17,19 @@
             <p class="text-muted-foreground">{{ 'pricing.credits_count'|trans({ '%count%': pack.credits }) }}</p>
             <p class="mt-1 text-sm text-muted-foreground">${{ (pack.priceCents / 100 / pack.credits)|number_format(3) }} {{ 'pricing.per_conversion'|trans }}</p>
             {% if app.user %}
-                <form method="post" action="{{ path('app_billing_checkout_create', { publicId: pack.publicId }) }}">
+                {# data-begin-checkout : capté par un écouteur délégué unique dans base.html.twig
+                   (pas un écouteur par formulaire) puisque cette grille est incluse à la fois
+                   sur /pricing et sur la section tarifs de la page d'accueil — voir
+                   documentation/technique/google-tag-manager.md. #}
+                <form
+                    method="post"
+                    action="{{ path('app_billing_checkout_create', { publicId: pack.publicId }) }}"
+                    data-begin-checkout
+                    data-pack-id="{{ pack.publicId }}"
+                    data-credits="{{ pack.credits }}"
+                    data-price="{{ (pack.priceCents / 100)|number_format(2, '.', '') }}"
+                    data-currency="{{ pack.currency }}"
+                >
                     <input type="hidden" name="_token" value="{{ csrf_token('billing_checkout') }}">
                     <button type="submit" class="mt-4 w-full rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground">
                         {{ 'pricing.buy'|trans({ '%count%': pack.credits }) }}

@@ -65,6 +65,14 @@ class CreditPurchase
     #[ORM\Column(type: 'datetime_immutable', nullable: true)]
     private ?\DateTimeImmutable $completedAt = null;
 
+    /**
+     * Distinct de completedAt : ne garde pas si l'événement GA4 "purchase" a déjà été envoyé au
+     * navigateur, indépendamment du crédit lui-même — voir documentation/technique/
+     * google-tag-manager.md. Même idiome que markCompleted() (timestamp nullable posé une fois).
+     */
+    #[ORM\Column(type: 'datetime_immutable', nullable: true)]
+    private ?\DateTimeImmutable $analyticsTrackedAt = null;
+
     public function __construct(User $user, CreditPack $creditPack, string $stripeCheckoutSessionId)
     {
         $this->publicId = new UuidV7();
@@ -146,5 +154,29 @@ class CreditPurchase
     public function getCompletedAt(): ?\DateTimeImmutable
     {
         return $this->completedAt;
+    }
+
+    public function isAnalyticsTracked(): bool
+    {
+        return null !== $this->analyticsTrackedAt;
+    }
+
+    /**
+     * @return bool true si cet appel est celui qui vient de marquer l'achat (false s'il l'était déjà)
+     */
+    public function markAnalyticsTracked(): bool
+    {
+        if (null !== $this->analyticsTrackedAt) {
+            return false;
+        }
+
+        $this->analyticsTrackedAt = new \DateTimeImmutable();
+
+        return true;
+    }
+
+    public function getAnalyticsTrackedAt(): ?\DateTimeImmutable
+    {
+        return $this->analyticsTrackedAt;
     }
 }

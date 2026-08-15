@@ -49,6 +49,22 @@ final class CreditPurchaseTest extends TestCase
         self::assertSame($firstCompletedAt, $purchase->getCompletedAt());
     }
 
+    public function testMarkAnalyticsTrackedReturnsTrueOnlyOnce(): void
+    {
+        $pack = new CreditPack(credits: 100, priceCents: 999, currency: 'usd', badge: null, displayOrder: 1);
+        $purchase = new CreditPurchase(new User('buyer@example.com'), $pack, 'cs_test_123');
+
+        self::assertFalse($purchase->isAnalyticsTracked());
+        self::assertNull($purchase->getAnalyticsTrackedAt());
+
+        self::assertTrue($purchase->markAnalyticsTracked());
+        $firstTrackedAt = $purchase->getAnalyticsTrackedAt();
+        self::assertTrue($purchase->isAnalyticsTracked());
+
+        self::assertFalse($purchase->markAnalyticsTracked());
+        self::assertSame($firstTrackedAt, $purchase->getAnalyticsTrackedAt());
+    }
+
     public function testStripePaymentIntentIdCanBeSetAfterConstruction(): void
     {
         $pack = new CreditPack(credits: 100, priceCents: 999, currency: 'usd', badge: null, displayOrder: 1);

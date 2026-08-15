@@ -5,15 +5,28 @@
 {% block body %}
     <div class="mx-auto max-w-xl px-4 py-16 text-center">
         <h1 class="text-2xl font-semibold">{{ 'billing.checkout.success.title'|trans }}</h1>
-        {% if purchase.completed %}
-            <p class="mt-4 text-muted-foreground">
-                {{ 'billing.checkout.success.credited'|trans({ '%count%': purchase.credits }) }}
-            </p>
-        {% else %}
-            <p class="mt-4 text-muted-foreground">{{ 'billing.checkout.success.body'|trans }}</p>
-        {% endif %}
+
+        {# L'URL de succès n'est jamais une preuve de paiement à elle seule (session_id devinable/
+           rejouable) — voir BillingCheckoutController. Ce bloc interroge le backend
+           (assets/app/src/entries/billingCheckoutSuccess.ts) et ne bascule sur "paid" qu'une fois
+           le paiement réellement confirmé côté serveur ; les trois textes sont déjà traduits ici,
+           le script ne fait qu'afficher/masquer, jamais composer de texte lui-même. #}
+        <div
+            id="billing-checkout-success-root"
+            data-confirm-url="{{ path('app_api_billing_confirm_analytics', { publicId: purchase.publicId }) }}"
+            data-csrf-token="{{ csrf_token('billing_confirm_analytics') }}"
+        >
+            <p data-state="verifying" class="mt-4 text-muted-foreground">{{ 'billing.checkout.success.verifying'|trans }}</p>
+            <p data-state="paid" hidden class="mt-4 text-muted-foreground">{{ 'billing.checkout.success.credited'|trans({ '%count%': purchase.credits }) }}</p>
+            <p data-state="unconfirmed" hidden class="mt-4 text-muted-foreground">{{ 'billing.checkout.success.unconfirmed'|trans }}</p>
+        </div>
+
         <a href="{{ path('app_home') }}" class="mt-6 inline-block rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground">
             {{ 'billing.checkout.success.back_home'|trans }}
         </a>
     </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ vite_entry_script_tags('billingCheckoutSuccess') }}
 {% endblock %}

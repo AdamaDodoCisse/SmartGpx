@@ -13,6 +13,7 @@ export default defineConfig({
                 app: './src/entries/app.css',
                 nav: './src/entries/nav.tsx',
                 convertHero: './src/entries/convertHero.tsx',
+                billingCheckoutSuccess: './src/entries/billingCheckoutSuccess.ts',
                 extensionConnect: './src/entries/extensionConnect.tsx',
                 kmlToGpx: './src/entries/kmlToGpx.tsx',
                 gpxToKml: './src/entries/gpxToKml.tsx',

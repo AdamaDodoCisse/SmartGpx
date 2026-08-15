@@ -356,14 +356,22 @@ usage:
             refund: 'Refund'
             admin_adjustment: 'Adjustment'
 
+analytics:
+    consent:
+        title: 'Cookie consent'
+        body: 'We use analytics cookies to understand how SmartGPX is used. They only load if you accept.'
+        accept: 'Accept'
+        decline: 'Decline'
+
 billing:
     checkout:
         error: 'Unable to reach the payment provider. Please try again.'
         cancelled: 'Checkout cancelled. You were not charged.'
         success:
             title: 'Payment received'
-            body: 'Your credits will appear on your account within a few seconds.'
+            verifying: 'Confirming your payment…'
             credited: '{1}%count% credit has been added to your account.|]1,Inf[%count% credits have been added to your account.'
+            unconfirmed: "We couldn't confirm this payment yet. If you were charged, your credits will appear on your account shortly. Refreshing this page may help."
             back_home: 'Back to homepage'
 
 legal:

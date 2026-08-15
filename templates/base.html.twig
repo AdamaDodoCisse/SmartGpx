@@ -130,11 +130,16 @@
                        balises hreflang du <head> ci-dessus. #}
                     {% if canonical_route and app.request.attributes.get('_locale') %}
                         {% set lang_route_params = app.request.attributes.get('_route_params', {}) %}
+                        {# Préserve la query string courante (ex. ?session_id=... sur la page de
+                           succès Stripe) : url() ne reconstruit que les paramètres de route, donc
+                           sans ça, changer de langue perdait silencieusement tout paramètre de
+                           requête — retour trouvé en travaillant sur le tracking GTM. #}
+                        {% set current_query_string = app.request.queryString %}
                         <div class="flex items-center rounded-md border border-border p-0.5 font-mono text-xs" role="group" aria-label="{{ 'layout.nav.language'|trans }}">
                             {% for locale_code in ['en', 'fr'] %}
                                 {% set is_current_locale = app.request.locale == locale_code %}
                                 <a
-                                    href="{{ url(canonical_route, lang_route_params|merge({_locale: locale_code})) }}"
+                                    href="{{ url(canonical_route, lang_route_params|merge({_locale: locale_code})) }}{{ current_query_string ? '?' ~ current_query_string : '' }}"
                                     hreflang="{{ locale_code }}"
                                     {% if is_current_locale %}aria-current="true"{% endif %}
                                     class="rounded px-2 py-1 uppercase transition-colors {{ is_current_locale ? 'bg-secondary text-foreground font-semibold' : 'text-muted-foreground hover:text-foreground' }}"
@@ -258,6 +263,74 @@
             </div>
         </footer>
 
+        {% if gtm_container_id and 'changeme' != gtm_container_id %}
+            {# Bandeau de consentement RGPD : le conteneur GTM n'est JAMAIS chargé sans acceptation
+               explicite, y compris pour la toute première page vue — voir
+               documentation/decisions/ADR-009-analytics-consent.md et
+               documentation/technique/google-tag-manager.md. dataLayer.push (voir
+               assets/app/src/lib/dataLayer.ts) fonctionne toujours, avec ou sans consentement :
+               c'est un tableau local inoffensif tant que ce script ci-dessous n'a rien chargé.
+               Pas de <noscript> GTM standard ici, volontairement : sans JS, ce bandeau ne peut de
+               toute façon jamais recueillir de consentement. #}
+            <div
+                id="gtm-consent-banner"
+                hidden
+                class="fixed inset-x-0 bottom-0 z-50 border-t border-border bg-background px-4 py-4 shadow-lg"
+                role="dialog"
+                aria-label="{{ 'analytics.consent.title'|trans }}"
+            >
+                <div class="mx-auto flex max-w-6xl flex-col items-center gap-3 sm:flex-row sm:justify-between">
+                    <p class="text-sm text-muted-foreground">{{ 'analytics.consent.body'|trans }}</p>
+                    <div class="flex shrink-0 gap-2">
+                        <button type="button" data-consent-decline class="rounded-md border border-border px-4 py-2 text-sm font-medium text-muted-foreground hover:bg-secondary">
+                            {{ 'analytics.consent.decline'|trans }}
+                        </button>
+                        <button type="button" data-consent-accept class="rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:opacity-90">
+                            {{ 'analytics.consent.accept'|trans }}
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <script>
+                (function () {
+                    var STORAGE_KEY = 'gtm_consent';
+                    var containerId = {{ gtm_container_id|json_encode|raw }};
+
+                    function loadGtmContainer() {
+                        if (document.getElementById('gtm-container-script')) {
+                            return;
+                        }
+                        var script = document.createElement('script');
+                        script.id = 'gtm-container-script';
+                        script.async = true;
+                        script.src = 'https://www.googletagmanager.com/gtm.js?id=' + encodeURIComponent(containerId);
+                        document.head.appendChild(script);
+                    }
+
+                    var stored = localStorage.getItem(STORAGE_KEY);
+                    if ('granted' === stored) {
+                        loadGtmContainer();
+                    } else if ('declined' !== stored) {
+                        var banner = document.getElementById('gtm-consent-banner');
+                        if (banner) {
+                            banner.hidden = false;
+                        }
+                    }
+
+                    document.addEventListener('click', function (event) {
+                        if (event.target.closest('[data-consent-accept]')) {
+                            localStorage.setItem(STORAGE_KEY, 'granted');
+                            document.getElementById('gtm-consent-banner').hidden = true;
+                            loadGtmContainer();
+                        } else if (event.target.closest('[data-consent-decline]')) {
+                            localStorage.setItem(STORAGE_KEY, 'declined');
+                            document.getElementById('gtm-consent-banner').hidden = true;
+                        }
+                    });
+                })();
+            </script>
+        {% endif %}
+
         {{ vite_entry_script_tags('nav', { dependency: 'react' }) }}
 
         <script>
@@ -269,6 +342,42 @@
 
                 document.documentElement.dataset.theme = next;
                 localStorage.setItem('theme', next);
+            });
+        </script>
+
+        {# Écouteur délégué unique (pas un par formulaire) : _pack_grid.html.twig est inclus à la
+           fois sur /pricing et sur la page d'accueil — voir
+           documentation/technique/google-tag-manager.md. dataLayer.push a lieu que le
+           consentement GTM soit accordé ou non (tableau local inoffensif tant que rien n'est
+           chargé, voir plus haut). Désactive aussi le bouton pour éviter un double clic qui
+           créerait deux sessions Stripe Checkout. #}
+        <script>
+            document.addEventListener('submit', function (event) {
+                var form = event.target.closest('[data-begin-checkout]');
+                if (!form) {
+                    return;
+                }
+
+                window.dataLayer = window.dataLayer || [];
+                window.dataLayer.push({
+                    event: 'begin_checkout',
+                    currency: form.dataset.currency,
+                    value: Number.parseFloat(form.dataset.price),
+                    items: [
+                        {
+                            item_id: form.dataset.packId,
+                            item_name: form.dataset.credits + ' SmartGPX Credits',
+                            item_category: 'credits',
+                            price: Number.parseFloat(form.dataset.price),
+                            quantity: 1,
+                        },
+                    ],
+                });
+
+                var submitButton = form.querySelector('button[type="submit"]');
+                if (submitButton) {
+                    submitButton.disabled = true;
+                }
             });
         </script>
     </body>

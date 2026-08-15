@@ -11,6 +11,7 @@ use App\Shared\Pagination\Paginator;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\DBAL\LockMode;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\Uid\Uuid;
 
 /**
  * @extends ServiceEntityRepository<CreditPurchase>
@@ -27,6 +28,15 @@ class CreditPurchaseRepository extends ServiceEntityRepository
         return $this->findOneBy(['stripeCheckoutSessionId' => $stripeCheckoutSessionId]);
     }
 
+    public function findOneByPublicId(string $publicId): ?CreditPurchase
+    {
+        if (!Uuid::isValid($publicId)) {
+            return null;
+        }
+
+        return $this->findOneBy(['publicId' => $publicId]);
+    }
+
     /**
      * Verrouille la ligne (SELECT ... FOR UPDATE) pour sérialiser deux livraisons concurrentes du
      * même événement webhook Stripe. Doit être appelée à l'intérieur d'une transaction déjà
@@ -38,6 +48,27 @@ class CreditPurchaseRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('p')
             ->where('p.stripeCheckoutSessionId = :sessionId')
             ->setParameter('sessionId', $stripeCheckoutSessionId)
+            ->getQuery()
+            ->setLockMode(LockMode::PESSIMISTIC_WRITE)
+            ->getOneOrNullResult();
+    }
+
+    /**
+     * Verrouille la ligne (SELECT ... FOR UPDATE) pour sérialiser deux appels concurrents de
+     * confirmation analytics (deux onglets sur la même page de succès) — voir
+     * ConfirmAnalyticsTrackingAction et documentation/technique/google-tag-manager.md. Doit être
+     * appelée à l'intérieur d'une transaction déjà ouverte, même principe que
+     * findOneByStripeCheckoutSessionIdForUpdate.
+     */
+    public function findOneByPublicIdForUpdate(string $publicId): ?CreditPurchase
+    {
+        if (!Uuid::isValid($publicId)) {
+            return null;
+        }
+
+        return $this->createQueryBuilder('p')
+            ->where('p.publicId = :publicId')
+            ->setParameter('publicId', $publicId, 'uuid')
             ->getQuery()
             ->setLockMode(LockMode::PESSIMISTIC_WRITE)
             ->getOneOrNullResult();

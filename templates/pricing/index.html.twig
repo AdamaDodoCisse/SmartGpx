@@ -17,3 +17,10 @@
         </div>
     </div>
 {% endblock %}
+
+{% block javascripts %}
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        window.dataLayer.push({ event: 'pricing_viewed' });
+    </script>
+{% endblock %}

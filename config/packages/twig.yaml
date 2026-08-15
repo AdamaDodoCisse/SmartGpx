@@ -1,6 +1,11 @@
 twig:
     file_name_pattern: '*.twig'
     form_themes: ['form/theme.html.twig']
+    globals:
+        # Pas un secret (voir .env) — disponible partout car le bandeau de consentement et
+        # l'injection conditionnelle du script GTM vivent dans base.html.twig, chargé sur
+        # toutes les pages.
+        gtm_container_id: '%env(GTM_CONTAINER_ID)%'
 
 when@test:
     twig:

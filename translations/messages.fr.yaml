@@ -356,14 +356,22 @@ usage:
             refund: 'Remboursement'
             admin_adjustment: 'Ajustement'
 
+analytics:
+    consent:
+        title: 'Consentement aux cookies'
+        body: "Nous utilisons des cookies analytics pour comprendre l'usage de SmartGPX. Ils ne se chargent que si vous acceptez."
+        accept: 'Accepter'
+        decline: 'Refuser'
+
 billing:
     checkout:
         error: 'Impossible de contacter le prestataire de paiement. Merci de réessayer.'
         cancelled: 'Paiement annulé. Vous n’avez pas été débité.'
         success:
             title: 'Paiement reçu'
-            body: 'Vos crédits apparaîtront sur votre compte dans quelques secondes.'
+            verifying: 'Confirmation de votre paiement…'
             credited: '{1}%count% crédit a été ajouté à votre compte.|]1,Inf[%count% crédits ont été ajoutés à votre compte.'
+            unconfirmed: "Nous n'avons pas encore pu confirmer ce paiement. Si vous avez été débité, vos crédits apparaîtront sous peu sur votre compte. Actualiser cette page peut aider."
             back_home: 'Retour à l’accueil'
 
 legal:
