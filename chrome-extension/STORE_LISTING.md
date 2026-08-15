@@ -29,6 +29,10 @@ Convert any Google Maps route to a GPX file in one click: works with Garmin, Wah
 Convertissez un itinéraire Google Maps en fichier GPX en un clic : compatible Garmin, Wahoo, OsmAnd, Strava, etc.
 ```
 
+The English text also matches `manifest.config.ts`'s `description` field exactly (kept in sync
+after the two were first found to differ — the manifest field is what shows in `chrome://extensions`,
+so it should never say something different from what the Store listing promises).
+
 Both name every device/app people actually search for ("garmin gpx export", "google maps to
 wahoo", "osmand import route") rather than generic phrasing — Chrome Web Store's search ranks
 heavily on exact-term matches in the summary and name, more than in the long description.
