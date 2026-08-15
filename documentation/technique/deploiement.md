@@ -1,11 +1,19 @@
 # Déploiement
 
-**Statut : pas encore déployé.** Cible retenue : **Infomaniak**. Ce document part de l'hypothèse
-d'un serveur avec accès SSH complet (VPS "Cloud Server" ou Public Cloud chez Infomaniak) — pas
-l'hébergement web mutualisé classique, qui ne donne généralement ni accès root pour installer
-Redis, ni la possibilité de lancer un build Node, ni le contrôle du pool PHP-FPM dont l'application
-a besoin. Si l'offre retenue chez Infomaniak est finalement différente, la section
-["Hypothèses à confirmer"](#hypothèses-à-confirmer) liste précisément ce qui doit être revu.
+**Statut : déployé et en ligne sur https://smartgpx.com** (Infomaniak, Serveur Cloud managé,
+slot `sz0qes`, dépôt cloné dans `~/sites/smartgpx.com`, PHP 8.4, Redis local disponible).
+L'accès se fait via l'alias SSH `categoryauto-prod` (configuration personnelle dans
+`~/.ssh/config`, jamais committée). **Stripe tourne en mode live depuis le 2026-08-15** : clé
+secrète live dans le `.env.local` du serveur et endpoint webhook live
+`we_1U4ngeAV88HZtMx1pCpOVgo5` (URL `https://smartgpx.com/billing/webhook/stripe`, événement
+`checkout.session.completed` uniquement, version d'API `2026-07-29.dahlia` alignée sur
+stripe-php v21.2).
+
+Le reste de ce document décrit la procédure de référence (premier déploiement et mises à jour).
+Il avait été rédigé avant le déploiement en partant de l'hypothèse d'un serveur avec accès SSH
+complet ; l'offre effectivement retenue (Serveur Cloud managé, sans root) fournit tout ce qui
+est nécessaire : PHP 8.4, Node, Composer, Redis, MySQL. La section
+["Hypothèses à confirmer"](#hypothèses-à-confirmer) reste utile pour toute migration future.
 
 Rien de ce qui suit n'est encore automatisé : aucun `Dockerfile`, aucun outil de déploiement
 (Deployer, Capistrano...), aucun step de déploiement dans la CI n'existe dans ce dépôt à ce jour —
@@ -123,12 +131,18 @@ d'environnement fournies par l'hébergeur, jamais dans le dépôt. Voir la règl
    sur la plupart de leurs offres Cloud Server) ou via `certbot` en ligne de commande selon
    l'offre exacte retenue.
 
-8. **Webhook Stripe** : dans le Dashboard Stripe (mode *live* une fois prêt), créer un endpoint
-   pointant vers `https://<domaine-prod>/billing/webhook/stripe` (POST uniquement, route
-   `app_billing_webhook_stripe`), copier le secret de signature généré dans
-   `STRIPE_WEBHOOK_SECRET`. Le reverse proxy/serveur web ne doit **jamais** altérer le corps brut
-   de cette requête (pas de middleware de parsing de body) — la vérification de signature Stripe
-   se fait sur le corps exact reçu, dans `BillingProviderInterface::parseWebhookEvent()`.
+8. **Webhook Stripe** — **fait le 2026-08-15** : endpoint live `we_1U4ngeAV88HZtMx1pCpOVgo5`
+   créé via l'API Stripe (`POST /v1/webhook_endpoints`) vers
+   `https://smartgpx.com/billing/webhook/stripe` (POST uniquement, route
+   `app_billing_webhook_stripe`), abonné au seul événement `checkout.session.completed`, version
+   d'API `2026-07-29.dahlia` (celle qu'épingle stripe-php v21.2 — le SDK ne configure aucune
+   version explicitement, voir `config/packages/stripe.yaml`). Le secret de signature `whsec_...`
+   retourné est dans `STRIPE_WEBHOOK_SECRET` du `.env.local` serveur. Le reverse proxy/serveur
+   web ne doit **jamais** altérer le corps brut de cette requête (pas de middleware de parsing de
+   body) — la vérification de signature Stripe se fait sur le corps exact reçu, dans
+   `BillingProviderInterface::parseWebhookEvent()`. Pour recréer l'endpoint (rotation, nouveau
+   domaine) : même appel API depuis le serveur, puis reporter le nouveau `whsec_...` et
+   `cache:clear --env=prod`.
 9. **Extension Chrome** : `EXTENSION_CHROME_ID` ne peut recevoir sa vraie valeur qu'une fois
    l'extension approuvée sur le Chrome Web Store — voir `chrome-extension/RELEASE_CHECKLIST.md`
    pour ce qu'il reste à faire côté extension (c'est un processus de publication séparé, jamais

@@ -79,6 +79,26 @@ et n'agit que si son statut n'est pas déjà `COMPLETED`.
 - Pas de méthodes de paiement asynchrones (virements, etc.) : `payment_method_types` reste au
   défaut carte, ce qui évite d'avoir à gérer `checkout.session.async_payment_succeeded`.
 
+## Mode live (production)
+
+**En place depuis le 2026-08-15.** La production (`https://smartgpx.com`, voir
+[deploiement.md](deploiement.md)) tourne sur le compte Stripe live :
+
+- `STRIPE_SECRET_KEY=sk_live_...` dans le `.env.local` du serveur (jamais committé, jamais
+  affiché dans un chat/log). Aucun objet Product/Price n'a été créé dans le catalogue Stripe —
+  le checkout utilise `price_data` inline depuis la table `credit_pack` (6 packs seedés).
+- Endpoint webhook live `we_1U4ngeAV88HZtMx1pCpOVgo5` →
+  `https://smartgpx.com/billing/webhook/stripe`, abonné uniquement à
+  `checkout.session.completed`, version d'API `2026-07-29.dahlia` (alignée sur stripe-php
+  v21.2). Son secret `whsec_...` est dans `STRIPE_WEBHOOK_SECRET` côté serveur.
+- Vérifications effectuées au passage en live, sans débit réel : `GET /v1/balance` avec la clé
+  live (`livemode: true`), POST non signé sur le endpoint → 400 (signature exigée), création
+  puis expiration d'une session Checkout live avec les mêmes paramètres que
+  `StripeBillingProvider`. Le premier paiement réel se surveille dans les logs de livraison du
+  webhook (Dashboard Stripe → Développeurs → Webhooks).
+- À noter : le compte Stripe est en EUR ; les packs sont facturés en USD (choix du seed),
+  Stripe convertit lors du règlement.
+
 ## Tester en local
 
 ```bash
