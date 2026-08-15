@@ -92,6 +92,13 @@ there before re-deciding something already settled.
   the opposite way (dark text on a transparent-over-dark card). Fixed per-usage instead —
   `text-foreground` added directly on `HeroCard`'s own element — rather than changing the shared
   class again.
+- **Doctrine `uuid`-typed columns need an explicit parameter type in hand-written QueryBuilder
+  queries.** `setParameter('id', $id)` alone works for plain scalar columns but silently matches
+  zero rows against a `#[ORM\Column(type: 'uuid')]` field — no error, just an empty result, found
+  the hard way in `CreditPurchaseRepository::findOneByPublicIdForUpdate` (Phase 11). Fix:
+  `setParameter('id', $id, 'uuid')`. The magic `findOneBy(['publicId' => $id])` finder infers the
+  type automatically and doesn't need this — only hand-written QueryBuilder queries (needed here
+  for `->setLockMode()`, which the magic finder can't express) do.
 
 ## Local development
 
@@ -100,9 +107,14 @@ deliberate Phase 1 choice) for the **dev** environment. Put real connection stri
 `.env.local` (dev) — gitignored.
 
 ```
-symfony serve                    # or: php -S 127.0.0.1:8000 -t public
+symfony serve                    # HTTPS via a locally-trusted CA — the standard way to launch (Phase 11)
 cd assets/app && npm run dev     # Vite dev server (HMR) — run alongside the PHP server
 ```
+
+`symfony serve` (not `php -S`) is required whenever session/cookie-sensitive flows are involved —
+Google Sign-In's OAuth redirect URI and the GTM consent banner both assume `https://127.0.0.1:8000`
+(see `documentation/technique/google-sign-in.md` and `documentation/technique/google-tag-manager.md`).
+Run `symfony server:ca:install` once if the browser doesn't yet trust the local certificate.
 
 Dev database schema (no migration files — see below):
 
@@ -151,20 +163,22 @@ npm run test             # vitest unit tests
 
 ```
 src/
-  Identity/       # auth (Phase 1) — reference domain shape for what follows
+  Identity/       # auth (Phase 1) — reference domain shape for what follows; Security/GoogleAuthenticator + ValueObject/GoogleIdentity (Google Sign-In, Phase 11)
   Routing/         # RoutingProviderInterface + GoogleRoutesProvider/FakeRoutingProvider (Phase 2); RouteOptions/capabilities/presets (Phase 10)
   Conversion/       # Google Maps URL parsing, GPX generation, Conversion entity/API (Phase 2); preview/export flow, free URL parsing (Phase 10)
   Usage/            # credit ledger (CreditAccount/CreditTransaction), reserve/consume/release (Phase 2)
   Extension/        # ExtensionAuthorization, token authenticator, /api/extension/* (Phase 3)
-  Billing/          # CreditPack/CreditPurchase, BillingProviderInterface + StripeBillingProvider (Phase 4)
+  Billing/          # CreditPack/CreditPurchase, BillingProviderInterface + StripeBillingProvider (Phase 4); ConfirmAnalyticsTrackingAction + BillingCheckoutStatusController for GTM purchase tracking (Phase 11)
   Shared/          # genuinely cross-domain code only (e.g. TimestampableTrait, Pagination/)
   Controller/       # top-level pages with no dedicated domain yet (Home, Pricing, Legal, Guides, Sitemap, Robots)
   Admin/            # admin back-office: Controller/ + Metrics/ + ComputeAdminMetricsAction (Phase 8) — mutations live in the domain they mutate, not here
   Contact/          # /contact — Request/Form/Mailer/Action, rate-limited like registration (Phase 9)
 
 assets/app/src/
-  entries/         # Vite entry points (one per React island)
+  entries/         # Vite entry points (one per React island, plus plain-TS entries like billingCheckoutSuccess.ts, Phase 11)
   components/       # shadcn/ui primitives + layout components + conversion/ (ConvertHero), extension/ (ExtensionConnect), tools/ (free GPS tools, Phase 5)
+  billing/          # plain-TS, framework-free purchase-tracking logic (checkoutSuccessPolling.ts) — no React, unit-tested without a network mock (Phase 11)
+  lib/              # dataLayer.ts (GTM push helper, Phase 11), mountIsland, downloadFile, utils
   gps/              # shared client-side conversion engine — gpx/kml/simplify/merge (Phase 5), kmz/tcx/fit/geojson (Phase 6) — all implemented
 
 chrome-extension/    # separate npm project — Manifest V3 extension (Phase 3)
@@ -178,7 +192,7 @@ migrations/         # Doctrine migrations
 documentation/      # fonctionnel/ (product), technique/ (implementation), decisions/ (ADRs)
 ```
 
-## Current architectural state (through Phase 10)
+## Current architectural state (through Phase 11)
 
 **Phase 1 — Foundation**: Symfony backend skeleton, MySQL/Doctrine, full email+password auth
 (registration, email verification, login with throttling, forgot/reset password),
@@ -417,6 +431,69 @@ summary:
 
 This completes every phase named in the original product brief, plus two follow-up passes built
 from explicit requests rather than the pre-written spec (Phase 9's QA/hardening sweep, Phase 10's
-Advanced Route Options brief). Further work needs a new phase scoped explicitly first — see
-`documentation/fonctionnel/vision-produit.md` and the ADRs before assuming a direction that hasn't
-been decided yet.
+Advanced Route Options brief).
+
+**Phase 11 — Google Sign-In, purchase analytics, and header/UX polish**: not named in the original
+product brief either — a sequence of discrete follow-up requests, continuing Phase 9/10's pattern
+of scoping directly from explicit asks rather than a pre-written spec.
+
+- **Google Sign-In** (`src/Identity/Security/GoogleAuthenticator.php`,
+  `src/Identity/Action/AuthenticateWithGoogleAction.php`): the `User` entity had been schema-ready
+  for this since Phase 1 (nullable `password`, `AuthProvider` enum, `googleId` column) but never
+  used. `knpuniversity/oauth2-client-bundle` + `league/oauth2-google`, wired as a plain Symfony
+  `Authenticator` on the existing `main` firewall — no new provider interface, since
+  `architecture.md` already ruled that out (only one real Google provider exists, unlike
+  Routing/Billing). `AuthenticateWithGoogleAction` covers three cases: known `googleId` →
+  reconnect; a matching LOCAL account with a Google-verified email → auto-link (`setGoogleId()`,
+  password left untouched, both login methods keep working); otherwise → new account,
+  `AuthProvider::GOOGLE`, verified immediately (Google already proved the email), the same
+  `UserRegisteredEvent` as local registration so the welcome credit is granted identically, no
+  changes needed in `src/Usage/`. "Continue with Google" (the official multi-color G mark, its own
+  small macro since it doesn't fit `icons.html.twig`'s `currentColor`-only convention) appears on
+  both `/login` and `/register` — one flow covers both, no separate "sign up with Google". See
+  `documentation/technique/google-sign-in.md`.
+- **GTM/GA4 purchase tracking, consent-gated** (`src/Billing/Action/ConfirmAnalyticsTrackingAction.php`,
+  `assets/app/src/billing/`): the success-page URL is never trusted as payment proof, the same
+  principle `BillingCheckoutController` already applied to crediting. A single
+  `POST /api/billing/checkout/{publicId}/confirm-analytics` decides *and* claims in one row-locked
+  transaction (mirrors `GrantPurchasedCreditsAction`'s pattern exactly), so two tabs racing on the
+  same success page can never both fire a `purchase` event — a real design flaw found and fixed
+  mid-implementation: an earlier two-endpoint GET/POST split let both tabs read "not yet tracked"
+  before either had claimed it. Plain TypeScript, not a React island, for the success page: no
+  React-component-testing infrastructure exists anywhere in this repo, and the polling/decision
+  logic is fully unit-tested without a network mock
+  (`assets/app/src/billing/checkoutSuccessPolling.ts`). The GTM container script never loads
+  without an explicit "Accept" click on a consent banner (`localStorage`, same minimal pattern as
+  the theme toggle) — stricter than Google's own Consent Mode v2, which still contacts Google
+  before consent is given. `templates/legal/privacy.html.twig`, which falsely claimed zero
+  analytics trackers, was corrected in the same pass. See
+  [ADR-009](documentation/decisions/ADR-009-analytics-consent.md) and
+  `documentation/technique/google-tag-manager.md`.
+- **Header/nav redesign**: a language switcher (`EN`/`FR`, plain links reusing the existing
+  hreflang URL-computation, no JS/dropdown) was entirely missing before this phase. Desktop nav
+  shortened by removing the standalone "Convert" text link (redundant with the CTA button right
+  next to it) and folding "Chrome Extension" into the "Tools" dropdown rather than keeping it a
+  top-level item. A "Sign up" link was added next to "Login" — `/register` existed and worked but
+  was reachable from no menu at all. Fixed along the way: the language switcher dropped the query
+  string on locale switch, which silently broke `?session_id=...` specifically on the Stripe
+  success page — now preserved via `app.request.queryString`.
+- **Chrome extension homepage mockup clarified**: the "Export GPX" button in the homepage's
+  extension preview card was styled identically to a real CTA, reading as clickable. Now presented
+  inside a small browser-toolbar frame (address bar + a highlighted extension icon using the real
+  `logo.mark()`, previously a generic puzzle icon) with a speech-bubble pointer connecting toolbar
+  to popup, plus `pointer-events-none` on the button itself — unmistakably an illustration, never
+  a page control.
+- **Footer credit line** ("Made with love by ♥ expert-ecom.com", bilingual) and **locale-aware
+  example destinations** in the hero's decorative map panel (Paris→Lyon for French, Boston→Miami
+  for English, both confirmed against real Google Routes API data).
+- **Site-wide em-dash cleanup**: roughly 135 em-dashes removed from real page copy (guides, tool
+  pages, legal pages, translation catalogs) — reformulated case by case (period, comma, colon,
+  parentheses, connector word) rather than blindly replaced, since heavy em-dash use reads as an
+  AI-writing tell. Deliberately untouched: Twig developer comments, the "Page Title — SmartGPX"
+  browser-tab convention, and the `'—'` empty-value placeholder already used in a couple of admin
+  tables (a UI convention, not prose).
+- **`symfony serve` (HTTPS) is now the standard way to launch the app locally**, not `php -S` — see
+  "Local development" above.
+
+Further work needs a new phase scoped explicitly first — see `documentation/fonctionnel/vision-produit.md`
+and the ADRs before assuming a direction that hasn't been decided yet.
