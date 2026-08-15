@@ -11,13 +11,13 @@
 
         {% if app.request.locale == 'fr' %}
             <p>Le GeoJSON est un format JSON standardisé (RFC 7946) pour représenter des données
-            géographiques — points, lignes, polygones. C'est le format de prédilection des
+            géographiques : points, lignes, polygones. C'est le format de prédilection des
             bibliothèques de cartographie web (Leaflet, Mapbox, OpenLayers…) et des développeurs. Le
             GPX, de son côté, reste le format de référence des appareils GPS grand public.</p>
 
             <h2>Quand utiliser le GPX</h2>
             <p>Pour charger un itinéraire sur une montre, un compteur vélo ou dans une application de
-            randonnée, le GPX est le format attendu — le GeoJSON n'y est généralement pas pris en
+            randonnée, le GPX est le format attendu. Le GeoJSON n'y est généralement pas pris en
             charge.</p>
 
             <h2>Quand utiliser le GeoJSON</h2>
@@ -34,16 +34,16 @@
             </ul>
             <p class="text-sm text-muted-foreground">Piège classique : l'ordre des coordonnées en
             GeoJSON est <code>[longitude, latitude]</code>, inversé par rapport à l'ordre habituel
-            latitude/longitude — notre convertisseur gère cette conversion automatiquement.</p>
+            latitude/longitude. Notre convertisseur gère cette conversion automatiquement.</p>
         {% else %}
-            <p>GeoJSON is a standardized JSON format (RFC 7946) for representing geographic data —
+            <p>GeoJSON is a standardized JSON format (RFC 7946) for representing geographic data:
             points, lines, polygons. It's the go-to format for web mapping libraries (Leaflet,
             Mapbox, OpenLayers…) and developers. GPX, meanwhile, remains the reference format for
             consumer GPS devices.</p>
 
             <h2>When to use GPX</h2>
             <p>To load a route onto a watch, a bike computer, or into a hiking app, GPX is the
-            expected format — GeoJSON is typically not supported there.</p>
+            expected format. GeoJSON is typically not supported there.</p>
 
             <h2>When to use GeoJSON</h2>
             <p>To display a track on a custom web map, or process it with GIS tools (QGIS, Turf.js…),
@@ -57,8 +57,8 @@
                 GPS track on a web map.</li>
             </ul>
             <p class="text-sm text-muted-foreground">Common pitfall: GeoJSON's coordinate order is
-            <code>[longitude, latitude]</code>, reversed from the usual latitude/longitude order —
-            our converter handles this automatically.</p>
+            <code>[longitude, latitude]</code>, reversed from the usual latitude/longitude order.
+            Our converter handles this automatically.</p>
         {% endif %}
     </div>
 {% endblock %}

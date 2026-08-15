@@ -16,8 +16,8 @@
         <div class="prose mt-10">
             {% if app.request.locale == 'fr' %}
                 <h2>Pourquoi convertir un GeoJSON en GPX ?</h2>
-                <p>Le GeoJSON est le format des développeurs web — utilisé par Mapbox, Leaflet et
-                la plupart des outils cartographiques en ligne — plutôt qu'un format pour appareils
+                <p>Le GeoJSON est le format des développeurs web (utilisé par Mapbox, Leaflet et
+                la plupart des outils cartographiques en ligne), plutôt qu'un format pour appareils
                 GPS. Si un tracé a été exporté depuis un outil de dessin de carte ou une API en
                 GeoJSON et que vous voulez le charger sur un appareil GPS, convertissez-le d'abord
                 en GPX ici.</p>
@@ -25,8 +25,8 @@
                 les différences entre les deux formats.</p>
             {% else %}
                 <h2>Why convert GeoJSON to GPX?</h2>
-                <p>GeoJSON is a web developer's format — used by Mapbox, Leaflet, and most online
-                mapping tools — rather than a GPS device format. If a track was exported from a
+                <p>GeoJSON is a web developer's format (used by Mapbox, Leaflet, and most online
+                mapping tools), rather than a GPS device format. If a track was exported from a
                 map-drawing tool or an API as GeoJSON and you want to load it onto a GPS device,
                 convert it to GPX here first.</p>
                 <p><a href="{{ path('app_guides_gpx_vs_geojson') }}">GPX vs GeoJSON</a> covers the

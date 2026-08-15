@@ -16,7 +16,7 @@
         <div class="prose mt-10">
             {% if app.request.locale == 'fr' %}
                 <h2>D'une trace enregistrée à un itinéraire partageable</h2>
-                <p>Google Maps n'accepte pas un fichier GPX directement — ce n'est pas son format —
+                <p>Google Maps n'accepte pas un fichier GPX directement (ce n'est pas son format),
                 donc cet outil relit les points de votre trace et reconstruit un lien d'itinéraire
                 Google Maps que vous pouvez ouvrir, partager ou suivre depuis votre téléphone. Les
                 étapes intermédiaires gardent leur ordre d'origine.</p>
@@ -26,12 +26,12 @@
                 envoyé à nos serveurs.</p>
             {% else %}
                 <h2>From a saved track to a shareable route</h2>
-                <p>Google Maps doesn't accept a GPX file directly — it's not their format — so this
+                <p>Google Maps doesn't accept a GPX file directly (it's not their format), so this
                 tool reads the points in your track and rebuilds them as a Google Maps directions
                 link you can open, share, or follow from your phone. Intermediate stops keep their
                 original order.</p>
-                <p>Useful for sharing a route you prepared elsewhere — exported from a GPS device,
-                or recorded by another app — without re-clicking every point by hand in Google
+                <p>Useful for sharing a route you prepared elsewhere (exported from a GPS device,
+                or recorded by another app) without re-clicking every point by hand in Google
                 Maps. Everything runs in your browser; no file is sent to our servers.</p>
             {% endif %}
         </div>

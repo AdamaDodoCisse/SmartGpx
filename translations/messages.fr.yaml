@@ -36,7 +36,7 @@ extension:
 layout:
     skip_to_content: 'Aller au contenu'
     main_navigation: 'Navigation principale'
-    default_meta_description: "SmartGPX convertit vos itinéraires Google Maps en GPX en quelques secondes, avec une boîte à outils complète de convertisseurs GPS gratuits — GPX, KML, KMZ, TCX, FIT, GeoJSON."
+    default_meta_description: "SmartGPX convertit vos itinéraires Google Maps en GPX en quelques secondes, avec une boîte à outils complète de convertisseurs GPS gratuits : GPX, KML, KMZ, TCX, FIT, GeoJSON."
     nav:
         language: 'Langue'
         convert: 'Convertir'
@@ -78,7 +78,7 @@ home:
         example_cta: "Essayer un itinéraire d'exemple"
         free_conversion_notice: '1 conversion gratuite • Sans carte bancaire'
         map_panel_label: 'ITINÉRAIRE GOOGLE MAPS → TRACE GPX'
-        coming_soon: 'Bientôt disponible — le convertisseur n’est pas encore actif.'
+        coming_soon: 'Bientôt disponible. Ce convertisseur n’est pas encore actif.'
         stat_tools_label: 'Outils gratuits'
         stat_languages_label: 'Langues'
         stat_free_label: 'Conversion offerte pour démarrer'
@@ -99,7 +99,7 @@ home:
         workflow_gpx: 'Fichier GPX'
         cta: "Obtenir l'extension Chrome"
         learn_more: 'En savoir plus'
-        learn_more_body: "Connectez votre navigateur une fois depuis votre compte, puis exportez un fichier GPX directement depuis n'importe quel itinéraire Google Maps — sans copier de lien."
+        learn_more_body: "Connectez votre navigateur une fois depuis votre compte, puis exportez un fichier GPX directement depuis n'importe quel itinéraire Google Maps, sans copier de lien."
         mockup_origin: 'Paris'
         mockup_destination: 'Lyon'
         mockup_mode: 'Voiture'
@@ -112,7 +112,7 @@ home:
         and_more: 'et bien d’autres'
     benefits:
         privacy_title: 'Vos fichiers restent privés'
-        privacy_body: "Chaque outil gratuit s'exécute entièrement dans votre navigateur — rien n'est jamais envoyé sur un serveur."
+        privacy_body: "Chaque outil gratuit s'exécute entièrement dans votre navigateur. Rien n'est jamais envoyé sur un serveur."
         credits_title: 'Les crédits n’expirent jamais'
         credits_body: 'Achetez une fois, utilisez quand vous voulez. Pas d’abonnement, pas de remise à zéro mensuelle.'
     tools_directory:
@@ -140,15 +140,15 @@ home:
     pricing_preview:
         eyebrow: 'TARIFS'
         title: 'Commencez gratuitement. Payez seulement si vous en avez besoin.'
-        subtitle: "Une conversion gratuite pour essayer. Ensuite, achetez un pack de crédits quand vous en avez besoin — jamais d'abonnement."
+        subtitle: "Une conversion gratuite pour essayer. Ensuite, achetez un pack de crédits quand vous en avez besoin, jamais d'abonnement."
         never_expire: 'Les crédits n’expirent jamais.'
         no_subscription: "Pas d'abonnement. Achetez des crédits une fois, utilisez-les quand vous voulez."
         cta: 'Tous les tarifs →'
     guide:
         eyebrow: 'LE GUIDE'
         title: "Pourquoi Google Maps n'exporte pas de fichier GPX."
-        body_1: "Un itinéraire Google Maps n'est qu'un lien — pas un fichier que votre GPS peut lire. En extraire une vraie trace suppose de recalculer l'itinéraire point par point, comme le fait la navigation de Google elle-même. Ce calcul d'itinéraire réel est la seule partie de SmartGPX qui nécessite un crédit payant ; tous les autres outils de cette page sont gratuits et s'exécutent dans votre navigateur."
-        body_2: "Le résultat est un fichier GPX ouvert et standard — le format que Garmin, Wahoo, OsmAnd, Locus Map et la plupart des outils GPS lisent déjà nativement, donc l'import sur votre appareil fonctionne directement."
+        body_1: "Un itinéraire Google Maps n'est qu'un lien, pas un fichier que votre GPS peut lire. En extraire une vraie trace suppose de recalculer l'itinéraire point par point, comme le fait la navigation de Google elle-même. Ce calcul d'itinéraire réel est la seule partie de SmartGPX qui nécessite un crédit payant ; tous les autres outils de cette page sont gratuits et s'exécutent dans votre navigateur."
+        body_2: "Le résultat est un fichier GPX ouvert et standard : le format que Garmin, Wahoo, OsmAnd, Locus Map et la plupart des outils GPS lisent déjà nativement, donc l'import sur votre appareil fonctionne directement."
         cta: 'Lire le guide complet →'
     faq:
         title: 'Questions fréquentes'
@@ -161,13 +161,13 @@ home:
         q_wahoo_title: 'SmartGPX fonctionne-t-il avec Wahoo ?'
         q_wahoo_body: 'Oui. Les compteurs de vélo Wahoo acceptent les fichiers d’itinéraire GPX.'
         q_gpx_to_maps_title: 'Puis-je reconvertir un GPX en Google Maps ?'
-        q_gpx_to_maps_body: "Oui — l'outil gratuit GPX → Google Maps transforme une trace GPX en lien d'itinéraire Google Maps."
+        q_gpx_to_maps_body: "Oui. L'outil gratuit GPX → Google Maps transforme une trace GPX en lien d'itinéraire Google Maps."
         q_credits_expire_title: 'Mes crédits expirent-ils ?'
         q_credits_expire_body: "Non. Les crédits sont achetés une fois et restent sur votre compte jusqu'à ce que vous les utilisiez."
         q_subscription_title: "Ai-je besoin d'un abonnement ?"
-        q_subscription_body: "Non. SmartGPX ne propose pas d'abonnement — vous achetez des crédits une fois et les utilisez quand vous convertissez un itinéraire."
+        q_subscription_body: "Non. SmartGPX ne propose pas d'abonnement : vous achetez des crédits une fois et les utilisez quand vous convertissez un itinéraire."
         q_privacy_title: 'Mes fichiers GPX sont-ils envoyés à SmartGPX ?'
-        q_privacy_body: "Seulement si vous utilisez Google Maps → GPX, qui doit contacter un service de calcul d'itinéraire. Tous les autres outils (visionneuse, simplification, fusion, convertisseurs de formats) s'exécutent entièrement dans votre navigateur — ces fichiers ne quittent jamais votre appareil."
+        q_privacy_body: "Seulement si vous utilisez Google Maps → GPX, qui doit contacter un service de calcul d'itinéraire. Tous les autres outils (visionneuse, simplification, fusion, convertisseurs de formats) s'exécutent entièrement dans votre navigateur. Ces fichiers ne quittent jamais votre appareil."
         q_chrome_title: 'Puis-je utiliser SmartGPX depuis Chrome ?'
         q_chrome_body: "Oui. L'extension Chrome SmartGPX permet d'exporter un fichier GPX directement depuis un onglet Google Maps, sans copier de lien."
     final_cta:
@@ -194,7 +194,7 @@ home:
 tools:
     gpx_viewer:
         meta_title: 'Visionneuse GPX'
-        meta_description: 'Visualisez une trace GPX sur une carte interactive, directement dans votre navigateur — le fichier ne quitte jamais votre appareil.'
+        meta_description: 'Visualisez une trace GPX sur une carte interactive, directement dans votre navigateur, et le fichier ne quitte jamais votre appareil.'
         title: 'Visionneuse GPX'
         intro: 'Déposez un fichier GPX pour voir sa trace, son itinéraire et ses points d’intérêt sur une carte.'
     gpx_to_google_maps:
@@ -269,10 +269,10 @@ tools:
     related:
         title: 'Outils associés'
     cta_google_maps:
-        body: "Besoin d'un itinéraire Google Maps plutôt ? Convertissez-le en fichier GPX en quelques secondes — un crédit gratuit pour commencer, sans abonnement."
+        body: "Besoin d'un itinéraire Google Maps plutôt ? Convertissez-le en fichier GPX en quelques secondes : un crédit gratuit pour commencer, sans abonnement."
         link: 'Convertir un itinéraire Google Maps'
     cta_chrome_extension:
-        body: "Oubliez le copier-coller — exportez un fichier GPX directement depuis un onglet Google Maps avec l'extension Chrome SmartGPX."
+        body: "Oubliez le copier-coller. Exportez un fichier GPX directement depuis un onglet Google Maps avec l'extension Chrome SmartGPX."
         link: "Installer l'extension Chrome"
 
 guides:
@@ -285,12 +285,12 @@ guides:
         meta_title: 'GPX ou KML : quel format choisir ?'
         meta_description: "Comparez les formats GPX et KML : leurs usages, les applications GPS compatibles, et comment convertir de l'un à l'autre."
         title: 'GPX ou KML : quel format choisir ?'
-        intro: "Le GPX est conçu pour les appareils GPS et les applications de suivi ; le KML pour Google Earth et la cartographie. Voici comment les distinguer — et les convertir."
+        intro: "Le GPX est conçu pour les appareils GPS et les applications de suivi ; le KML pour Google Earth et la cartographie. Voici comment les distinguer, et comment les convertir."
     gpx_vs_tcx:
         meta_title: 'GPX ou TCX : quel format pour votre appareil GPS ?'
         meta_description: "GPX et TCX stockent tous deux des traces GPS, mais TCX ajoute des données d'entraînement comme la fréquence cardiaque et les tours. Découvrez la différence."
         title: 'GPX ou TCX : quelle différence ?'
-        intro: "Le TCX étend le GPX avec des données d'entraînement — fréquence cardiaque, cadence, tours. Voici quand utiliser l'un plutôt que l'autre."
+        intro: "Le TCX étend le GPX avec des données d'entraînement : fréquence cardiaque, cadence, tours. Voici quand utiliser l'un plutôt que l'autre."
     gpx_vs_fit:
         meta_title: 'GPX ou FIT : comprendre la différence'
         meta_description: "Le FIT est le format binaire compact de Garmin pour les données d'activité ; le GPX est le standard universel et lisible pour les traces GPS. Découvrez quand utiliser chacun."
@@ -303,7 +303,7 @@ guides:
         intro: "Le GeoJSON est le standard des bibliothèques de cartographie web ; le GPX est le standard des appareils GPS et des applications de randonnée ou de vélo. Voici quand utiliser chacun."
     google_maps_to_gpx:
         meta_title: 'Comment convertir un itinéraire Google Maps en GPX'
-        meta_description: "Étape par étape : transformez un itinéraire Google Maps en fichier GPX utilisable sur un Garmin, un Wahoo ou toute application GPS — en quelques secondes."
+        meta_description: "Étape par étape : transformez un itinéraire Google Maps en fichier GPX utilisable sur un Garmin, un Wahoo ou toute application GPS, en quelques secondes."
         title: 'Comment convertir un itinéraire Google Maps en GPX'
         intro: "Vous avez préparé un itinéraire sur Google Maps mais avez besoin de l'avoir sur votre GPS ? Voici comment le transformer en fichier GPX standard, rapidement."
     kmz:
@@ -318,7 +318,7 @@ guides:
         intro: "Un GPX enregistré chaque seconde peut contenir des milliers de points. Voici comment la simplification réduit ce nombre sans déformer l'itinéraire."
     merge_tracks:
         meta_title: 'Comment fusionner plusieurs traces GPX en un seul fichier'
-        meta_description: "Combinez plusieurs fichiers GPX enregistrés sur plusieurs jours ou segments en une seule trace ou un seul fichier — directement dans votre navigateur."
+        meta_description: "Combinez plusieurs fichiers GPX enregistrés sur plusieurs jours ou segments en une seule trace ou un seul fichier, directement dans votre navigateur."
         title: 'Comment fusionner plusieurs traces GPX en un seul fichier'
         intro: "Vous avez enregistré un voyage de plusieurs jours en plusieurs fichiers GPX ? Voici comment les combiner en une seule trace, ou en un seul fichier à segments distincts."
 
@@ -359,7 +359,7 @@ usage:
 billing:
     checkout:
         error: 'Impossible de contacter le prestataire de paiement. Merci de réessayer.'
-        cancelled: 'Paiement annulé — vous n’avez pas été débité.'
+        cancelled: 'Paiement annulé. Vous n’avez pas été débité.'
         success:
             title: 'Paiement reçu'
             body: 'Vos crédits apparaîtront sur votre compte dans quelques secondes.'
@@ -367,7 +367,7 @@ billing:
             back_home: 'Retour à l’accueil'
 
 legal:
-    draft_notice: 'Brouillon — en attente de relecture juridique avant mise en production.'
+    draft_notice: 'Brouillon : en attente de relecture juridique avant mise en production.'
     privacy:
         title: 'Politique de confidentialité'
     terms:

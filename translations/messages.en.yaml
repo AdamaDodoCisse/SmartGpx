@@ -36,7 +36,7 @@ extension:
 layout:
     skip_to_content: 'Skip to content'
     main_navigation: 'Main navigation'
-    default_meta_description: 'SmartGPX converts Google Maps routes to GPX in seconds, plus a full toolbox of free GPS format converters — GPX, KML, KMZ, TCX, FIT, GeoJSON.'
+    default_meta_description: 'SmartGPX converts Google Maps routes to GPX in seconds, plus a full toolbox of free GPS format converters: GPX, KML, KMZ, TCX, FIT, GeoJSON.'
     nav:
         language: 'Language'
         convert: 'Convert'
@@ -78,7 +78,7 @@ home:
         example_cta: 'Try an example route'
         free_conversion_notice: '1 free conversion • No credit card required'
         map_panel_label: 'GOOGLE MAPS ROUTE → GPX TRACK'
-        coming_soon: 'Coming soon — the converter is not available yet.'
+        coming_soon: 'Coming soon. This converter is not available yet.'
         stat_tools_label: 'Free tools'
         stat_languages_label: 'Languages'
         stat_free_label: 'Free conversion to start'
@@ -99,7 +99,7 @@ home:
         workflow_gpx: 'GPX file'
         cta: 'Get the Chrome extension'
         learn_more: 'Learn more'
-        learn_more_body: 'Connect your browser once from your account, then export a GPX file straight from any Google Maps route — no copying links.'
+        learn_more_body: 'Connect your browser once from your account, then export a GPX file straight from any Google Maps route, without copying links.'
         mockup_origin: 'Paris'
         mockup_destination: 'Lyon'
         mockup_mode: 'Driving'
@@ -112,7 +112,7 @@ home:
         and_more: 'and more'
     benefits:
         privacy_title: 'Your files stay private'
-        privacy_body: 'Every free tool runs entirely in your browser — nothing is ever uploaded.'
+        privacy_body: 'Every free tool runs entirely in your browser. Nothing is ever uploaded.'
         credits_title: 'Credits never expire'
         credits_body: 'Buy once, use whenever. No subscription, no monthly reset.'
     tools_directory:
@@ -140,15 +140,15 @@ home:
     pricing_preview:
         eyebrow: 'PRICING'
         title: 'Start free. Pay only when you need more.'
-        subtitle: 'One free conversion to try it. After that, buy a credit pack whenever you need one — never a subscription.'
+        subtitle: 'One free conversion to try it. After that, buy a credit pack whenever you need one, never a subscription.'
         never_expire: 'Credits never expire.'
         no_subscription: 'No subscription. Buy credits once, use them whenever you need them.'
         cta: 'Full pricing details →'
     guide:
         eyebrow: 'THE GUIDE'
         title: "Why Google Maps doesn't export a GPX file."
-        body_1: "A Google Maps route is just a link — not a file your GPS can read. Getting a real track out of it means recomputing the route point by point, the same way Google's own navigation does. That routing computation is the one part of SmartGPX that needs a paid credit; every other tool on this page runs free, in your browser."
-        body_2: "The result is a plain, open GPX file — the format Garmin, Wahoo, OsmAnd, Locus Map and most GPS tools already read natively, so importing it back onto your device just works."
+        body_1: "A Google Maps route is just a link, not a file your GPS can read. Getting a real track out of it means recomputing the route point by point, the same way Google's own navigation does. That routing computation is the one part of SmartGPX that needs a paid credit; every other tool on this page runs free, in your browser."
+        body_2: "The result is a plain, open GPX file: the format Garmin, Wahoo, OsmAnd, Locus Map and most GPS tools already read natively, so importing it back onto your device just works."
         cta: 'Read the full step-by-step guide →'
     faq:
         title: 'Frequently asked questions'
@@ -161,13 +161,13 @@ home:
         q_wahoo_title: 'Does SmartGPX work with Wahoo?'
         q_wahoo_body: 'Yes. Wahoo bike computers accept GPX route files.'
         q_gpx_to_maps_title: 'Can I convert GPX back to Google Maps?'
-        q_gpx_to_maps_body: 'Yes — the free GPX → Google Maps tool turns a GPX track into a Google Maps directions link.'
+        q_gpx_to_maps_body: 'Yes. The free GPX → Google Maps tool turns a GPX track into a Google Maps directions link.'
         q_credits_expire_title: 'Do my credits expire?'
         q_credits_expire_body: 'No. Credits are purchased once and stay on your account until you use them.'
         q_subscription_title: 'Do I need a subscription?'
-        q_subscription_body: 'No. SmartGPX has no subscription — you buy credits once and use them whenever you convert a route.'
+        q_subscription_body: 'No. SmartGPX has no subscription: you buy credits once and use them whenever you convert a route.'
         q_privacy_title: 'Are my GPX files uploaded to SmartGPX?'
-        q_privacy_body: 'Only if you use Google Maps → GPX, which needs to contact a routing service. Every other tool (viewer, simplify, merge, format converters) runs entirely in your browser — those files never leave your device.'
+        q_privacy_body: 'Only if you use Google Maps → GPX, which needs to contact a routing service. Every other tool (viewer, simplify, merge, format converters) runs entirely in your browser. Those files never leave your device.'
         q_chrome_title: 'Can I use SmartGPX from Chrome?'
         q_chrome_body: 'Yes. The SmartGPX Chrome extension lets you export a GPX file straight from a Google Maps tab, without copying a link.'
     final_cta:
@@ -194,7 +194,7 @@ home:
 tools:
     gpx_viewer:
         meta_title: 'GPX Viewer'
-        meta_description: 'View a GPX track on an interactive map, right in your browser — the file never leaves your device.'
+        meta_description: 'View a GPX track on an interactive map, right in your browser, and the file never leaves your device.'
         title: 'GPX Viewer'
         intro: 'Drop a GPX file to see its track, route, and waypoints on a map.'
     gpx_to_google_maps:
@@ -269,10 +269,10 @@ tools:
     related:
         title: 'Related tools'
     cta_google_maps:
-        body: 'Need a route from Google Maps instead? Convert it to a GPX file in seconds — one free credit to start, no subscription.'
+        body: 'Need a route from Google Maps instead? Convert it to a GPX file in seconds: one free credit to start, no subscription.'
         link: 'Convert a Google Maps route'
     cta_chrome_extension:
-        body: 'Skip the copy-paste — export a GPX file straight from a Google Maps tab with the SmartGPX Chrome extension.'
+        body: 'Skip the copy-paste. Export a GPX file straight from a Google Maps tab with the SmartGPX Chrome extension.'
         link: 'Get the Chrome extension'
 
 guides:
@@ -283,14 +283,14 @@ guides:
         intro: 'Practical guides on GPS file formats and how to convert between them.'
     gpx_vs_kml:
         meta_title: 'GPX vs KML: Which Format Should You Use?'
-        meta_description: "Compare GPX and KML file formats — what they're for, which GPS apps support them, and how to convert between the two."
+        meta_description: "Compare GPX and KML file formats: what they're for, which GPS apps support them, and how to convert between the two."
         title: 'GPX vs KML: Which Should You Use?'
-        intro: "GPX is built for GPS devices and tracking apps; KML is built for Google Earth and mapping. Here's how to tell them apart — and convert between them."
+        intro: "GPX is built for GPS devices and tracking apps; KML is built for Google Earth and mapping. Here's how to tell them apart, and how to convert between them."
     gpx_vs_tcx:
         meta_title: 'GPX vs TCX: Which Format for Your GPS Device?'
         meta_description: 'GPX and TCX both store GPS tracks, but TCX adds workout data like heart rate and laps. Learn the difference and how to convert between them.'
         title: "GPX vs TCX: What's the Difference?"
-        intro: "TCX extends GPX with training data — heart rate, cadence, laps. Here's when you need one over the other."
+        intro: "TCX extends GPX with training data: heart rate, cadence, laps. Here's when you need one over the other."
     gpx_vs_fit:
         meta_title: 'GPX vs FIT: Understanding the Difference'
         meta_description: "FIT is Garmin's compact binary format for activity data; GPX is the universal, human-readable standard for GPS tracks. Learn when to use each."
@@ -303,7 +303,7 @@ guides:
         intro: "GeoJSON is the standard for web mapping libraries; GPX is the standard for GPS devices and hiking/cycling apps. Here's when to use each."
     google_maps_to_gpx:
         meta_title: 'How to Convert a Google Maps Route to GPX'
-        meta_description: 'Step-by-step: turn any Google Maps route into a GPX file you can load onto a Garmin, Wahoo, or any GPS app — in seconds, no software to install.'
+        meta_description: 'Step-by-step: turn any Google Maps route into a GPX file you can load onto a Garmin, Wahoo, or any GPS app, in seconds, with no software to install.'
         title: 'How to Convert a Google Maps Route to GPX'
         intro: "Planned a route in Google Maps but need it on your GPS device? Here's the fastest way to turn it into a standard GPX file."
     kmz:
@@ -318,7 +318,7 @@ guides:
         intro: "A GPX recorded every second can have thousands of points. Here's how simplification trims that down without distorting the route."
     merge_tracks:
         meta_title: 'How to Merge Multiple GPX Tracks Into One File'
-        meta_description: 'Combine several GPX files recorded across multiple days or segments into a single track or file — directly in your browser, no software needed.'
+        meta_description: 'Combine several GPX files recorded across multiple days or segments into a single track or file, directly in your browser, no software needed.'
         title: 'How to Merge Multiple GPX Tracks Into One File'
         intro: "Recorded a multi-day trip as separate GPX files? Here's how to combine them into a single track, or a single file with separate segments."
 
@@ -359,7 +359,7 @@ usage:
 billing:
     checkout:
         error: 'Unable to reach the payment provider. Please try again.'
-        cancelled: 'Checkout cancelled — you were not charged.'
+        cancelled: 'Checkout cancelled. You were not charged.'
         success:
             title: 'Payment received'
             body: 'Your credits will appear on your account within a few seconds.'
@@ -367,7 +367,7 @@ billing:
             back_home: 'Back to homepage'
 
 legal:
-    draft_notice: 'Draft — pending legal review before production use.'
+    draft_notice: 'Draft: pending legal review before production use.'
     privacy:
         title: 'Privacy Policy'
     terms:

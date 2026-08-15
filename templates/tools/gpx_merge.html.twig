@@ -16,8 +16,8 @@
         <div class="prose mt-10">
             {% if app.request.locale == 'fr' %}
                 <h2>Pourquoi fusionner des fichiers GPX ?</h2>
-                <p>Un appareil GPS coupe parfois un enregistrement en plusieurs fichiers — une
-                pause, une batterie rechargée, un arrêt de l'appli — et vous vous retrouvez avec
+                <p>Un appareil GPS coupe parfois un enregistrement en plusieurs fichiers : une
+                pause, une batterie rechargée, un arrêt de l'appli. Vous vous retrouvez alors avec
                 trois ou quatre GPX pour ce qui était une seule sortie. Cet outil les recolle en un
                 seul fichier, dans l'ordre chronologique, en gardant tous les points de chaque
                 trace source.</p>
@@ -26,8 +26,8 @@
                 horodatage.</p>
             {% else %}
                 <h2>Why merge GPX files?</h2>
-                <p>A GPS device sometimes splits a recording into several files — a pause, a
-                battery swap, the app restarting — and you end up with three or four GPX files for
+                <p>A GPS device sometimes splits a recording into several files: a pause, a
+                battery swap, the app restarting. You end up with three or four GPX files for
                 what was really one outing. This tool stitches them back into a single file in
                 chronological order, keeping every point from each source track.</p>
                 <p><a href="{{ path('app_guides_merge_tracks') }}">The full guide</a> explains how
