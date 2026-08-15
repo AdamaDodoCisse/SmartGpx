@@ -65,7 +65,7 @@ development:
 - [ ] Register a Chrome Web Store developer account and complete the store's own privacy and
       permissions questionnaire, using `PRIVACY_DISCLOSURE.md` and `STORE_LISTING.md` as the
       source of truth.
-- [ ] Optional: generate promotional images (440×280 small tile, 1400×560 marquee) — see
-      `STORE_LISTING.md`'s "Promotional images" section; not required to submit.
+- [x] Optional: generate promotional images (440×280 small tile, 1400×560 marquee) — done, see
+      `store-assets/` and `STORE_LISTING.md`'s "Promotional images" section.
 - [ ] Re-run the full manual end-to-end pass above against the production API origin, not
       `127.0.0.1`.

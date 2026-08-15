@@ -131,13 +131,17 @@ guessed at.
 
 ### Promotional images (optional, but improves placement odds)
 
-Not yet produced — genuinely optional (the listing is fully submittable without them), only
-needed for certain search/category placements and any editorial featuring:
-- **Small promo tile**: 440×280 PNG or JPEG.
-- **Marquee**: 1400×560, only used if Google features the extension.
-
-Ask if you'd like these generated the same way the icons were (SVG source, brand tokens, rendered
-via a headless browser) — a quick follow-up, not blocking submission.
+**Done.** Both in `store-assets/`, generated from the exact same brand tokens as the site itself
+(`.hero-gradient`, `.hero-terrain`, the route-line motif, Fjalla One/IBM Plex Mono) rather than a
+one-off design — genuinely optional for submission, only used for certain search/category
+placements and any editorial featuring:
+- `promo-small-tile-440x280.png` — logo + wordmark, the "GOOGLE MAPS → GPX" eyebrow badge, and a
+  one-line tagline, on the hero's dark pine gradient with the terrain silhouette anchored at the
+  bottom.
+- `promo-marquee-1400x560.png` — same left-column branding plus a headline and the compatible-app
+  list (Garmin/Wahoo/OsmAnd/Locus Map/Strava/Komoot), paired on the right with a light "map panel"
+  card reusing the homepage hero's exact route-line SVG path/waypoints — the same visual the site
+  itself uses to represent "a route becomes a real GPX track."
 
 ## Privacy practices tab
 
