@@ -66,6 +66,9 @@ export function MobileMenu({
                                         {tool.label}
                                     </a>
                                 ))}
+                                <a href={chromeExtensionHref} className="border-t border-border pt-3 text-sm">
+                                    {t('nav.chrome_extension')}
+                                </a>
                             </div>
                         </div>
 
@@ -74,9 +77,6 @@ export function MobileMenu({
                         </a>
                         <a href={pricingHref} className="text-base font-medium">
                             {t('nav.pricing')}
-                        </a>
-                        <a href={chromeExtensionHref} className="text-base font-medium">
-                            {t('nav.chrome_extension')}
                         </a>
 
                         {isAuthenticated ? (

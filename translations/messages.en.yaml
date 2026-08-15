@@ -38,6 +38,7 @@ layout:
     main_navigation: 'Main navigation'
     default_meta_description: 'SmartGPX converts Google Maps routes to GPX in seconds, plus a full toolbox of free GPS format converters — GPX, KML, KMZ, TCX, FIT, GeoJSON.'
     nav:
+        language: 'Language'
         convert: 'Convert'
         tools: 'Tools'
         guides: 'Guides'

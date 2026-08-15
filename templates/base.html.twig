@@ -64,11 +64,12 @@
                 </a>
 
                 <nav class="hidden items-center gap-6 lg:flex" aria-label="{{ 'layout.main_navigation'|trans }}">
-                    <a href="{{ path('app_home') }}#convert" class="nav-link text-sm font-medium text-muted-foreground hover:text-foreground">{{ 'layout.nav.convert'|trans }}</a>
-
                     {# Menu "Tools" en HTML natif (details/summary) : le header reste du Twig
                        statique et indexable (voir ADR-004), aucun JS n'est nécessaire pour un
-                       simple menu déroulant. #}
+                       simple menu déroulant. Le lien "Convert" autonome a été retiré (redondant
+                       avec le bouton CTA "Convert a route" plus bas, même destination) et
+                       "Chrome Extension" a rejoint ce menu (autre façon d'accéder au
+                       convertisseur) pour raccourcir la barre — retour UX du 15/08. #}
                     <details class="group relative">
                         <summary class="flex cursor-pointer list-none items-center gap-1 text-sm font-medium text-muted-foreground marker:content-none hover:text-foreground [&::-webkit-details-marker]:hidden">
                             {{ 'layout.nav.tools'|trans }}
@@ -84,12 +85,13 @@
                             <a href="{{ path('app_tools_tcx_to_gpx') }}" class="block rounded-sm px-3 py-2 text-sm hover:bg-secondary">{{ 'home.free_tools.tcx_to_gpx'|trans }}</a>
                             <a href="{{ path('app_tools_fit_to_gpx') }}" class="block rounded-sm px-3 py-2 text-sm hover:bg-secondary">{{ 'home.free_tools.fit_to_gpx'|trans }}</a>
                             <a href="{{ path('app_tools_geojson_to_gpx') }}" class="block rounded-sm px-3 py-2 text-sm hover:bg-secondary">{{ 'home.free_tools.geojson_to_gpx'|trans }}</a>
+                            <div class="my-2 border-t border-border"></div>
+                            <a href="{{ path('app_home') }}#chrome-extension" class="block rounded-sm px-3 py-2 text-sm hover:bg-secondary">{{ 'layout.nav.chrome_extension'|trans }}</a>
                         </div>
                     </details>
 
                     <a href="{{ path('app_guides_index') }}" class="nav-link text-sm font-medium text-muted-foreground hover:text-foreground">{{ 'layout.nav.guides'|trans }}</a>
                     <a href="{{ path('app_pricing') }}" class="nav-link text-sm font-medium text-muted-foreground hover:text-foreground">{{ 'layout.nav.pricing'|trans }}</a>
-                    <a href="{{ path('app_home') }}#chrome-extension" class="nav-link text-sm font-medium text-muted-foreground hover:text-foreground">{{ 'layout.nav.chrome_extension'|trans }}</a>
 
                     {% if app.user %}
                         <details class="group relative">
@@ -116,6 +118,24 @@
                 </nav>
 
                 <div class="flex items-center gap-2">
+                    {# Sélecteur de langue : deux liens simples (pas de JS, pas de dropdown),
+                       toujours visible dans le bandeau — donc dispensable dans le menu mobile,
+                       qui reste inchangé — réutilise le même calcul d'URL par locale que les
+                       balises hreflang du <head> ci-dessus. #}
+                    {% if canonical_route and app.request.attributes.get('_locale') %}
+                        {% set lang_route_params = app.request.attributes.get('_route_params', {}) %}
+                        <div class="flex items-center rounded-md border border-border p-0.5 font-mono text-xs" role="group" aria-label="{{ 'layout.nav.language'|trans }}">
+                            {% for locale_code in ['en', 'fr'] %}
+                                {% set is_current_locale = app.request.locale == locale_code %}
+                                <a
+                                    href="{{ url(canonical_route, lang_route_params|merge({_locale: locale_code})) }}"
+                                    hreflang="{{ locale_code }}"
+                                    {% if is_current_locale %}aria-current="true"{% endif %}
+                                    class="rounded px-2 py-1 uppercase transition-colors {{ is_current_locale ? 'bg-secondary text-foreground font-semibold' : 'text-muted-foreground hover:text-foreground' }}"
+                                >{{ locale_code }}</a>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
                     <button
                         type="button"
                         data-theme-toggle

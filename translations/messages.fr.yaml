@@ -38,6 +38,7 @@ layout:
     main_navigation: 'Navigation principale'
     default_meta_description: "SmartGPX convertit vos itinéraires Google Maps en GPX en quelques secondes, avec une boîte à outils complète de convertisseurs GPS gratuits — GPX, KML, KMZ, TCX, FIT, GeoJSON."
     nav:
+        language: 'Langue'
         convert: 'Convertir'
         tools: 'Outils'
         guides: 'Guides'
