@@ -251,6 +251,23 @@ tools:
         meta_description: 'Convert a GPX file to GeoJSON, right in your browser.'
         title: 'GPX → GeoJSON'
         intro: 'Drop a GPX file to convert it to GeoJSON.'
+    category:
+        format_converter: 'FORMAT CONVERTER'
+        gps_viewer: 'GPS VIEWER'
+        track_editor: 'TRACK EDITOR'
+        maps_export: 'MAPS EXPORT'
+    trust:
+        browser: 'Runs in your browser'
+        no_signup: 'No sign-up required'
+        free: 'Free forever'
+    related:
+        title: 'Related tools'
+    cta_google_maps:
+        body: 'Need a route from Google Maps instead? Convert it to a GPX file in seconds — one free credit to start, no subscription.'
+        link: 'Convert a Google Maps route'
+    cta_chrome_extension:
+        body: 'Skip the copy-paste — export a GPX file straight from a Google Maps tab with the SmartGPX Chrome extension.'
+        link: 'Get the Chrome extension'
 
 guides:
     index:

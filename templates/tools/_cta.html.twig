@@ -1,0 +1,13 @@
+{% import '_macros/icons.html.twig' as icons %}
+{# Carte CTA partagée, purement informative (aucune friction payante sur les outils gratuits —
+   voir documentation/fonctionnel/vision-produit.md). Variable attendue : variant, soit
+   'google_maps' (12 pages — pointe vers le convertisseur payant de la page d'accueil) soit
+   'chrome_extension' (uniquement gpx_to_google_maps, qui parle déjà de Google Maps). #}
+{% set cta_href = variant == 'chrome_extension' ? path('app_home') ~ '#chrome-extension' : path('app_home') ~ '#convert' %}
+<div class="contour-bg mt-12 rounded-lg border border-border border-l-4 border-l-route bg-secondary/30 p-6">
+    <p class="text-sm">{{ ('tools.cta_' ~ variant ~ '.body')|trans }}</p>
+    <a href="{{ cta_href }}" class="mt-3 inline-flex items-center gap-1.5 text-sm font-medium text-route hover:underline">
+        {{ ('tools.cta_' ~ variant ~ '.link')|trans }}
+        {{ icons.icon('arrow-right', 'size-3.5') }}
+    </a>
+</div>

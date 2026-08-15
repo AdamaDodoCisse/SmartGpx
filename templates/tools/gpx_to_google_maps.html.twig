@@ -1,18 +1,21 @@
 {% extends 'base.html.twig' %}
-{% import '_macros/icons.html.twig' as icons %}
 
 {% block title %}{{ 'tools.gpx_to_google_maps.meta_title'|trans }} — SmartGPX{% endblock %}
 {% block meta_description %}{{ 'tools.gpx_to_google_maps.meta_description'|trans }}{% endblock %}
 
 {% block body %}
+    {% include 'tools/_header.html.twig' with {
+        icon: 'map-pin',
+        eyebrow_key: 'tools.category.maps_export',
+        i18n_prefix: 'tools.gpx_to_google_maps',
+    } only %}
+
     <div class="mx-auto max-w-3xl px-4 py-12">
-        <span class="mb-4 flex size-10 items-center justify-center rounded-full bg-accent text-primary">{{ icons.icon('map-pin', 'size-5') }}</span>
-        <h1 class="text-3xl font-display tracking-tight">{{ 'tools.gpx_to_google_maps.title'|trans }}</h1>
-        <p class="mt-2 text-muted-foreground">{{ 'tools.gpx_to_google_maps.intro'|trans }}</p>
         <div id="gpx-to-google-maps-root"></div>
 
         <div class="prose mt-10">
             {% if app.request.locale == 'fr' %}
+                <h2>D'une trace enregistrée à un itinéraire partageable</h2>
                 <p>Google Maps n'accepte pas un fichier GPX directement — ce n'est pas son format —
                 donc cet outil relit les points de votre trace et reconstruit un lien d'itinéraire
                 Google Maps que vous pouvez ouvrir, partager ou suivre depuis votre téléphone. Les
@@ -22,6 +25,7 @@
                 la main dans Google Maps. Tout se passe dans votre navigateur, aucun fichier n'est
                 envoyé à nos serveurs.</p>
             {% else %}
+                <h2>From a saved track to a shareable route</h2>
                 <p>Google Maps doesn't accept a GPX file directly — it's not their format — so this
                 tool reads the points in your track and rebuilds them as a Google Maps directions
                 link you can open, share, or follow from your phone. Intermediate stops keep their
@@ -31,6 +35,16 @@
                 Maps. Everything runs in your browser; no file is sent to our servers.</p>
             {% endif %}
         </div>
+
+        {% include 'tools/_related.html.twig' with {
+            related: [
+                { route: 'app_gpx_viewer', icon: 'map', label: 'home.free_tools.gpx_viewer' },
+                { route: 'app_tools_gpx_simplify', icon: 'sparkles', label: 'home.free_tools.gpx_simplify' },
+                { route: 'app_tools_kml_to_gpx', icon: 'file-code', label: 'home.free_tools.kml_to_gpx' },
+            ],
+        } only %}
+
+        {% include 'tools/_cta.html.twig' with { variant: 'chrome_extension' } only %}
     </div>
     {{ vite_entry_script_tags('gpxToGoogleMaps', { dependency: 'react' }) }}
 {% endblock %}

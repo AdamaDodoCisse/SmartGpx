@@ -1,18 +1,21 @@
 {% extends 'base.html.twig' %}
-{% import '_macros/icons.html.twig' as icons %}
 
 {% block title %}{{ 'tools.kmz_to_gpx.meta_title'|trans }} — SmartGPX{% endblock %}
 {% block meta_description %}{{ 'tools.kmz_to_gpx.meta_description'|trans }}{% endblock %}
 
 {% block body %}
+    {% include 'tools/_header.html.twig' with {
+        icon: 'file-archive',
+        eyebrow_key: 'tools.category.format_converter',
+        i18n_prefix: 'tools.kmz_to_gpx',
+    } only %}
+
     <div class="mx-auto max-w-3xl px-4 py-12">
-        <span class="mb-4 flex size-10 items-center justify-center rounded-full bg-accent text-primary">{{ icons.icon('file-archive', 'size-5') }}</span>
-        <h1 class="text-3xl font-display tracking-tight">{{ 'tools.kmz_to_gpx.title'|trans }}</h1>
-        <p class="mt-2 text-muted-foreground">{{ 'tools.kmz_to_gpx.intro'|trans }}</p>
         <div id="kmz-to-gpx-root"></div>
 
         <div class="prose mt-10">
             {% if app.request.locale == 'fr' %}
+                <h2>Que contient un fichier KMZ ?</h2>
                 <p>Un fichier KMZ est simplement un fichier KML compressé en ZIP — souvent avec des
                 icônes ou images embarquées — c'est le format que Google Earth utilise pour
                 exporter une carte complète en un seul fichier. Cet outil extrait le KML à
@@ -21,6 +24,7 @@
                 <p><a href="{{ path('app_guides_kmz') }}">Qu'est-ce qu'un fichier KMZ ?</a> explique
                 sa structure en détail.</p>
             {% else %}
+                <h2>What's inside a KMZ file?</h2>
                 <p>A KMZ file is just a KML file zipped up — often with embedded icons or images —
                 it's the format Google Earth uses to export a whole map as one file. This tool
                 extracts the KML inside and converts it to GPX, without ever sending the file to a
@@ -29,6 +33,15 @@
                 structure in more detail.</p>
             {% endif %}
         </div>
+
+        {% include 'tools/_related.html.twig' with {
+            related: [
+                { route: 'app_tools_kml_to_gpx', icon: 'file-code', label: 'home.free_tools.kml_to_gpx' },
+                { route: 'app_gpx_viewer', icon: 'map', label: 'home.free_tools.gpx_viewer' },
+            ],
+        } only %}
+
+        {% include 'tools/_cta.html.twig' with { variant: 'google_maps' } only %}
     </div>
     {{ vite_entry_script_tags('kmzToGpx', { dependency: 'react' }) }}
 {% endblock %}

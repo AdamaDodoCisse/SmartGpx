@@ -1,0 +1,18 @@
+{% import '_macros/icons.html.twig' as icons %}
+{# Bloc "outils associés" partagé — variable attendue : related, une liste de
+   { route, icon, label } (label = clé de traduction, réutilise les clés home.free_tools.*
+   déjà utilisées par l'annuaire d'outils de la page d'accueil, pour ne pas dupliquer les
+   libellés). #}
+<div class="mt-12 border-t border-border pt-10">
+    <p class="font-mono text-xs tracking-[0.15em] text-muted-foreground">{{ 'tools.related.title'|trans }}</p>
+    <ul class="mt-4 grid gap-px overflow-hidden rounded-lg border border-border bg-border {{ related|length >= 3 ? 'sm:grid-cols-3' : 'sm:grid-cols-2' }}">
+        {% for item in related %}
+            <li class="bg-background p-4">
+                <a href="{{ path(item.route) }}" class="flex items-center justify-between gap-2 text-sm hover:text-primary">
+                    <span class="flex items-center gap-2">{{ icons.icon(item.icon, 'size-4 text-primary') }}{{ item.label|trans }}</span>
+                    {{ icons.icon('arrow-right', 'size-3.5 text-muted-foreground') }}
+                </a>
+            </li>
+        {% endfor %}
+    </ul>
+</div>

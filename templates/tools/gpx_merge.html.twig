@@ -1,18 +1,21 @@
 {% extends 'base.html.twig' %}
-{% import '_macros/icons.html.twig' as icons %}
 
 {% block title %}{{ 'tools.gpx_merge.meta_title'|trans }} — SmartGPX{% endblock %}
 {% block meta_description %}{{ 'tools.gpx_merge.meta_description'|trans }}{% endblock %}
 
 {% block body %}
+    {% include 'tools/_header.html.twig' with {
+        icon: 'combine',
+        eyebrow_key: 'tools.category.track_editor',
+        i18n_prefix: 'tools.gpx_merge',
+    } only %}
+
     <div class="mx-auto max-w-3xl px-4 py-12">
-        <span class="mb-4 flex size-10 items-center justify-center rounded-full bg-accent text-primary">{{ icons.icon('combine', 'size-5') }}</span>
-        <h1 class="text-3xl font-display tracking-tight">{{ 'tools.gpx_merge.title'|trans }}</h1>
-        <p class="mt-2 text-muted-foreground">{{ 'tools.gpx_merge.intro'|trans }}</p>
         <div id="gpx-merge-root"></div>
 
         <div class="prose mt-10">
             {% if app.request.locale == 'fr' %}
+                <h2>Pourquoi fusionner des fichiers GPX ?</h2>
                 <p>Un appareil GPS coupe parfois un enregistrement en plusieurs fichiers — une
                 pause, une batterie rechargée, un arrêt de l'appli — et vous vous retrouvez avec
                 trois ou quatre GPX pour ce qui était une seule sortie. Cet outil les recolle en un
@@ -22,6 +25,7 @@
                 comment l'ordre est déterminé et ce qui se passe pour les fichiers sans
                 horodatage.</p>
             {% else %}
+                <h2>Why merge GPX files?</h2>
                 <p>A GPS device sometimes splits a recording into several files — a pause, a
                 battery swap, the app restarting — and you end up with three or four GPX files for
                 what was really one outing. This tool stitches them back into a single file in
@@ -30,6 +34,15 @@
                 the order is determined and what happens with files that have no timestamps.</p>
             {% endif %}
         </div>
+
+        {% include 'tools/_related.html.twig' with {
+            related: [
+                { route: 'app_tools_gpx_simplify', icon: 'sparkles', label: 'home.free_tools.gpx_simplify' },
+                { route: 'app_gpx_viewer', icon: 'map', label: 'home.free_tools.gpx_viewer' },
+            ],
+        } only %}
+
+        {% include 'tools/_cta.html.twig' with { variant: 'google_maps' } only %}
     </div>
     {{ vite_entry_script_tags('gpxMerge', { dependency: 'react' }) }}
 {% endblock %}

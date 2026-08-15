@@ -1,18 +1,21 @@
 {% extends 'base.html.twig' %}
-{% import '_macros/icons.html.twig' as icons %}
 
 {% block title %}{{ 'tools.tcx_to_gpx.meta_title'|trans }} — SmartGPX{% endblock %}
 {% block meta_description %}{{ 'tools.tcx_to_gpx.meta_description'|trans }}{% endblock %}
 
 {% block body %}
+    {% include 'tools/_header.html.twig' with {
+        icon: 'activity',
+        eyebrow_key: 'tools.category.format_converter',
+        i18n_prefix: 'tools.tcx_to_gpx',
+    } only %}
+
     <div class="mx-auto max-w-3xl px-4 py-12">
-        <span class="mb-4 flex size-10 items-center justify-center rounded-full bg-accent text-primary">{{ icons.icon('activity', 'size-5') }}</span>
-        <h1 class="text-3xl font-display tracking-tight">{{ 'tools.tcx_to_gpx.title'|trans }}</h1>
-        <p class="mt-2 text-muted-foreground">{{ 'tools.tcx_to_gpx.intro'|trans }}</p>
         <div id="tcx-to-gpx-root"></div>
 
         <div class="prose mt-10">
             {% if app.request.locale == 'fr' %}
+                <h2>Pourquoi convertir un TCX en GPX ?</h2>
                 <p>Le TCX est le format d'entraînement de Garmin — il ajoute la fréquence
                 cardiaque, la cadence et la puissance à un tracé GPS, là où le GPX reste plus
                 générique. Si votre appareil ou une application comme Strava a exporté un TCX et
@@ -21,6 +24,7 @@
                 <p><a href="{{ path('app_guides_gpx_vs_tcx') }}">GPX vs TCX</a> détaille ce que le
                 TCX ajoute et ce qui se perd lors de la conversion vers GPX.</p>
             {% else %}
+                <h2>Why convert TCX to GPX?</h2>
                 <p>TCX is Garmin's training format — it adds heart rate, cadence, and power to a
                 GPS track, where GPX stays more generic. If your device or an app like Strava
                 exported a TCX file and you just need the track itself (for another device, or to
@@ -29,6 +33,15 @@
                 adds and what's lost when converting down to GPX.</p>
             {% endif %}
         </div>
+
+        {% include 'tools/_related.html.twig' with {
+            related: [
+                { route: 'app_tools_gpx_to_tcx', icon: 'activity', label: 'home.free_tools.gpx_to_tcx' },
+                { route: 'app_gpx_viewer', icon: 'map', label: 'home.free_tools.gpx_viewer' },
+            ],
+        } only %}
+
+        {% include 'tools/_cta.html.twig' with { variant: 'google_maps' } only %}
     </div>
     {{ vite_entry_script_tags('tcxToGpx', { dependency: 'react' }) }}
 {% endblock %}

@@ -1,18 +1,21 @@
 {% extends 'base.html.twig' %}
-{% import '_macros/icons.html.twig' as icons %}
 
 {% block title %}{{ 'tools.kml_to_gpx.meta_title'|trans }} — SmartGPX{% endblock %}
 {% block meta_description %}{{ 'tools.kml_to_gpx.meta_description'|trans }}{% endblock %}
 
 {% block body %}
+    {% include 'tools/_header.html.twig' with {
+        icon: 'file-code',
+        eyebrow_key: 'tools.category.format_converter',
+        i18n_prefix: 'tools.kml_to_gpx',
+    } only %}
+
     <div class="mx-auto max-w-3xl px-4 py-12">
-        <span class="mb-4 flex size-10 items-center justify-center rounded-full bg-accent text-primary">{{ icons.icon('file-code', 'size-5') }}</span>
-        <h1 class="text-3xl font-display tracking-tight">{{ 'tools.kml_to_gpx.title'|trans }}</h1>
-        <p class="mt-2 text-muted-foreground">{{ 'tools.kml_to_gpx.intro'|trans }}</p>
         <div id="kml-to-gpx-root"></div>
 
         <div class="prose mt-10">
             {% if app.request.locale == 'fr' %}
+                <h2>Pourquoi convertir un KML en GPX ?</h2>
                 <p>Le KML est le format de Google Earth et Google My Maps — pensé pour la
                 visualisation, avec des options de style que le GPX n'a pas. Si vous voulez charger
                 une carte préparée dans Google Earth ou My Maps sur une montre Garmin, un compteur
@@ -21,6 +24,7 @@
                 <p><a href="{{ path('app_guides_gpx_vs_kml') }}">GPX vs KML</a> détaille les
                 différences entre les deux formats et quand utiliser lequel.</p>
             {% else %}
+                <h2>Why convert KML to GPX?</h2>
                 <p>KML is Google Earth and Google My Maps' format — built for visualization, with
                 styling options GPX doesn't have. If you want to load a map you built in Google
                 Earth or My Maps onto a Garmin watch, a Wahoo bike computer, or an app like OsmAnd,
@@ -30,6 +34,16 @@
                 differences between the two formats and when to use each.</p>
             {% endif %}
         </div>
+
+        {% include 'tools/_related.html.twig' with {
+            related: [
+                { route: 'app_tools_gpx_to_kml', icon: 'file-code', label: 'home.free_tools.gpx_to_kml' },
+                { route: 'app_tools_kmz_to_gpx', icon: 'file-archive', label: 'home.free_tools.kmz_to_gpx' },
+                { route: 'app_gpx_viewer', icon: 'map', label: 'home.free_tools.gpx_viewer' },
+            ],
+        } only %}
+
+        {% include 'tools/_cta.html.twig' with { variant: 'google_maps' } only %}
     </div>
     {{ vite_entry_script_tags('kmlToGpx', { dependency: 'react' }) }}
 {% endblock %}

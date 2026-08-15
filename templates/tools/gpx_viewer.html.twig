@@ -1,5 +1,4 @@
 {% extends 'base.html.twig' %}
-{% import '_macros/icons.html.twig' as icons %}
 
 {% block title %}{{ 'tools.gpx_viewer.meta_title'|trans }} — SmartGPX{% endblock %}
 {% block meta_description %}{{ 'tools.gpx_viewer.meta_description'|trans }}{% endblock %}
@@ -16,35 +15,46 @@
 {% endblock %}
 
 {% block body %}
+    {% include 'tools/_header.html.twig' with {
+        icon: 'map',
+        eyebrow_key: 'tools.category.gps_viewer',
+        i18n_prefix: 'tools.gpx_viewer',
+        wide: true,
+    } only %}
+
     {# max-w-5xl plutôt que le max-w-3xl des autres pages outil : une fois une trace chargée, la
        carte doit pouvoir utiliser l'espace disponible sur desktop (voir GpxViewerTool.tsx). #}
     <div class="mx-auto max-w-5xl px-4 py-12">
-        <span class="mb-4 flex size-10 items-center justify-center rounded-full bg-accent text-primary">{{ icons.icon('map', 'size-5') }}</span>
-        <h1 class="text-3xl font-display tracking-tight">{{ 'tools.gpx_viewer.title'|trans }}</h1>
-        <p class="mt-2 text-muted-foreground">{{ 'tools.gpx_viewer.intro'|trans }}</p>
         <div id="gpx-viewer-root"></div>
 
         <div class="prose mt-10">
             {% if app.request.locale == 'fr' %}
+                <h2>Vérifiez votre trace avant de lui faire confiance</h2>
                 <p>Un fichier GPX n'est au fond qu'une liste de coordonnées, chacune avec une
                 altitude et parfois un horodatage. Ce visualiseur transforme cette liste en tracé
                 affiché sur une carte, pour vérifier d'un coup d'œil qu'un fichier correspond bien
                 à l'itinéraire attendu avant de le charger sur un appareil GPS ou de le partager.</p>
                 <p>Tout se passe dans votre navigateur : le fichier n'est jamais envoyé à nos
-                serveurs. Si vous cherchez plutôt à transformer un lien Google Maps en fichier GPX,
-                c'est <a href="{{ path('app_home') }}#convert">le convertisseur principal</a> qu'il
-                vous faut, pas cet outil.</p>
+                serveurs.</p>
             {% else %}
+                <h2>See your track before you trust it</h2>
                 <p>A GPX file is really just a list of coordinates, each with an elevation and
                 sometimes a timestamp. This viewer turns that list into a route drawn on a map, so
                 you can check at a glance that a file matches the route you expect before loading
                 it onto a GPS device or sharing it.</p>
-                <p>Everything runs in your browser — the file is never sent to our servers. If
-                you're looking to turn a Google Maps link into a GPX file in the first place,
-                that's <a href="{{ path('app_home') }}#convert">the main converter</a>, not this
-                viewer.</p>
+                <p>Everything runs in your browser — the file is never sent to our servers.</p>
             {% endif %}
         </div>
+
+        {% include 'tools/_related.html.twig' with {
+            related: [
+                { route: 'app_tools_gpx_simplify', icon: 'sparkles', label: 'home.free_tools.gpx_simplify' },
+                { route: 'app_tools_gpx_merge', icon: 'combine', label: 'home.free_tools.gpx_merge' },
+                { route: 'app_tools_gpx_to_google_maps', icon: 'map-pin', label: 'home.free_tools.gpx_to_google_maps' },
+            ],
+        } only %}
+
+        {% include 'tools/_cta.html.twig' with { variant: 'google_maps' } only %}
     </div>
     {{ vite_entry_script_tags('gpxViewer', { dependency: 'react' }) }}
 {% endblock %}

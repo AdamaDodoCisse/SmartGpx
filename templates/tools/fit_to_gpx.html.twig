@@ -1,18 +1,21 @@
 {% extends 'base.html.twig' %}
-{% import '_macros/icons.html.twig' as icons %}
 
 {% block title %}{{ 'tools.fit_to_gpx.meta_title'|trans }} — SmartGPX{% endblock %}
 {% block meta_description %}{{ 'tools.fit_to_gpx.meta_description'|trans }}{% endblock %}
 
 {% block body %}
+    {% include 'tools/_header.html.twig' with {
+        icon: 'watch',
+        eyebrow_key: 'tools.category.format_converter',
+        i18n_prefix: 'tools.fit_to_gpx',
+    } only %}
+
     <div class="mx-auto max-w-3xl px-4 py-12">
-        <span class="mb-4 flex size-10 items-center justify-center rounded-full bg-accent text-primary">{{ icons.icon('watch', 'size-5') }}</span>
-        <h1 class="text-3xl font-display tracking-tight">{{ 'tools.fit_to_gpx.title'|trans }}</h1>
-        <p class="mt-2 text-muted-foreground">{{ 'tools.fit_to_gpx.intro'|trans }}</p>
         <div id="fit-to-gpx-root"></div>
 
         <div class="prose mt-10">
             {% if app.request.locale == 'fr' %}
+                <h2>Pourquoi convertir un FIT en GPX ?</h2>
                 <p>Le FIT est un format binaire compact — c'est ce que les montres Garmin, les
                 capteurs Wahoo et la plupart des compteurs de vélo enregistrent nativement. Il
                 stocke plus que le GPX (fréquence cardiaque, cadence, puissance), mais beaucoup
@@ -21,6 +24,7 @@
                 <p><a href="{{ path('app_guides_gpx_vs_fit') }}">GPX vs FIT</a> détaille le format
                 binaire et ce qui se perd lors de la conversion vers GPX.</p>
             {% else %}
+                <h2>Why convert FIT to GPX?</h2>
                 <p>FIT is a compact binary format — it's what Garmin watches, Wahoo sensors, and
                 most bike computers record natively. It stores more than GPX (heart rate, cadence,
                 power), but plenty of apps and older devices only read GPX. This tool extracts the
@@ -29,6 +33,15 @@
                 format and what's lost when converting down to GPX.</p>
             {% endif %}
         </div>
+
+        {% include 'tools/_related.html.twig' with {
+            related: [
+                { route: 'app_tools_gpx_to_fit', icon: 'watch', label: 'home.free_tools.gpx_to_fit' },
+                { route: 'app_gpx_viewer', icon: 'map', label: 'home.free_tools.gpx_viewer' },
+            ],
+        } only %}
+
+        {% include 'tools/_cta.html.twig' with { variant: 'google_maps' } only %}
     </div>
     {{ vite_entry_script_tags('fitToGpx', { dependency: 'react' }) }}
 {% endblock %}
