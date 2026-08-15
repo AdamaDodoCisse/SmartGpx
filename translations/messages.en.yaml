@@ -8,6 +8,9 @@ conversion:
         route_not_found: 'No route could be found between these locations.'
         provider_unavailable: 'The routing service is temporarily unavailable. Please try again shortly.'
         email_not_verified: 'Please verify your email before exporting. Check your inbox for the confirmation link.'
+        too_many_waypoints: 'This route has too many stops. Please remove some and try again.'
+        preview_not_found: 'This route preview has expired. Please convert again.'
+        invalid_route_selection: 'That route is no longer available. Please convert again.'
 
 extension:
     error:

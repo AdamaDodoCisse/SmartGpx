@@ -12,6 +12,13 @@ framework:
             policy: sliding_window
             limit: 20
             interval: '1 hour'
+        route_parse:
+            # Analyse d'URL gratuite (pas d'appel payant à l'API de routing) utilisée par le
+            # panneau d'options avancées pour peupler la liste des étapes — plafond plus généreux
+            # que "conversion" puisqu'aucun crédit n'est en jeu.
+            policy: sliding_window
+            limit: 60
+            interval: '1 hour'
         contact:
             policy: sliding_window
             limit: 5

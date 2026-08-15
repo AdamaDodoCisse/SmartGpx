@@ -17,6 +17,7 @@ final readonly class GpxRouteData
         public string $routeName,
         public array $waypoints,
         public array $trackPoints,
+        public ?GpxRouteOptionsMetadata $routeOptions = null,
     ) {
     }
 }

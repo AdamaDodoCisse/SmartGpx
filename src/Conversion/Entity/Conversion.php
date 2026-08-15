@@ -5,15 +5,19 @@ declare(strict_types=1);
 namespace App\Conversion\Entity;
 
 use App\Conversion\Gpx\GpxRouteData;
+use App\Conversion\Gpx\GpxRouteOptionsMetadata;
 use App\Conversion\Gpx\GpxTrackPoint;
 use App\Conversion\Gpx\GpxWaypoint;
 use App\Conversion\Parser\ParsedGoogleMapsUrl;
 use App\Conversion\Repository\ConversionRepository;
 use App\Identity\Entity\User;
+use App\Routing\Enum\RoutingFeatureCostTier;
 use App\Routing\Enum\TravelMode;
+use App\Routing\Enum\WaypointType;
 use App\Routing\Result\RoutePoint;
 use App\Routing\Result\RouteResult;
 use App\Routing\ValueObject\RouteLocation;
+use App\Routing\ValueObject\RouteOptions;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Uid\UuidV7;
 
@@ -79,6 +83,28 @@ class Conversion
     #[ORM\Column]
     private int $trackPointCount;
 
+    /** @var array{routingPreference: string, avoidHighways: bool, avoidTolls: bool, avoidFerries: bool, optimizeWaypointOrder: bool, routeDetail: string} */
+    #[ORM\Column(type: 'json')]
+    private array $routeOptions;
+
+    #[ORM\Column(length: 20, enumType: RoutingFeatureCostTier::class)]
+    private RoutingFeatureCostTier $costTier;
+
+    /** @var array{currencyCode: string, amount: float}|null */
+    #[ORM\Column(type: 'json', nullable: true)]
+    private ?array $tollEstimate = null;
+
+    #[ORM\Column(length: 20, nullable: true)]
+    private ?string $routeLabel = null;
+
+    /** @var list<string> */
+    #[ORM\Column(type: 'json')]
+    private array $waypointTypes;
+
+    /** @var list<int>|null */
+    #[ORM\Column(type: 'json', nullable: true)]
+    private ?array $optimizedWaypointOrder = null;
+
     #[ORM\Column(type: 'datetime_immutable')]
     private \DateTimeImmutable $createdAt;
 
@@ -88,11 +114,17 @@ class Conversion
         $this->createdAt = new \DateTimeImmutable();
     }
 
+    /**
+     * @param list<WaypointType> $waypointTypes une entrée par étape intermédiaire, dans l'ordre — les positions manquantes valent STOP
+     */
     public static function fromRoute(
         User $user,
         string $sourceUrl,
         ParsedGoogleMapsUrl $parsed,
         RouteResult $route,
+        RouteOptions $options,
+        RoutingFeatureCostTier $costTier,
+        array $waypointTypes = [],
     ): self {
         $conversion = new self();
         $conversion->user = $user;
@@ -113,6 +145,24 @@ class Conversion
             $route->points,
         );
         $conversion->waypoints = self::buildWaypoints($parsed, $route);
+        $conversion->routeOptions = [
+            'routingPreference' => $options->routingPreference->value,
+            'avoidHighways' => $options->modifiers->avoidHighways,
+            'avoidTolls' => $options->modifiers->avoidTolls,
+            'avoidFerries' => $options->modifiers->avoidFerries,
+            'optimizeWaypointOrder' => $options->optimizeWaypointOrder,
+            'routeDetail' => $options->routeDetail->value,
+        ];
+        $conversion->costTier = $costTier;
+        $conversion->tollEstimate = null !== $route->tollEstimate
+            ? ['currencyCode' => $route->tollEstimate->currencyCode, 'amount' => $route->tollEstimate->amount]
+            : null;
+        $conversion->routeLabel = $route->routeLabel;
+        $conversion->waypointTypes = array_map(
+            static fn (int $position) => ($waypointTypes[$position] ?? WaypointType::STOP)->value,
+            array_keys($parsed->intermediates),
+        );
+        $conversion->optimizedWaypointOrder = $route->optimizedWaypointOrder;
 
         return $conversion;
     }
@@ -182,6 +232,14 @@ class Conversion
                 static fn (array $point): GpxTrackPoint => new GpxTrackPoint($point['lat'], $point['lon']),
                 $this->geometry,
             ),
+            routeOptions: new GpxRouteOptionsMetadata(
+                travelMode: $this->travelMode->value,
+                avoidHighways: $this->routeOptions['avoidHighways'],
+                avoidTolls: $this->routeOptions['avoidTolls'],
+                avoidFerries: $this->routeOptions['avoidFerries'],
+                routingPreference: $this->routeOptions['routingPreference'],
+                costTier: $this->costTier->value,
+            ),
         );
     }
 
@@ -246,6 +304,48 @@ class Conversion
     public function getTrackPointCount(): int
     {
         return $this->trackPointCount;
+    }
+
+    /**
+     * @return array{routingPreference: string, avoidHighways: bool, avoidTolls: bool, avoidFerries: bool, optimizeWaypointOrder: bool, routeDetail: string}
+     */
+    public function getRouteOptions(): array
+    {
+        return $this->routeOptions;
+    }
+
+    public function getCostTier(): RoutingFeatureCostTier
+    {
+        return $this->costTier;
+    }
+
+    /**
+     * @return array{currencyCode: string, amount: float}|null
+     */
+    public function getTollEstimate(): ?array
+    {
+        return $this->tollEstimate;
+    }
+
+    public function getRouteLabel(): ?string
+    {
+        return $this->routeLabel;
+    }
+
+    /**
+     * @return list<string>
+     */
+    public function getWaypointTypes(): array
+    {
+        return $this->waypointTypes;
+    }
+
+    /**
+     * @return list<int>|null
+     */
+    public function getOptimizedWaypointOrder(): ?array
+    {
+        return $this->optimizedWaypointOrder;
     }
 
     public function getCreatedAt(): \DateTimeImmutable

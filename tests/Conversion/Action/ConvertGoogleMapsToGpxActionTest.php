@@ -9,8 +9,15 @@ use App\Conversion\Repository\ConversionRepository;
 use App\Identity\Entity\User;
 use App\Identity\Exception\EmailNotVerifiedException;
 use App\Identity\Repository\UserRepository;
+use App\Routing\Enum\RoutingFeatureCostTier;
+use App\Routing\Enum\RoutingPreference;
+use App\Routing\Enum\TravelMode;
+use App\Routing\Enum\WaypointType;
 use App\Routing\Exception\RouteNotFoundException;
 use App\Routing\Provider\FakeRoutingProvider;
+use App\Routing\Result\RouteComputation;
+use App\Routing\ValueObject\RouteModifiers;
+use App\Routing\ValueObject\RouteOptions;
 use App\Usage\Entity\CreditAccount;
 use App\Usage\Enum\CreditTransactionType;
 use App\Usage\Exception\InsufficientCreditsException;
@@ -128,6 +135,63 @@ final class ConvertGoogleMapsToGpxActionTest extends KernelTestCase
         }
 
         self::assertSame(0, $this->fakeRoutingProvider->callCount, 'The routing provider must never be called without an available credit.');
+    }
+
+    public function testAdvancedRouteOptionsAreStoredOnTheConversion(): void
+    {
+        $this->seedAccount(1);
+        $options = new RouteOptions(
+            routingPreference: RoutingPreference::TRAFFIC_AWARE,
+            modifiers: new RouteModifiers(avoidHighways: true, avoidTolls: true),
+        );
+
+        $conversion = $this->action->execute($this->user, self::VALID_URL, null, $options);
+
+        $stored = $conversion->getRouteOptions();
+        self::assertTrue($stored['avoidHighways']);
+        self::assertTrue($stored['avoidTolls']);
+        self::assertFalse($stored['avoidFerries']);
+        self::assertSame('TRAFFIC_AWARE', $stored['routingPreference']);
+        self::assertSame(RoutingFeatureCostTier::STANDARD, $conversion->getCostTier());
+    }
+
+    public function testRequestingAlternativesClassifiesTheConversionAsAdvanced(): void
+    {
+        $this->seedAccount(1);
+        $options = new RouteOptions(computeAlternativeRoutes: true);
+        $this->fakeRoutingProvider->queue(new RouteComputation(
+            [FakeRoutingProvider::defaultFixtureRoute(TravelMode::DRIVE)],
+            RoutingFeatureCostTier::ADVANCED,
+        ));
+
+        $conversion = $this->action->execute($this->user, self::VALID_URL, null, $options);
+
+        self::assertSame(RoutingFeatureCostTier::ADVANCED, $conversion->getCostTier());
+    }
+
+    public function testWaypointTypesAreStoredAlignedWithIntermediates(): void
+    {
+        $this->seedAccount(1);
+        $urlWithStops = 'https://www.google.com/maps/dir/?api=1&origin=Paris%2C+France&destination=Lyon%2C+France&waypoints=Orl%C3%A9ans%2C+France%7CTours%2C+France&travelmode=driving';
+
+        $conversion = $this->action->execute($this->user, $urlWithStops, null, new RouteOptions(), [WaypointType::STOP, WaypointType::VIA]);
+
+        self::assertSame(['STOP', 'VIA'], $conversion->getWaypointTypes());
+    }
+
+    public function testCoordinateWaypointNeverBecomesAnAddressThroughTheFullPipeline(): void
+    {
+        $this->seedAccount(1);
+        $urlWithCoordinateWaypoint = 'https://www.google.com/maps/dir/?api=1&origin=Paris%2C+France&destination=49.051624%2C2.0093594&travelmode=driving';
+
+        $this->fakeRoutingProvider->queue(new RouteComputation(
+            [FakeRoutingProvider::defaultFixtureRoute(TravelMode::DRIVE)],
+            RoutingFeatureCostTier::STANDARD,
+        ));
+
+        $conversion = $this->action->execute($this->user, $urlWithCoordinateWaypoint, null, new RouteOptions());
+
+        self::assertSame('49.051624, 2.0093594', $conversion->getDestinationLabel());
     }
 
     private function seedAccount(int $balance): void

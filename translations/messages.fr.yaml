@@ -8,6 +8,9 @@ conversion:
         route_not_found: 'Aucun itinéraire trouvé entre ces emplacements.'
         provider_unavailable: 'Le service de calcul d’itinéraire est temporairement indisponible. Merci de réessayer sous peu.'
         email_not_verified: 'Merci de vérifier votre e-mail avant d’exporter. Consultez votre boîte de réception pour le lien de confirmation.'
+        too_many_waypoints: "Cet itinéraire comporte trop d'étapes. Merci d'en retirer quelques-unes et de réessayer."
+        preview_not_found: 'Cet aperçu d’itinéraire a expiré. Merci de relancer la conversion.'
+        invalid_route_selection: "Cet itinéraire n'est plus disponible. Merci de relancer la conversion."
 
 extension:
     error:

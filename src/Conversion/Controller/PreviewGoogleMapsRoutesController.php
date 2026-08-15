@@ -4,14 +4,9 @@ declare(strict_types=1);
 
 namespace App\Conversion\Controller;
 
-use App\Conversion\Action\ConvertGoogleMapsToGpxAction;
-use App\Conversion\Action\LogConversionFailureAction;
-use App\Conversion\Enum\ConversionFailureReason;
+use App\Conversion\Action\PreviewGoogleMapsRoutesAction;
 use App\Conversion\Exception\InvalidGoogleMapsUrlException;
 use App\Conversion\Exception\UnsupportedGoogleMapsUrlException;
-use App\Conversion\Gpx\GpxGenerator;
-use App\Conversion\Http\ConversionJsonPresenter;
-use App\Conversion\Repository\ConversionRepository;
 use App\Conversion\Request\ConvertGoogleMapsUrlRequest;
 use App\Conversion\Service\GoogleMapsRouteOptionsMapper;
 use App\Identity\Entity\User;
@@ -21,8 +16,7 @@ use App\Routing\Exception\RouteNotFoundException;
 use App\Routing\Exception\RoutingProviderUnavailableException;
 use App\Routing\Exception\TooManyWaypointsException;
 use App\Routing\Provider\RoutingProviderInterface;
-use App\Routing\ValueObject\RouteOptions;
-use App\Usage\Exception\InsufficientCreditsException;
+use App\Routing\Result\RouteResult;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\Exception\JsonException;
@@ -31,32 +25,31 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\RateLimiter\RateLimiterFactory;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-final class ConvertGoogleMapsController extends AbstractController
+/**
+ * Première étape du flux "choisir son itinéraire" (options avancées : itinéraires alternatifs,
+ * route de référence économe en carburant) — ne facture rien, voir PreviewGoogleMapsRoutesAction
+ * et documentation/technique/routing-options.md.
+ */
+final class PreviewGoogleMapsRoutesController extends AbstractController
 {
     public function __construct(
         #[Autowire(service: 'limiter.conversion')]
         private readonly RateLimiterFactory $conversionLimiterFactory,
         private readonly ValidatorInterface $validator,
         private readonly TranslatorInterface $translator,
-        private readonly ConversionJsonPresenter $presenter,
         private readonly GoogleMapsRouteOptionsMapper $optionsMapper,
         private readonly RoutingProviderInterface $routingProvider,
     ) {
     }
 
-    #[Route('/api/conversions/google-maps', name: 'app_api_convert_google_maps', methods: ['POST'])]
+    #[Route('/api/conversions/google-maps/preview', name: 'app_api_preview_google_maps_routes', methods: ['POST'])]
     #[IsGranted('ROLE_USER')]
-    public function create(
-        Request $request,
-        ConvertGoogleMapsToGpxAction $convertGoogleMapsToGpxAction,
-        LogConversionFailureAction $logConversionFailureAction,
-        UrlGeneratorInterface $urlGenerator,
-    ): JsonResponse {
+    public function preview(Request $request, PreviewGoogleMapsRoutesAction $previewGoogleMapsRoutesAction): JsonResponse
+    {
         $user = $this->currentUser();
 
         if (!$this->isCsrfTokenValid('convert_google_maps', $request->headers->get('X-CSRF-Token'))) {
@@ -86,74 +79,44 @@ final class ConvertGoogleMapsController extends AbstractController
             : null;
 
         $mapping = $this->optionsMapper->map($dto, $this->routingProvider->capabilities());
-        // This endpoint is single-shot only — a request wanting to compare candidates must go
-        // through PreviewGoogleMapsRoutesController/ExportPreviewedRouteController instead, so a
-        // credit is only ever spent on the route actually exported.
-        $options = new RouteOptions(
-            routingPreference: $mapping->options->routingPreference,
-            modifiers: $mapping->options->modifiers,
-            optimizeWaypointOrder: $mapping->options->optimizeWaypointOrder,
-            routeDetail: $mapping->options->routeDetail,
-            showTollEstimates: $mapping->options->showTollEstimates,
-            vehicleProfile: $mapping->options->vehicleProfile,
-        );
 
         try {
-            $conversion = $convertGoogleMapsToGpxAction->execute(
+            $preview = $previewGoogleMapsRoutesAction->execute(
                 $user,
                 $dto->url,
                 $travelModeOverride ?? $mapping->presetSuggestedTravelMode,
-                $options,
+                $mapping->options,
                 $mapping->waypointTypes,
             );
         } catch (EmailNotVerifiedException) {
             return $this->errorResponse('conversion.error.email_not_verified', $user, Response::HTTP_FORBIDDEN);
         } catch (InvalidGoogleMapsUrlException|UnsupportedGoogleMapsUrlException) {
-            $logConversionFailureAction->execute($user, $dto->url, ConversionFailureReason::UNSUPPORTED_URL);
-
             return $this->errorResponse('conversion.error.unsupported_url', $user, Response::HTTP_UNPROCESSABLE_ENTITY);
-        } catch (InsufficientCreditsException) {
-            $logConversionFailureAction->execute($user, $dto->url, ConversionFailureReason::INSUFFICIENT_CREDITS);
-
-            return $this->errorResponse('conversion.error.insufficient_credits', $user, Response::HTTP_PAYMENT_REQUIRED);
         } catch (RouteNotFoundException) {
-            $logConversionFailureAction->execute($user, $dto->url, ConversionFailureReason::ROUTE_NOT_FOUND);
-
             return $this->errorResponse('conversion.error.route_not_found', $user, Response::HTTP_UNPROCESSABLE_ENTITY);
         } catch (TooManyWaypointsException) {
-            $logConversionFailureAction->execute($user, $dto->url, ConversionFailureReason::ROUTE_NOT_FOUND);
-
             return $this->errorResponse('conversion.error.too_many_waypoints', $user, Response::HTTP_UNPROCESSABLE_ENTITY);
         } catch (RoutingProviderUnavailableException) {
-            $logConversionFailureAction->execute($user, $dto->url, ConversionFailureReason::PROVIDER_UNAVAILABLE);
-
             return $this->errorResponse('conversion.error.provider_unavailable', $user, Response::HTTP_SERVICE_UNAVAILABLE);
         }
 
-        $downloadUrl = $urlGenerator->generate('app_api_conversion_download', [
-            'publicId' => (string) $conversion->getPublicId(),
-        ]);
-
-        return $this->json($this->presenter->toArray($conversion, $downloadUrl));
-    }
-
-    #[Route('/api/conversions/{publicId}/gpx', name: 'app_api_conversion_download', methods: ['GET'])]
-    #[IsGranted('ROLE_USER')]
-    public function download(
-        string $publicId,
-        ConversionRepository $conversionRepository,
-        GpxGenerator $gpxGenerator,
-    ): Response {
-        $user = $this->currentUser();
-        $conversion = $conversionRepository->findOneByPublicId($publicId);
-
-        if (null === $conversion || $conversion->getUser()->getId() !== $user->getId()) {
-            throw $this->createNotFoundException();
-        }
-
-        return new Response($gpxGenerator->generate($conversion->toGpxRouteData()), Response::HTTP_OK, [
-            'Content-Type' => 'application/gpx+xml',
-            'Content-Disposition' => sprintf('attachment; filename="smartgpx-%s.gpx"', $conversion->getPublicId()),
+        return $this->json([
+            'previewId' => $preview->previewId,
+            'candidates' => array_map(
+                static fn (RouteResult $route, int $index): array => [
+                    'index' => $index,
+                    'routeLabel' => $route->routeLabel,
+                    'distanceMeters' => $route->distanceMeters,
+                    'durationSeconds' => $route->durationSeconds,
+                    'avoidsHighways' => $mapping->options->modifiers->avoidHighways,
+                    'avoidsTolls' => $mapping->options->modifiers->avoidTolls,
+                    'tollEstimate' => null !== $route->tollEstimate
+                        ? ['currencyCode' => $route->tollEstimate->currencyCode, 'amount' => $route->tollEstimate->amount]
+                        : null,
+                ],
+                $preview->computation->routes,
+                array_keys($preview->computation->routes),
+            ),
         ]);
     }
 

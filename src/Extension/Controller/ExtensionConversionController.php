@@ -13,11 +13,15 @@ use App\Conversion\Gpx\GpxGenerator;
 use App\Conversion\Http\ConversionJsonPresenter;
 use App\Conversion\Repository\ConversionRepository;
 use App\Conversion\Request\ConvertGoogleMapsUrlRequest;
+use App\Conversion\Service\GoogleMapsRouteOptionsMapper;
 use App\Identity\Entity\User;
 use App\Identity\Exception\EmailNotVerifiedException;
 use App\Routing\Enum\TravelMode;
 use App\Routing\Exception\RouteNotFoundException;
 use App\Routing\Exception\RoutingProviderUnavailableException;
+use App\Routing\Exception\TooManyWaypointsException;
+use App\Routing\Provider\RoutingProviderInterface;
+use App\Routing\ValueObject\RouteOptions;
 use App\Usage\Exception\InsufficientCreditsException;
 use App\Usage\Repository\CreditAccountRepository;
 use App\Usage\Repository\CreditTransactionRepository;
@@ -49,6 +53,8 @@ final class ExtensionConversionController extends AbstractController
         private readonly ValidatorInterface $validator,
         private readonly TranslatorInterface $translator,
         private readonly ConversionJsonPresenter $presenter,
+        private readonly GoogleMapsRouteOptionsMapper $optionsMapper,
+        private readonly RoutingProviderInterface $routingProvider,
     ) {
     }
 
@@ -74,10 +80,7 @@ final class ExtensionConversionController extends AbstractController
             return $this->errorResponse('conversion.error.invalid_url', $user, Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
-        $dto = new ConvertGoogleMapsUrlRequest();
-        $dto->url = \is_string($payload['url'] ?? null) ? $payload['url'] : '';
-        $rawTravelMode = $payload['travelMode'] ?? null;
-        $dto->travelMode = \is_string($rawTravelMode) ? $rawTravelMode : null;
+        $dto = ConvertGoogleMapsUrlRequest::fromPayload($payload);
 
         if (\count($this->validator->validate($dto)) > 0) {
             return $this->errorResponse('conversion.error.invalid_url', $user, Response::HTTP_UNPROCESSABLE_ENTITY);
@@ -87,8 +90,26 @@ final class ExtensionConversionController extends AbstractController
             ? TravelMode::tryFrom(strtoupper($dto->travelMode))
             : null;
 
+        $mapping = $this->optionsMapper->map($dto, $this->routingProvider->capabilities());
+        // Same restriction as the web controller: the extension popup has no route-selection UI,
+        // so this endpoint never requests multiple candidate routes.
+        $options = new RouteOptions(
+            routingPreference: $mapping->options->routingPreference,
+            modifiers: $mapping->options->modifiers,
+            optimizeWaypointOrder: $mapping->options->optimizeWaypointOrder,
+            routeDetail: $mapping->options->routeDetail,
+            showTollEstimates: $mapping->options->showTollEstimates,
+            vehicleProfile: $mapping->options->vehicleProfile,
+        );
+
         try {
-            $conversion = $convertGoogleMapsToGpxAction->execute($user, $dto->url, $travelModeOverride);
+            $conversion = $convertGoogleMapsToGpxAction->execute(
+                $user,
+                $dto->url,
+                $travelModeOverride ?? $mapping->presetSuggestedTravelMode,
+                $options,
+                $mapping->waypointTypes,
+            );
         } catch (EmailNotVerifiedException) {
             return $this->errorResponse('conversion.error.email_not_verified', $user, Response::HTTP_FORBIDDEN);
         } catch (InvalidGoogleMapsUrlException|UnsupportedGoogleMapsUrlException) {
@@ -103,6 +124,10 @@ final class ExtensionConversionController extends AbstractController
             $logConversionFailureAction->execute($user, $dto->url, ConversionFailureReason::ROUTE_NOT_FOUND);
 
             return $this->errorResponse('conversion.error.route_not_found', $user, Response::HTTP_UNPROCESSABLE_ENTITY);
+        } catch (TooManyWaypointsException) {
+            $logConversionFailureAction->execute($user, $dto->url, ConversionFailureReason::ROUTE_NOT_FOUND);
+
+            return $this->errorResponse('conversion.error.too_many_waypoints', $user, Response::HTTP_UNPROCESSABLE_ENTITY);
         } catch (RoutingProviderUnavailableException) {
             $logConversionFailureAction->execute($user, $dto->url, ConversionFailureReason::PROVIDER_UNAVAILABLE);
 

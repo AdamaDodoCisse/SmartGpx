@@ -9,10 +9,17 @@ namespace App\Conversion\Gpx;
  * documentation/technique/google-maps-to-gpx.md). Pas d'élément <ele> : l'API Google Routes v2
  * ne renvoie pas l'altitude dans la forme de réponse utilisée ici — omission valide au regard du
  * schéma GPX 1.1 (élément optionnel).
+ *
+ * <extensions> (sous <metadata>, quand GpxRouteData::$routeOptions est fourni) porte les options
+ * de routage appliquées dans un espace de noms SmartGPX dédié — un élément schema-légal en GPX
+ * 1.1, prévu pour ce genre d'extension propriétaire (voir
+ * documentation/technique/routing-options.md). Absent si $routeOptions est null : le document
+ * reste valide dans les deux cas.
  */
 final class GpxGenerator
 {
     private const string GPX_NAMESPACE = 'http://www.topografix.com/GPX/1/1';
+    private const string SMARTGPX_NAMESPACE = 'https://smartgpx.app/gpx/extensions/1';
 
     public function generate(GpxRouteData $route): string
     {
@@ -30,7 +37,7 @@ final class GpxGenerator
         );
         $document->appendChild($gpx);
 
-        $gpx->appendChild($this->buildMetadata($document, $route->routeName));
+        $gpx->appendChild($this->buildMetadata($document, $route->routeName, $route->routeOptions));
 
         foreach ($route->waypoints as $waypoint) {
             $gpx->appendChild($this->buildWaypoint($document, $waypoint));
@@ -47,7 +54,7 @@ final class GpxGenerator
         return $xml;
     }
 
-    private function buildMetadata(\DOMDocument $document, string $routeName): \DOMElement
+    private function buildMetadata(\DOMDocument $document, string $routeName, ?GpxRouteOptionsMetadata $routeOptions): \DOMElement
     {
         $metadata = $this->createElement($document, 'metadata');
         $metadata->appendChild($this->createTextElement($document, 'name', $routeName));
@@ -57,7 +64,33 @@ final class GpxGenerator
             (new \DateTimeImmutable())->format('Y-m-d\TH:i:s\Z'),
         ));
 
+        if (null !== $routeOptions) {
+            $metadata->appendChild($this->buildExtensions($document, $routeOptions));
+        }
+
         return $metadata;
+    }
+
+    private function buildExtensions(\DOMDocument $document, GpxRouteOptionsMetadata $routeOptions): \DOMElement
+    {
+        $extensions = $this->createElement($document, 'extensions');
+
+        $routeOptionsElement = $document->createElementNS(self::SMARTGPX_NAMESPACE, 'smartgpx:routeOptions');
+
+        if (false === $routeOptionsElement) {
+            throw new \RuntimeException('Failed to create GPX extensions element.');
+        }
+
+        $routeOptionsElement->setAttribute('travelMode', $routeOptions->travelMode);
+        $routeOptionsElement->setAttribute('avoidHighways', $routeOptions->avoidHighways ? 'true' : 'false');
+        $routeOptionsElement->setAttribute('avoidTolls', $routeOptions->avoidTolls ? 'true' : 'false');
+        $routeOptionsElement->setAttribute('avoidFerries', $routeOptions->avoidFerries ? 'true' : 'false');
+        $routeOptionsElement->setAttribute('routingPreference', $routeOptions->routingPreference);
+        $routeOptionsElement->setAttribute('costTier', $routeOptions->costTier);
+
+        $extensions->appendChild($routeOptionsElement);
+
+        return $extensions;
     }
 
     private function buildWaypoint(\DOMDocument $document, GpxWaypoint $waypoint): \DOMElement
