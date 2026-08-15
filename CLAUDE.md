@@ -82,7 +82,16 @@ there before re-deciding something already settled.
   defined once in `:root` only, *not* duplicated in the dark-mode override blocks used elsewhere
   — the hero and the dark pricing section always render the same rich dark look regardless of the
   site's own theme, a deliberate exception to the app's usual three-state
-  light/dark/system theming, not an oversight.
+  light/dark/system theming, not an oversight. **`.hero-card-scope` itself has two different
+  legitimate usages that must not be conflated** (found the hard way in Phase 10): a real light
+  floating card (`HeroCard.tsx`, the decorative hero panel — both also set `bg-background`
+  explicitly) versus a transparent, outline-only card sitting directly on `.dark-section` (the
+  homepage pricing cards — no `bg-*` class at all, by design, so their plain text is meant to
+  inherit the section's own light `color`). Adding `color: var(--color-foreground)` to the shared
+  `.hero-card-scope` rule to fix illegible plain text in `ConvertResult` broke the pricing cards
+  the opposite way (dark text on a transparent-over-dark card). Fixed per-usage instead —
+  `text-foreground` added directly on `HeroCard`'s own element — rather than changing the shared
+  class again.
 
 ## Local development
 
@@ -143,8 +152,8 @@ npm run test             # vitest unit tests
 ```
 src/
   Identity/       # auth (Phase 1) — reference domain shape for what follows
-  Routing/         # RoutingProviderInterface + GoogleRoutesProvider/FakeRoutingProvider (Phase 2)
-  Conversion/       # Google Maps URL parsing, GPX generation, Conversion entity/API (Phase 2)
+  Routing/         # RoutingProviderInterface + GoogleRoutesProvider/FakeRoutingProvider (Phase 2); RouteOptions/capabilities/presets (Phase 10)
+  Conversion/       # Google Maps URL parsing, GPX generation, Conversion entity/API (Phase 2); preview/export flow, free URL parsing (Phase 10)
   Usage/            # credit ledger (CreditAccount/CreditTransaction), reserve/consume/release (Phase 2)
   Extension/        # ExtensionAuthorization, token authenticator, /api/extension/* (Phase 3)
   Billing/          # CreditPack/CreditPurchase, BillingProviderInterface + StripeBillingProvider (Phase 4)
@@ -169,7 +178,7 @@ migrations/         # Doctrine migrations
 documentation/      # fonctionnel/ (product), technique/ (implementation), decisions/ (ADRs)
 ```
 
-## Current architectural state (through Phase 9)
+## Current architectural state (through Phase 10)
 
 **Phase 1 — Foundation**: Symfony backend skeleton, MySQL/Doctrine, full email+password auth
 (registration, email verification, login with throttling, forgot/reset password),
@@ -355,7 +364,59 @@ request attribute the code read (`_canonical_route`) is never actually populated
 runtime, only `_route` and `_locale` are; no test caught it because none existed for this behavior
 (one does now).
 
-This completes every phase named in the original product brief, plus the follow-up QA/hardening
-pass above. Further work needs a new phase scoped explicitly first — see
+**Phase 10 — Advanced Route Options**: a full 30-section brief extending the Google Maps → GPX
+converter with route-planning options, built in full (the user explicitly opted out of a reduced
+scope). See `documentation/fonctionnel/advanced-route-options.md`,
+`documentation/technique/routing-options.md`, and
+[ADR-008](documentation/decisions/ADR-008-routing-provider-capabilities.md) for complete detail;
+summary:
+
+- **`RoutingProviderInterface` gained `capabilities(): RoutingProviderCapabilities` and a
+  `RouteOptions`-aware `computeRoutes()`** (replacing `computeRoute()` — see ADR-001's Phase 10
+  update). Real Google Routes API fields now wired: `routeModifiers` (avoid highways/tolls/
+  ferries), `routingPreference` (traffic-aware routing), `optimizeWaypointOrder`,
+  `computeAlternativeRoutes`, `requestedReferenceRoutes` (fuel-efficient route),
+  `extraComputations` (tolls), `polylineQuality` — each sent only when the travel mode actually
+  supports it (DRIVE/TWO_WHEELER for most; DRIVE only for fuel-efficient). Never a hardcoded
+  `25`-waypoint limit either — `capabilities()->maxIntermediateWaypoints` is the one source of
+  truth. `new RouteOptions()` (the parameter default) reproduces the exact pre-Phase-10 behavior,
+  so every existing caller — including the Chrome extension, unmodified — keeps working
+  byte-for-byte.
+- **STOP vs VIA waypoints, and a two-phase preview/export flow for alternatives.** Comparing
+  alternative or fuel-efficient routes can't be one atomic step like the standard flow — Google
+  returns multiple candidates, and a credit must only be spent on the one actually chosen.
+  `PreviewGoogleMapsRoutesAction` computes and caches candidates (Redis, `cache.app`, 10-minute
+  TTL, sealed to the user id) with **zero credit reservation**; `ExportPreviewedRouteAction`
+  re-reads the cache (never recomputes) and only then reserves/consumes. Triggered only when the
+  frontend requests alternatives/fuel-efficient — the default single-shot
+  `ConvertGoogleMapsToGpxAction` flow is structurally untouched. Deliberately web-only: the
+  Chrome extension has no route-choice UI in this phase, so no `/preview`/`/export` equivalent
+  exists under `src/Extension/`.
+- **`RoutingFeatureCostTier` (STANDARD/ADVANCED) is classified and exposed, but doesn't change
+  credit cost yet** — the brief itself frames this as for *later* use by the credit system, not
+  this phase. Every conversion still costs a flat 1 credit.
+- **A free `POST /api/conversions/google-maps/parse`** (no credit, no Google Routes call —
+  `GoogleMapsUrlParser` doesn't need one) lets the advanced panel populate the STOP/VIA waypoint
+  list before any conversion; accessible to anonymous visitors like the rest of the main form,
+  rate-limited separately (`limiter.route_parse`, IP-keyed, more generous than `limiter.conversion`
+  since nothing is billable).
+- **A server-side preset system** (`RoutePreset` enum + `RoutePresetOptionsResolver`, a `match`
+  table) — the backend is the single source of truth for what a preset resolves to; the frontend
+  only needs preset names/labels for the buttons, never duplicates the resolution table.
+- **Frontend**: a new `AdvancedRouteOptions.tsx` panel (closed by default — the standard
+  paste-URL → Convert workflow is unchanged for anyone who doesn't open it), gated section by
+  section on the live `RoutingProviderCapabilities` fetched server-side and embedded in the
+  homepage HTML (avoids an extra network round trip). New Radix primitives added from scratch —
+  checkbox, radio-group, toggle-group, tooltip, collapsible — since only Button/Input/Sheet
+  existed before. Waypoint reordering uses up/down buttons, not drag-and-drop: the brief marks
+  drag-and-drop optional, and buttons are more accessible with no new dependency.
+- **Two real bugs found while verifying against the live Google Routes API** (not simulated):
+  the dev database schema hadn't been synced for the new `Conversion` columns (only the test DB
+  had — `doctrine:schema:update --force` needs running for **both** after an entity change, not
+  just `--env=test`), and the `.hero-card-scope` dual-usage bug described above.
+
+This completes every phase named in the original product brief, plus two follow-up passes built
+from explicit requests rather than the pre-written spec (Phase 9's QA/hardening sweep, Phase 10's
+Advanced Route Options brief). Further work needs a new phase scoped explicitly first — see
 `documentation/fonctionnel/vision-produit.md` and the ADRs before assuming a direction that hasn't
 been decided yet.
