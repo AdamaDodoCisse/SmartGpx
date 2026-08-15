@@ -5,7 +5,7 @@
  * manifest.config.ts's host_permissions/externally_connectable — and as the default shown
  * before a connection exists.
  */
-export const DEV_API_ORIGIN = 'http://127.0.0.1:8000';
+export const DEV_API_ORIGIN = 'https://127.0.0.1:8000';
 
 // Placeholder — replace with the real production domain before any Chrome Web Store
 // submission. See chrome-extension/RELEASE_CHECKLIST.md.
