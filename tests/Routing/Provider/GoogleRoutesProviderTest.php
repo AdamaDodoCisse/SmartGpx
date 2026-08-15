@@ -271,6 +271,40 @@ final class GoogleRoutesProviderTest extends TestCase
         self::assertArrayNotHasKey('optimizeWaypointOrder', $capturedBody, 'No intermediates: nothing to optimize.');
     }
 
+    public function testOptimizedIntermediateWaypointIndexIsParsedFromTheResponse(): void
+    {
+        $responseWithOptimizedOrder = <<<'JSON'
+            {
+                "routes": [
+                    {
+                        "distanceMeters": 12345,
+                        "duration": "900s",
+                        "optimizedIntermediateWaypointIndex": [2, 0, 1],
+                        "polyline": {"geoJsonLinestring": {"type": "LineString", "coordinates": [[2.3522, 48.8566], [2.0093594, 49.051624]]}},
+                        "legs": [{"distanceMeters": 12345, "duration": "900s", "startLocation": {"latLng": {"latitude": 48.8566, "longitude": 2.3522}}, "endLocation": {"latLng": {"latitude": 49.051624, "longitude": 2.0093594}}}]
+                    }
+                ]
+            }
+            JSON;
+
+        $httpClient = new MockHttpClient(
+            static fn (): MockResponse => new MockResponse($responseWithOptimizedOrder, ['http_code' => 200]),
+            'https://routes.googleapis.com',
+        );
+
+        $provider = self::createProvider($httpClient);
+        $stops = [
+            new RouteWaypoint(Address::fromString('Orléans, France'), WaypointType::STOP, 0),
+            new RouteWaypoint(Address::fromString('Tours, France'), WaypointType::STOP, 1),
+            new RouteWaypoint(Address::fromString('Poitiers, France'), WaypointType::STOP, 2),
+        ];
+        $options = new RouteOptions(optimizeWaypointOrder: true);
+
+        $computation = $provider->computeRoutes(Address::fromString('Paris'), Address::fromString('Bordeaux'), $stops, TravelMode::DRIVE, $options);
+
+        self::assertSame([2, 0, 1], $computation->primary()->optimizedWaypointOrder);
+    }
+
     public function testAlternativesAndFuelEfficientRouteAreParsedWithLabelsAndTollEstimate(): void
     {
         $httpClient = new MockHttpClient(

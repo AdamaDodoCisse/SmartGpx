@@ -6,6 +6,7 @@ namespace App\Tests\Conversion\Gpx;
 
 use App\Conversion\Gpx\GpxGenerator;
 use App\Conversion\Gpx\GpxRouteData;
+use App\Conversion\Gpx\GpxRouteOptionsMetadata;
 use App\Conversion\Gpx\GpxTrackPoint;
 use App\Conversion\Gpx\GpxWaypoint;
 use PHPUnit\Framework\TestCase;
@@ -83,5 +84,62 @@ final class GpxGeneratorTest extends TestCase
 
         $document = new \DOMDocument();
         self::assertTrue($document->loadXML($xml));
+    }
+
+    public function testOmitsExtensionsBlockWhenNoRouteOptionsMetadataIsGiven(): void
+    {
+        $route = new GpxRouteData(
+            routeName: 'No metadata',
+            waypoints: [],
+            trackPoints: [new GpxTrackPoint(0.0, 0.0)],
+        );
+
+        $xml = (new GpxGenerator())->generate($route);
+
+        $document = new \DOMDocument();
+        self::assertTrue($document->loadXML($xml));
+        $xpath = new \DOMXPath($document);
+        $xpath->registerNamespace('gpx', self::GPX_NAMESPACE);
+
+        $extensions = $xpath->query('/gpx:gpx/gpx:metadata/gpx:extensions');
+        self::assertNotFalse($extensions);
+        self::assertCount(0, $extensions, 'No <extensions> block should appear when routeOptions metadata is absent.');
+    }
+
+    public function testIncludesRouteOptionsExtensionsBlockWhenMetadataIsGiven(): void
+    {
+        $route = new GpxRouteData(
+            routeName: 'Cergy to Paris',
+            waypoints: [],
+            trackPoints: [new GpxTrackPoint(0.0, 0.0)],
+            routeOptions: new GpxRouteOptionsMetadata(
+                travelMode: 'DRIVE',
+                avoidHighways: true,
+                avoidTolls: false,
+                avoidFerries: false,
+                routingPreference: 'TRAFFIC_AWARE',
+                costTier: 'STANDARD',
+            ),
+        );
+
+        $xml = (new GpxGenerator())->generate($route);
+
+        $document = new \DOMDocument();
+        self::assertTrue($document->loadXML($xml), 'The document must stay well-formed, valid GPX 1.1 with the extensions block present.');
+        $xpath = new \DOMXPath($document);
+        $xpath->registerNamespace('gpx', self::GPX_NAMESPACE);
+        $xpath->registerNamespace('smartgpx', 'https://smartgpx.app/gpx/extensions/1');
+
+        $extensions = $xpath->query('/gpx:gpx/gpx:metadata/gpx:extensions/smartgpx:routeOptions');
+        self::assertNotFalse($extensions);
+        self::assertCount(1, $extensions);
+
+        $node = $extensions->item(0);
+        self::assertInstanceOf(\DOMElement::class, $node);
+        self::assertSame('DRIVE', $node->getAttribute('travelMode'));
+        self::assertSame('true', $node->getAttribute('avoidHighways'));
+        self::assertSame('false', $node->getAttribute('avoidTolls'));
+        self::assertSame('TRAFFIC_AWARE', $node->getAttribute('routingPreference'));
+        self::assertSame('STANDARD', $node->getAttribute('costTier'));
     }
 }
