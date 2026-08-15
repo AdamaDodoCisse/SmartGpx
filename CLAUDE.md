@@ -38,6 +38,10 @@ there before re-deciding something already settled.
   to the backend, because only it needs a routing-provider secret.
 - **Credits**: only a successful Google Maps → GPX conversion consumes a credit. Every other
   tool is and stays free unless the business model is deliberately changed.
+- **Only a verified account may complete a Google Maps → GPX conversion** — enforced once, in
+  `ConvertGoogleMapsToGpxAction::execute()` (Phase 9), so both the web controller and the Chrome
+  extension controller inherit it automatically. Don't re-check `isVerified()` per-controller;
+  add any future gate to the shared action instead.
 - **Secrets** (routing API keys, Stripe keys, mailer credentials, DB password) never live in
   `.env`/`.env.dev` (placeholders only, committed) — only in gitignored `.env.local` /
   `.env.test.local`. Never expose them in React, the Chrome extension, error messages, or logs.
@@ -61,7 +65,10 @@ there before re-deciding something already settled.
   (Fjalla One, condensed — headings, the wordmark, short labels) with the system sans for body
   text and `--font-mono` (IBM Plex Mono) for coordinate-like/data accents (eyebrow tags, step
   counters). Extend this token system for new pages rather than reaching for a different palette
-  or typeface per page.
+  or typeface per page. The logo mark (pine-green badge, white contour ring, orange waypoint dot —
+  Phase 9) is defined once per stack, `templates/_macros/logo.html.twig` (Twig) and `LogoMark` in
+  `chrome-extension/src/popup/components/icons.tsx` (React) — reuse these rather than re-drawing
+  it or reaching for a generic icon.
 
 ## Local development
 
@@ -130,6 +137,7 @@ src/
   Shared/          # genuinely cross-domain code only (e.g. TimestampableTrait, Pagination/)
   Controller/       # top-level pages with no dedicated domain yet (Home, Pricing, Legal, Guides, Sitemap, Robots)
   Admin/            # admin back-office: Controller/ + Metrics/ + ComputeAdminMetricsAction (Phase 8) — mutations live in the domain they mutate, not here
+  Contact/          # /contact — Request/Form/Mailer/Action, rate-limited like registration (Phase 9)
 
 assets/app/src/
   entries/         # Vite entry points (one per React island)
@@ -147,7 +155,7 @@ migrations/         # Doctrine migrations
 documentation/      # fonctionnel/ (product), technique/ (implementation), decisions/ (ADRs)
 ```
 
-## Current architectural state (through Phase 8)
+## Current architectural state (through Phase 9)
 
 **Phase 1 — Foundation**: Symfony backend skeleton, MySQL/Doctrine, full email+password auth
 (registration, email verification, login with throttling, forgot/reset password),
@@ -224,9 +232,10 @@ content). Also added, since none of it existed before: a `SitemapController` (`/
 hand-maintained public-route list, same pattern as the homepage tool map),
 a `RobotsController` (`/robots.txt` — a controller, not a static file, so the sitemap URL it
 points at is always correct for the current host), and canonical/hreflang `<link>` tags in
-`base.html.twig` using Symfony's `_canonical_route` request attribute. The header nav (desktop and
-mobile) gained "Tools"/"Guides" links, since there was previously no way to reach either from the
-site chrome. See `documentation/fonctionnel/guides.md` and `documentation/technique/seo.md`.
+`base.html.twig`. The header nav (desktop and mobile) gained "Tools"/"Guides" links, since there
+was previously no way to reach either from the site chrome. See `documentation/fonctionnel/guides.md`
+and `documentation/technique/seo.md` — the latter documents a real regression (Phase 9) in this
+exact canonical/hreflang mechanism, worth reading before touching it again.
 
 **Phase 8 — Admin interface**: the last phase named in the product brief. A simple back-office
 (`src/Admin/`) — dashboard metrics, a paginated user list with a per-user credit ledger and manual
@@ -247,6 +256,61 @@ development" above), and the test suite now runs against SQLite instead of MySQL
 `documentation/fonctionnel/admin.md`, `documentation/technique/admin.md`, and
 [ADR-007](documentation/decisions/ADR-007-admin-access-control.md).
 
-This completes every phase named in the original product brief. Further work needs a new phase
-scoped explicitly first — see `documentation/fonctionnel/vision-produit.md` and the ADRs before
-assuming a direction that hasn't been decided yet.
+**Phase 9 — Visual identity, revenue-path hardening, and a full QA pass**: not named in the
+original product brief (Phases 1–8 were) — scoped and built directly from a systematic QA sweep
+plus explicit follow-up requests, rather than a pre-written spec. Several distinct pieces:
+
+- **Real visual identity, replacing every placeholder**: no logo asset existed anywhere before
+  this phase — no web favicon at all, a text-only header wordmark, and the Chrome extension's
+  `icons/icon{16,32,48,128}.png` were literal placeholder solid-color PNGs. One SVG mark (a
+  pine-green badge, white open topographic contour ring, trail-blaze-orange waypoint dot — see
+  the "topo trail" token system below) defined once per stack (`templates/_macros/logo.html.twig`
+  for Twig, `LogoMark` in `chrome-extension/src/popup/components/icons.tsx` for React) and reused
+  everywhere: the web favicon, the site header, the admin header, the extension popup, and the
+  extension's own icon files. The `chrome-extension/STORE_LISTING.md` and `RELEASE_CHECKLIST.md`
+  drafts (pre-existing, never completed) now have their real icons and screenshots — what's left
+  before an actual Chrome Web Store submission (`PROD_API_ORIGIN`, a real developer account) is
+  explicitly out of reach of this repo, documented as such in `RELEASE_CHECKLIST.md`.
+- **Only verified accounts may complete a Google Maps → GPX conversion** — enforced in
+  `ConvertGoogleMapsToGpxAction::execute()` (a new `EmailNotVerifiedException`, checked first,
+  before any credit reservation), so both the web controller and the Chrome extension controller
+  are covered by the one check. Previously nothing enforced this at all, even though an unverified
+  user could already log in.
+- **The homepage conversion form is visible to anonymous visitors** — since Google Maps → GPX is
+  the paid, revenue-driving feature, hiding it behind a sign-in wall worked against the business
+  goal. The real form now renders for everyone; only submitting it (not landing on the page) tells
+  an anonymous visitor to sign up, or a signed-in-but-unverified one to verify their email first.
+  All widget states (idle, loading, success, no-credit, sign-in-required, email-not-verified)
+  share one `HeroCard` component so state changes read as one object updating, not different UI
+  blocks appearing.
+- **All 13 free tool pages** gained real explanatory content (previously bare dropzones), and the
+  **GPX Viewer had a real, fully-reproducible bug** (only part of the map rendered until an
+  interaction shifted what was visible) — root cause: `leaflet.css` was never linked in the
+  production build (`vite_entry_script_tags` alone doesn't emit an entry's CSS, only
+  `vite_entry_link_tags` does), invisible under `vite dev` since that injects CSS live with no
+  `<link>` needed.
+- **Header and footer redesign**, plus two real bugs found and fixed along the way: the header
+  always showed a static "Login" link regardless of auth state (now a real Account dropdown with
+  Credits/Extensions/Log out), and the mobile menu only listed 6 of the 15 real nav destinations
+  with hardcoded English-only paths (a French visitor tapping a translated label landed on the
+  English route) — now sourced from Twig's `path()` instead of being duplicated in TypeScript.
+- **CI was silently broken**: PHPStan needs `var/cache/dev`'s compiled container, which no step
+  warmed, and the test job still provisioned MySQL + ran Doctrine migrations, a Phase-8-stale setup
+  (tests have used SQLite + `schema:update` since Phase 8 — see "Local development" above) that
+  left CI's schema silently missing every entity change since. Fixed and verified locally end to
+  end under conditions matching CI exactly (no live database, freshly warmed dev cache only).
+- **Terms of Service and Privacy Policy got real content** (previously one-sentence placeholders),
+  and `/contact` (a new `src/Contact/` domain — request/form/mailer/action, rate-limited like
+  registration) plus `/account/credits` (a credit-ledger page, `src/Usage/Controller/`) were built
+  where no such page existed before.
+
+Also worth knowing: `documentation/technique/seo.md` documents a real regression this phase found
+and fixed — canonical/hreflang tags were silently missing site-wide since Phase 8, because the
+request attribute the code read (`_canonical_route`) is never actually populated by Symfony at
+runtime, only `_route` and `_locale` are; no test caught it because none existed for this behavior
+(one does now).
+
+This completes every phase named in the original product brief, plus the follow-up QA/hardening
+pass above. Further work needs a new phase scoped explicitly first — see
+`documentation/fonctionnel/vision-produit.md` and the ADRs before assuming a direction that hasn't
+been decided yet.
