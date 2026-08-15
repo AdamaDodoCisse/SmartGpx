@@ -335,6 +335,19 @@ plus explicit follow-up requests, rather than a pre-written spec. Several distin
   their own full sections further up the same page — judged as page bloat rather than a genuine
   gap, since gpx2maps needed that grid for content this page already had spread across dedicated
   sections.
+- **Redesign of the 13 free tool pages**: previously an identical, minimal skeleton (flat icon
+  badge, `<h1>`, one explainer paragraph) with **zero CTA or cross-linking between the 13 tools**
+  and no link to `/pricing` anywhere. Extended the homepage's visual language down to these pages
+  via three shared partials in `templates/tools/` — `_header.html.twig` (route-accent icon badge,
+  category eyebrow, bigger title, on a `.contour-bg` band — not the homepage's full
+  `.hero-gradient`, deliberately, to avoid repeating that signature treatment 13 times),
+  `_related.html.twig` (2–3 curated cross-links per page, sized to the item count — a `grid-cols-3`
+  with only 2 items left a visible empty cell, caught and fixed during this work), and
+  `_cta.html.twig` (one soft, informational card per page — 12 pages link to the paid converter,
+  `gpx_to_google_maps` itself links to the Chrome extension instead). The CTA copy stays
+  non-gating by design: `documentation/fonctionnel/vision-produit.md` states plainly that no
+  payment friction gets added to the free tools, so these are plain cross-links, never a modal or
+  blocker. Pure Twig/translations/CSS — no backend or React changes.
 
 Also worth knowing: `documentation/technique/seo.md` documents a real regression this phase found
 and fixed — canonical/hreflang tags were silently missing site-wide since Phase 8, because the
