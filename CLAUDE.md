@@ -127,9 +127,10 @@ php bin/console app:credit-pack:seed-launch-grid   # only needed once, on a fres
 **Tests run against SQLite, not MySQL** (`.env.test`'s `DATABASE_URL`, a file under `var/`) — no
 server to start, and `config/packages/doctrine.yaml`'s `when@test` block overrides the driver
 accordingly. **New schema changes are never migrations** (as of Phase 8) — sync straight from
-entity mappings with `doctrine:schema:update --force`, dev and test alike; the handful of
-`migrations/*.php` files already in the repo are Phase 1–7 history, already applied, left as-is
-— don't add new ones. `tests/bootstrap.php` seeds the `credit_pack` launch grid once per test run
+entity mappings with `doctrine:schema:update --force`, dev, test, and prod alike. The Phase 1–7
+`migrations/*.php` history was deleted once this was confirmed working in production
+(2026-08-16) — don't add new ones; `doctrine_migrations.yaml` stays configured but unused.
+`tests/bootstrap.php` seeds the `credit_pack` launch grid once per test run
 (invoking `app:credit-pack:seed-launch-grid` in-process) since `schema:update` only syncs DDL,
 never data. Recreate the test database after any entity change:
 
@@ -186,10 +187,9 @@ chrome-extension/    # separate npm project — Manifest V3 extension (Phase 3)
   src/background/    # service worker — the only code that reads the stored token
   src/lib/           # env, auth, api, mapsUrl, messages, i18n
 
-templates/         # Twig — every public page (guides/ — 8 SEO content pages + index, Phase 7)
+templates/         # Twig — every public page (guides/ — 11 SEO content pages + index, Phase 7/12)
 translations/       # Twig i18n catalogs (messages.{en,fr}.yaml)
-migrations/         # Doctrine migrations
-documentation/      # fonctionnel/ (product), technique/ (implementation), decisions/ (ADRs)
+documentation/      # fonctionnel/ (product), technique/ (implementation), decisions/ (ADRs), seo/ (Phase 12)
 ```
 
 ## Current architectural state (through Phase 11)

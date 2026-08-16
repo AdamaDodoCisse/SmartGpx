@@ -67,19 +67,14 @@ d'environnement fournies par l'hébergeur, jamais dans le dépôt. Voir la règl
    au premier rendu — il n'y a aucune compilation à la volée côté serveur.
 5. **Schéma de base de données** — lire attentivement avant d'exécuter :
 
-   Le dépôt contient deux mécanismes en apparence contradictoires : 7 fichiers de migration
-   historiques (`migrations/`, datés du 13 août 2026, couvrant les Phases 1 à 7) plus
-   `config/packages/doctrine_migrations.yaml` toujours configuré, **et** la règle explicite de
-   `CLAUDE.md` depuis la Phase 8 : *"No new Doctrine migrations — sync schema via
-   `doctrine:schema:update --force` instead"*. Cette règle ne précise pas explicitement le cas de
-   la production, mais elle est présentée comme la pratique du projet dans son ensemble, pas
-   seulement dev/test — et c'est la seule pratique activement maintenue depuis la Phase 8 (aucune
-   migration n'a été ajoutée depuis). **Recommandation retenue ici** : traiter
-   `doctrine:schema:update --force` comme la méthode de synchronisation de schéma également en
-   production, cohérente avec le reste du projet, plutôt que de faire vivre deux stratégies en
-   parallèle. Sur une base neuve (premier déploiement), `doctrine:schema:update --force` crée
-   directement le schéma complet actuel (Phases 1 à 10) — les anciennes migrations n'ont pas besoin
-   d'être rejouées.
+   `doctrine:schema:update --force` est l'unique méthode de synchronisation du schéma, en
+   production comme en dev/test (voir `CLAUDE.md`). Les 7 fichiers de migration historiques
+   (`migrations/`, Phases 1 à 7) ont été supprimés une fois cette pratique confirmée en production
+   (2026-08-16) : ils ne servaient plus qu'à documenter un choix déjà tranché, et faisaient
+   coexister deux mécanismes pour un seul usage réel. `config/packages/doctrine_migrations.yaml`
+   reste en place (le bundle recrée `migrations/` de lui-même si une migration y est un jour
+   générée) mais rien ne l'utilise activement aujourd'hui. Sur une base neuve (premier
+   déploiement), `doctrine:schema:update --force` crée directement le schéma complet actuel.
 
    ```bash
    php bin/console doctrine:database:create --if-not-exists --env=prod
