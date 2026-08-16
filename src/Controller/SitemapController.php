@@ -45,6 +45,9 @@ final class SitemapController extends AbstractController
         'app_guides_kmz',
         'app_guides_simplify_track',
         'app_guides_merge_tracks',
+        'app_guides_google_maps_to_garmin',
+        'app_guides_google_maps_to_wahoo',
+        'app_guides_google_maps_to_osmand',
     ];
 
     public function __construct(private readonly UrlGeneratorInterface $urlGenerator)

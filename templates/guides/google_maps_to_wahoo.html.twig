@@ -1,0 +1,103 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'guides.google_maps_to_wahoo.meta_title'|trans }}{% endblock %}
+{% block meta_description %}{{ 'guides.google_maps_to_wahoo.meta_description'|trans }}{% endblock %}
+{% block og_title %}{{ 'guides.google_maps_to_wahoo.meta_title'|trans }}{% endblock %}
+{% block og_description %}{{ 'guides.google_maps_to_wahoo.meta_description'|trans }}{% endblock %}
+
+{% block body %}
+    {% include '_partials/breadcrumb.html.twig' with {
+        trail: [
+            { label: 'layout.breadcrumb.home'|trans, route: 'app_home' },
+            { label: 'guides.index.title'|trans, route: 'app_guides_index' },
+            { label: 'guides.google_maps_to_wahoo.title'|trans, route: null },
+        ]
+    } %}
+
+    {% include 'guides/_hero_header.html.twig' with { icon: 'bike', i18n_prefix: 'guides.google_maps_to_wahoo' } %}
+
+    <div id="guide-google-maps-to-wahoo" class="mx-auto max-w-3xl px-4 py-8">
+        <p class="text-sm font-medium text-route">{{ 'guides.google_maps_to_wahoo.convert_cta'|trans }}</p>
+        <div
+            id="convert-hero-root"
+            data-is-authenticated="{{ app.user ? '1' : '' }}"
+            data-is-verified="{{ app.user and app.user.verified ? '1' : '' }}"
+            data-csrf-token="{{ csrf_token('convert_google_maps') }}"
+            data-credit-balance="{{ creditBalance }}"
+            data-locale="{{ app.request.locale }}"
+            data-capabilities="{{ capabilities|json_encode }}"
+            data-landing-page="{{ landingPage }}"
+            class="mt-3"
+        ></div>
+    </div>
+
+    {{ vite_entry_script_tags('convertHero', { dependency: 'react' }) }}
+
+    <div class="mx-auto max-w-3xl px-4 pb-16">
+        {% include 'guides/_route_workflow.html.twig' with {
+            steps: [
+                { icon: 'map-pin', label: 'Google Maps' },
+                { icon: 'sparkles', label: 'SmartGPX' },
+                { icon: 'file-code', label: 'GPX' },
+                { icon: 'bike', label: 'Wahoo' },
+            ]
+        } %}
+
+        {% include 'guides/_how_to_steps.html.twig' with { i18n_prefix: 'guides.google_maps_to_wahoo' } %}
+
+        <div class="prose prose-sm mt-10 max-w-none">
+            <h2>{{ 'guides.google_maps_to_wahoo.wahoo_specifics_title'|trans }}</h2>
+            {% if 'fr' == app.request.locale %}
+                <p>L'application Wahoo traite un GPX comme un fichier d'itinéraire. Le chemin le plus
+                direct : ouvrez le fichier GPX téléchargé sur votre téléphone et choisissez de l'ouvrir
+                avec l'application Wahoo, puis nommez l'itinéraire. Il apparaîtra ensuite dans « Choose
+                a route » sur votre ELEMNT une fois synchronisé. Vous pouvez aussi passer par l'onglet
+                Explore de l'application Wahoo, puis « My Collection » → « My Routes » → « Import a
+                file ». Dans les deux cas, votre téléphone doit avoir une connexion internet pendant
+                l'import : l'application envoie le fichier vers le Wahoo Cloud, qui le convertit en un
+                itinéraire que votre ELEMNT peut suivre. Sur ordinateur, relier l'ELEMNT en USB et
+                déposer le GPX dans son dossier de routes fonctionne aussi.</p>
+
+                <h2>{{ 'guides.google_maps_to_wahoo.limitations_title'|trans }}</h2>
+                <p>L'import via l'application dépend de cette étape par le Wahoo Cloud : il ne
+                fonctionne donc pas hors ligne. Les itinéraires très longs ou avec beaucoup de points
+                peuvent prendre plus de temps à traiter, et les modèles ELEMNT plus anciens organisent
+                parfois les itinéraires importés un peu différemment de la gamme BOLT/ROAM/ACE
+                actuelle.</p>
+            {% else %}
+                <p>The Wahoo app treats a GPX file as a route. The most direct path: open the
+                downloaded GPX file on your phone and choose to open it with the Wahoo app, then name
+                the route. It'll then show up under "Choose a route" on your ELEMNT once synced. You
+                can also go through the Wahoo app's Explore tab, then My Collection, My Routes, Import
+                a file. Either way, your phone needs an internet connection during import: the app
+                uploads the file to the Wahoo Cloud, which converts it into a route your ELEMNT can
+                follow. On a computer, connecting the ELEMNT over USB and dropping the GPX into its
+                routes folder works too.</p>
+
+                <h2>{{ 'guides.google_maps_to_wahoo.limitations_title'|trans }}</h2>
+                <p>Importing a route through the app depends on that Wahoo Cloud step, so it won't work
+                offline. Extremely long or waypoint-heavy routes can take longer to process, and older
+                ELEMNT models may organize imported routes slightly differently in their menus than the
+                current BOLT/ROAM/ACE line.</p>
+            {% endif %}
+        </div>
+
+        {% include 'tools/_cta.html.twig' with { variant: 'chrome_extension' } %}
+
+        {% include 'guides/_related.html.twig' with {
+            links: [
+                { route: 'app_guides_google_maps_to_gpx', icon: 'map-pin', label: 'guides.google_maps_to_gpx.title'|trans },
+                { route: 'app_gpx_viewer', icon: 'sparkles', label: 'home.free_tools.gpx_viewer'|trans },
+                { route: 'app_guides_google_maps_to_garmin', icon: 'route', label: 'guides.google_maps_to_garmin.title'|trans },
+                { route: 'app_guides_google_maps_to_osmand', icon: 'navigation', label: 'guides.google_maps_to_osmand.title'|trans },
+            ]
+        } %}
+
+        {% include 'guides/_faq.html.twig' with {
+            namespace: 'guides.google_maps_to_wahoo.faq',
+            keys: ['q_direct_send', 'q_convert', 'q_gpx_support', 'q_elemnt', 'q_integration', 'q_multi_stop'],
+        } %}
+
+        <p class="mt-8 border-t border-border pt-6 text-xs text-muted-foreground">{{ 'guides.disclaimer'|trans }}</p>
+    </div>
+{% endblock %}

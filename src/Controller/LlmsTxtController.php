@@ -48,6 +48,9 @@ final class LlmsTxtController extends AbstractController
         ['route' => 'app_guides_kmz', 'key' => 'kmz'],
         ['route' => 'app_guides_simplify_track', 'key' => 'simplify_track'],
         ['route' => 'app_guides_merge_tracks', 'key' => 'merge_tracks'],
+        ['route' => 'app_guides_google_maps_to_garmin', 'key' => 'google_maps_to_garmin'],
+        ['route' => 'app_guides_google_maps_to_wahoo', 'key' => 'google_maps_to_wahoo'],
+        ['route' => 'app_guides_google_maps_to_osmand', 'key' => 'google_maps_to_osmand'],
     ];
 
     public function __construct(private readonly UrlGeneratorInterface $urlGenerator)

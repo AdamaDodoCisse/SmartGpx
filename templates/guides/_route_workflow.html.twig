@@ -1,0 +1,20 @@
+{% import '_macros/icons.html.twig' as icons %}
+{# Diagramme d'étapes partagé (Google Maps → SmartGPX → GPX → appareil), un seul composant
+   paramétré par `steps` (liste de { icon, label }) plutôt que trois quasi-identiques — pur
+   Twig/CSS, aucun JS/React : ces pages visent le trafic Google, la priorité est LCP/INP (voir
+   CLAUDE.md), pas une justification suffisante pour charger un composant React de plus. #}
+<div class="mt-8 flex flex-col items-stretch gap-2 rounded-lg border border-border bg-secondary/30 p-4 sm:flex-row sm:items-center sm:justify-between sm:gap-1">
+    {% for step in steps %}
+        <div class="flex items-center gap-2 sm:flex-col sm:gap-1.5 sm:text-center">
+            <span class="flex size-9 shrink-0 items-center justify-center rounded-full bg-background text-primary ring-1 ring-border">
+                {{ icons.icon(step.icon, 'size-4.5') }}
+            </span>
+            <span class="text-sm font-medium">{{ step.label }}</span>
+        </div>
+        {% if not loop.last %}
+            <span class="flex justify-center text-muted-foreground/60" aria-hidden="true">
+                {{ icons.icon('arrow-right', 'size-4 rotate-90 sm:rotate-0') }}
+            </span>
+        {% endif %}
+    {% endfor %}
+</div>

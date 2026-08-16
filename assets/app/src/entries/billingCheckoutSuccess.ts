@@ -1,3 +1,4 @@
+import { getLandingPage } from '@/lib/attribution';
 import { pushToDataLayer } from '@/lib/dataLayer';
 import { buildPurchaseEvent, decidePollOutcome, type ConfirmAnalyticsResponse } from '@/billing/checkoutSuccessPolling';
 
@@ -35,7 +36,7 @@ if (root instanceof HTMLElement) {
 
                 if ('paid' === decision.type) {
                     if (decision.push) {
-                        pushToDataLayer(buildPurchaseEvent(decision.analytics));
+                        pushToDataLayer(buildPurchaseEvent(decision.analytics, getLandingPage()));
                     }
                     showState(root, 'paid');
 

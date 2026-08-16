@@ -2,11 +2,25 @@ import { useEffect, useRef, useState, type FormEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { getLandingPage } from '@/lib/attribution';
+import { pushToDataLayer } from '@/lib/dataLayer';
 import { AdvancedRouteOptions } from './AdvancedRouteOptions';
 import { ConvertResult, type ConversionResult } from './ConvertResult';
 import { HeroCard } from './HeroCard';
 import { RouteSelection } from './RouteSelection';
 import { DEFAULT_ROUTE_OPTIONS, type ParsedWaypoint, type RouteCandidate, type RouteOptionsState, type RoutingProviderCapabilities } from './routing/types';
+
+/**
+ * Payload volontairement minimal (voir documentation/technique/google-tag-manager.md, section
+ * "données interdites") : jamais de lien Google Maps, origine/destination, coordonnées, ni GPX —
+ * uniquement la page et l'action. landing_page omis quand aucune attribution n'est posée (visite
+ * homepage) plutôt que poussé avec une valeur vide.
+ */
+function conversionEvent(event: string): Record<string, unknown> {
+    const landingPage = getLandingPage();
+
+    return landingPage ? { event, source: 'web', landing_page: landingPage } : { event, source: 'web' };
+}
 
 interface ConvertHeroProps {
     isAuthenticated: boolean;
@@ -238,6 +252,7 @@ export function ConvertHero({ isAuthenticated, isVerified, csrfToken, creditBala
                 return;
             }
 
+            pushToDataLayer(conversionEvent('conversion_completed'));
             setState({ status: 'success', result: data as ConversionResult });
         } catch {
             setState({ status: 'error', message: t('convert.error.generic') });
@@ -260,6 +275,7 @@ export function ConvertHero({ isAuthenticated, isVerified, csrfToken, creditBala
         }
 
         setState({ status: 'loading' });
+        pushToDataLayer(conversionEvent('conversion_started'));
 
         const wantsRouteChoice = options.showAlternativeRoutes || options.showFuelEfficientRoute;
         const endpoint = wantsRouteChoice ? '/api/conversions/google-maps/preview' : '/api/conversions/google-maps';
@@ -308,6 +324,7 @@ export function ConvertHero({ isAuthenticated, isVerified, csrfToken, creditBala
                 return;
             }
 
+            pushToDataLayer(conversionEvent('conversion_completed'));
             setState({ status: 'success', result: data as ConversionResult });
         } catch {
             setState({ status: 'error', message: t('convert.error.generic') });

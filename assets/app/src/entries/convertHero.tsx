@@ -1,4 +1,5 @@
 import { mountIsland } from '@/lib/mountIsland';
+import { setLandingPage } from '@/lib/attribution';
 import { ConvertHero } from '@/components/conversion/ConvertHero';
 import type { RoutingProviderCapabilities } from '@/components/conversion/routing/types';
 
@@ -17,6 +18,13 @@ const FALLBACK_CAPABILITIES: RoutingProviderCapabilities = {
 };
 
 mountIsland('convert-hero-root', (props) => {
+    // Seules les 3 pages du cluster Garmin/Wahoo/OsmAnd passent cet attribut ; la page d'accueil
+    // ne le pose jamais, donc une visite homepage n'écrase jamais une attribution déjà posée par
+    // un guide — voir documentation/technique/google-tag-manager.md.
+    if (props.landingPage) {
+        setLandingPage(props.landingPage);
+    }
+
     let capabilities = FALLBACK_CAPABILITIES;
 
     try {

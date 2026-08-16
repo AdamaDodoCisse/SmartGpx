@@ -52,6 +52,9 @@ layout:
         extensions: 'Extensions'
         logout: 'Déconnexion'
         convert_cta: 'Convertir un itinéraire'
+    breadcrumb:
+        label: "Fil d'Ariane"
+        home: 'Accueil'
     footer:
         privacy: 'Confidentialité'
         terms: 'Conditions'
@@ -160,6 +163,8 @@ home:
         q_garmin_body: 'Oui. Le GPX est un format pris en charge par les appareils Garmin et Garmin Connect : vous pouvez charger un fichier SmartGPX directement sur un appareil Garmin compatible.'
         q_wahoo_title: 'SmartGPX fonctionne-t-il avec Wahoo ?'
         q_wahoo_body: 'Oui. Les compteurs de vélo Wahoo acceptent les fichiers d’itinéraire GPX.'
+        q_osmand_title: 'Puis-je utiliser un itinéraire Google Maps dans OsmAnd ?'
+        q_osmand_body: 'Oui. OsmAnd navigue à partir de traces GPX, exactement ce que SmartGPX génère depuis un itinéraire Google Maps.'
         q_gpx_to_maps_title: 'Puis-je reconvertir un GPX en Google Maps ?'
         q_gpx_to_maps_body: "Oui. L'outil gratuit GPX → Google Maps transforme une trace GPX en lien d'itinéraire Google Maps."
         q_credits_expire_title: 'Mes crédits expirent-ils ?'
@@ -276,6 +281,13 @@ tools:
         link: "Installer l'extension Chrome"
 
 guides:
+    eyebrow:
+        device_guide: 'Guide appareil'
+    disclaimer: "SmartGPX n'est affilié ni à Garmin, ni à Wahoo, ni à OsmAnd, ni à Strava, ni à Google ; les mentions de ces noms décrivent uniquement une compatibilité de format de fichier."
+    faq:
+        heading: 'Questions fréquentes'
+    related:
+        heading: 'Ressources associées'
     index:
         meta_title: 'Guides'
         meta_description: "Des guides pour choisir le bon format GPS et tirer parti des outils de conversion gratuits de SmartGPX."
@@ -321,6 +333,101 @@ guides:
         meta_description: "Combinez plusieurs fichiers GPX enregistrés sur plusieurs jours ou segments en une seule trace ou un seul fichier, directement dans votre navigateur."
         title: 'Comment fusionner plusieurs traces GPX en un seul fichier'
         intro: "Vous avez enregistré un voyage de plusieurs jours en plusieurs fichiers GPX ? Voici comment les combiner en une seule trace, ou en un seul fichier à segments distincts."
+    google_maps_to_garmin:
+        meta_title: 'Google Maps vers Garmin : convertissez votre itinéraire en GPX | SmartGPX'
+        meta_description: "Convertissez un itinéraire Google Maps en GPX pour Garmin. Collez votre itinéraire dans SmartGPX, téléchargez le GPX, puis importez-le comme parcours dans Garmin Connect."
+        title: 'Comment envoyer un itinéraire Google Maps vers Garmin'
+        intro: "Google Maps n'exporte pas directement un itinéraire vers Garmin. Convertissez-le d'abord en GPX, puis chargez-le comme parcours sur votre appareil."
+        convert_cta: 'Convertir votre itinéraire pour Garmin'
+        step_1_title: 'Préparez votre itinéraire dans Google Maps'
+        step_1_body: 'Renseignez le départ, la destination et les étapes éventuelles, comme d’habitude.'
+        step_2_title: 'Copiez le lien de l’itinéraire'
+        step_2_body: "Utilisez le bouton « Partager » de Google Maps, ou copiez l'URL depuis la barre d'adresse."
+        step_3_title: 'Collez-le dans SmartGPX'
+        step_3_body: 'Déposez le lien dans le convertisseur ci-dessous et lancez la conversion.'
+        step_4_title: 'Téléchargez le fichier GPX'
+        step_4_body: "SmartGPX renvoie un fichier GPX standard, calculé à partir de l'itinéraire réel."
+        step_5_title: 'Importez-le dans Garmin Connect'
+        step_5_body: 'Importez le GPX comme parcours dans Garmin Connect, puis envoyez-le vers votre montre ou votre Edge.'
+        garmin_specifics_title: 'Faire arriver le fichier sur votre Garmin'
+        limitations_title: 'À savoir'
+        faq:
+            q_direct_export_title: 'Google Maps peut-il exporter directement vers Garmin ?'
+            q_direct_export_body: "Non. Google Maps n'a pas d'export natif vers Garmin. Il faut d'abord convertir l'itinéraire en fichier GPX, ce que fait SmartGPX."
+            q_convert_title: 'Comment convertir un itinéraire Google Maps en GPX pour Garmin ?'
+            q_convert_body: 'Collez le lien de l’itinéraire Google Maps dans le convertisseur de cette page, téléchargez le fichier GPX obtenu, puis importez-le dans Garmin Connect.'
+            q_connect_import_title: 'Puis-je importer des fichiers GPX dans Garmin Connect ?'
+            q_connect_import_body: 'Oui. Garmin Connect permet d’importer un fichier GPX comme parcours, puis d’envoyer ce parcours vers une montre ou un Edge appairé.'
+            q_edge_title: 'Puis-je utiliser cet itinéraire avec un Garmin Edge ?'
+            q_edge_body: 'Oui. Les compteurs Edge prennent en charge les parcours synchronisés depuis Garmin Connect, où le GPX téléchargé ici est importé.'
+            q_zumo_title: 'Puis-je l’utiliser avec un Garmin Zumo ?'
+            q_zumo_body: "La plupart des appareils Garmin, y compris les Zumo, peuvent charger des fichiers GPX ou des parcours, mais la méthode exacte varie selon le modèle et le firmware. Consultez le manuel de votre appareil si la synchronisation Garmin Connect n'est pas disponible dessus."
+            q_integration_title: 'SmartGPX se connecte-t-il directement à Garmin ?'
+            q_integration_body: "Non. SmartGPX crée un fichier GPX standard utilisable avec des flux compatibles Garmin. Il n'existe aucune intégration ou partenariat officiel avec Garmin."
+            q_multi_stop_title: 'Puis-je convertir un itinéraire Google Maps à plusieurs étapes ?'
+            q_multi_stop_body: 'Oui. SmartGPX prend en charge les itinéraires à plusieurs étapes, pas seulement un départ et une arrivée.'
+    google_maps_to_wahoo:
+        meta_title: 'Google Maps vers Wahoo : convertissez votre itinéraire en GPX | SmartGPX'
+        meta_description: "Transformez un itinéraire Google Maps en fichier GPX pour Wahoo. Collez votre itinéraire dans SmartGPX, téléchargez le GPX, puis importez-le avec l'application Wahoo."
+        title: 'Comment envoyer un itinéraire Google Maps vers Wahoo'
+        intro: "Google Maps ne transmet pas directement un itinéraire à Wahoo. Convertissez-le d'abord en GPX, puis importez-le avec l'application Wahoo."
+        convert_cta: 'Convertir votre itinéraire pour Wahoo'
+        step_1_title: 'Préparez votre itinéraire dans Google Maps'
+        step_1_body: 'Renseignez le départ, la destination et les étapes éventuelles, comme d’habitude.'
+        step_2_title: 'Copiez le lien de l’itinéraire'
+        step_2_body: "Utilisez le bouton « Partager » de Google Maps, ou copiez l'URL depuis la barre d'adresse."
+        step_3_title: 'Collez-le dans SmartGPX'
+        step_3_body: 'Déposez le lien dans le convertisseur ci-dessous et lancez la conversion.'
+        step_4_title: 'Téléchargez le fichier GPX'
+        step_4_body: "SmartGPX renvoie un fichier GPX standard, calculé à partir de l'itinéraire réel."
+        step_5_title: "Importez-le avec l'application Wahoo"
+        step_5_body: "Ouvrez le fichier GPX avec l'application Wahoo, ou importez-le depuis l'onglet Explore, puis synchronisez-le vers votre ELEMNT."
+        wahoo_specifics_title: 'Faire arriver le fichier sur votre Wahoo'
+        limitations_title: 'À savoir'
+        faq:
+            q_direct_send_title: 'Google Maps peut-il envoyer un itinéraire directement à Wahoo ?'
+            q_direct_send_body: "Non. Google Maps n'a pas d'export natif vers Wahoo. Il faut d'abord convertir l'itinéraire en fichier GPX, ce que fait SmartGPX."
+            q_convert_title: 'Comment convertir Google Maps en GPX pour Wahoo ?'
+            q_convert_body: "Collez le lien de l'itinéraire Google Maps dans le convertisseur de cette page, téléchargez le fichier GPX obtenu, puis importez-le avec l'application Wahoo."
+            q_gpx_support_title: 'Wahoo peut-il utiliser des fichiers GPX ?'
+            q_gpx_support_body: "Oui. L'application Wahoo accepte les fichiers d'itinéraire GPX (ainsi que TCX et FIT) et les synchronise vers un appareil ELEMNT appairé."
+            q_elemnt_title: 'Puis-je utiliser SmartGPX avec un Wahoo ELEMNT ?'
+            q_elemnt_body: "Oui, pour la gamme ELEMNT BOLT, ROAM et ACE : le fichier GPX téléchargé ici s'importe via l'application Wahoo comme n'importe quel autre itinéraire GPX."
+            q_integration_title: 'SmartGPX se connecte-t-il directement à Wahoo ?'
+            q_integration_body: "Non. SmartGPX crée un fichier GPX standard utilisable avec des flux compatibles Wahoo. Il n'existe aucune intégration ou partenariat officiel avec Wahoo."
+            q_multi_stop_title: 'Puis-je conserver plusieurs étapes ?'
+            q_multi_stop_body: 'Oui. SmartGPX prend en charge les itinéraires à plusieurs étapes, pas seulement un départ et une arrivée.'
+    google_maps_to_osmand:
+        meta_title: 'Google Maps vers OsmAnd : convertissez vos itinéraires en GPX | SmartGPX'
+        meta_description: "Convertissez votre itinéraire Google Maps en GPX pour l'utiliser dans OsmAnd. Collez l'itinéraire dans SmartGPX, téléchargez le GPX, puis ouvrez-le dans OsmAnd."
+        title: 'Comment utiliser un itinéraire Google Maps dans OsmAnd'
+        intro: "OsmAnd n'ouvre pas directement un lien Google Maps, mais navigue à partir de traces GPX, exactement ce que génère SmartGPX."
+        convert_cta: 'Convertir votre itinéraire pour OsmAnd'
+        step_1_title: 'Préparez votre itinéraire dans Google Maps'
+        step_1_body: 'Renseignez le départ, la destination et les étapes éventuelles, comme d’habitude.'
+        step_2_title: 'Copiez le lien de l’itinéraire'
+        step_2_body: "Utilisez le bouton « Partager » de Google Maps, ou copiez l'URL depuis la barre d'adresse."
+        step_3_title: 'Collez-le dans SmartGPX'
+        step_3_body: 'Déposez le lien dans le convertisseur ci-dessous et lancez la conversion.'
+        step_4_title: 'Téléchargez le fichier GPX'
+        step_4_body: "SmartGPX renvoie un fichier GPX standard, calculé à partir de l'itinéraire réel."
+        step_5_title: 'Ouvrez-le dans OsmAnd'
+        step_5_body: 'Ouvrez le GPX avec OsmAnd, ou importez-le depuis Mes Endroits → Traces, puis lancez la navigation depuis la trace.'
+        osmand_specifics_title: 'Faire arriver la trace dans OsmAnd'
+        limitations_title: 'À savoir'
+        faq:
+            q_direct_export_title: 'Google Maps peut-il exporter directement vers OsmAnd ?'
+            q_direct_export_body: "Non. Google Maps n'a pas d'export natif vers OsmAnd. Il faut d'abord convertir l'itinéraire en fichier GPX, ce que fait SmartGPX."
+            q_convert_title: 'Comment faire arriver un itinéraire Google Maps dans OsmAnd ?'
+            q_convert_body: 'Collez le lien de l’itinéraire Google Maps dans le convertisseur de cette page, téléchargez le fichier GPX obtenu, puis ouvrez-le dans OsmAnd.'
+            q_gpx_support_title: 'OsmAnd prend-il en charge les fichiers GPX ?'
+            q_gpx_support_body: "Oui, nativement. Le GPX est le format de trace qu'OsmAnd utilise lui-même pour stocker et afficher les itinéraires enregistrés ou importés."
+            q_navigation_title: "Puis-je naviguer avec l'itinéraire importé ?"
+            q_navigation_body: "Oui. Une fois la trace GPX importée, OsmAnd peut la suivre pour la navigation, l'itinéraire suivi exact dépendant aussi du profil de navigation choisi."
+            q_integration_title: 'SmartGPX s’intègre-t-il directement à OsmAnd ?'
+            q_integration_body: "Non. SmartGPX crée un fichier GPX standard utilisable avec des flux compatibles OsmAnd. Il n'existe aucune intégration ou partenariat officiel avec OsmAnd."
+            q_multi_stop_title: 'Puis-je convertir un itinéraire Google Maps à plusieurs étapes ?'
+            q_multi_stop_body: 'Oui. SmartGPX prend en charge les itinéraires à plusieurs étapes, pas seulement un départ et une arrivée.'
 
 pricing:
     title: 'Tarifs'

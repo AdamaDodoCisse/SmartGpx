@@ -1,0 +1,32 @@
+{# Tutoriel en 5 étapes partagé par le cluster Garmin/Wahoo/OsmAnd — variable attendue :
+   `i18n_prefix` (ex. 'guides.google_maps_to_garmin', résout step_1..5_title/_body). Le JSON-LD
+   HowTo est généré depuis les mêmes clés juste en dessous : ne peut donc jamais diverger du
+   contenu visible (voir exigence "le JSON-LD doit correspondre exactement au contenu affiché"). #}
+<ol class="mt-8 space-y-6">
+    {% for n in 1..5 %}
+        <li class="flex gap-4">
+            <span class="flex size-8 shrink-0 items-center justify-center rounded-full bg-primary font-mono text-sm font-semibold text-primary-foreground">{{ n }}</span>
+            <div>
+                <h3 class="font-display text-lg tracking-tight">{{ (i18n_prefix ~ '.step_' ~ n ~ '_title')|trans }}</h3>
+                <p class="mt-1 text-sm text-muted-foreground">{{ (i18n_prefix ~ '.step_' ~ n ~ '_body')|trans }}</p>
+            </div>
+        </li>
+    {% endfor %}
+</ol>
+<script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "HowTo",
+        "name": {{ (i18n_prefix ~ '.title')|trans|json_encode|raw }},
+        "step": [
+            {% for n in 1..5 %}
+                {
+                    "@type": "HowToStep",
+                    "position": {{ n }},
+                    "name": {{ (i18n_prefix ~ '.step_' ~ n ~ '_title')|trans|json_encode|raw }},
+                    "text": {{ (i18n_prefix ~ '.step_' ~ n ~ '_body')|trans|json_encode|raw }}
+                }{% if n < 5 %},{% endif %}
+            {% endfor %}
+        ]
+    }
+</script>

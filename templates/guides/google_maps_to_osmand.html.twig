@@ -1,0 +1,98 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'guides.google_maps_to_osmand.meta_title'|trans }}{% endblock %}
+{% block meta_description %}{{ 'guides.google_maps_to_osmand.meta_description'|trans }}{% endblock %}
+{% block og_title %}{{ 'guides.google_maps_to_osmand.meta_title'|trans }}{% endblock %}
+{% block og_description %}{{ 'guides.google_maps_to_osmand.meta_description'|trans }}{% endblock %}
+
+{% block body %}
+    {% include '_partials/breadcrumb.html.twig' with {
+        trail: [
+            { label: 'layout.breadcrumb.home'|trans, route: 'app_home' },
+            { label: 'guides.index.title'|trans, route: 'app_guides_index' },
+            { label: 'guides.google_maps_to_osmand.title'|trans, route: null },
+        ]
+    } %}
+
+    {% include 'guides/_hero_header.html.twig' with { icon: 'navigation', i18n_prefix: 'guides.google_maps_to_osmand' } %}
+
+    <div id="guide-google-maps-to-osmand" class="mx-auto max-w-3xl px-4 py-8">
+        <p class="text-sm font-medium text-route">{{ 'guides.google_maps_to_osmand.convert_cta'|trans }}</p>
+        <div
+            id="convert-hero-root"
+            data-is-authenticated="{{ app.user ? '1' : '' }}"
+            data-is-verified="{{ app.user and app.user.verified ? '1' : '' }}"
+            data-csrf-token="{{ csrf_token('convert_google_maps') }}"
+            data-credit-balance="{{ creditBalance }}"
+            data-locale="{{ app.request.locale }}"
+            data-capabilities="{{ capabilities|json_encode }}"
+            data-landing-page="{{ landingPage }}"
+            class="mt-3"
+        ></div>
+    </div>
+
+    {{ vite_entry_script_tags('convertHero', { dependency: 'react' }) }}
+
+    <div class="mx-auto max-w-3xl px-4 pb-16">
+        {% include 'guides/_route_workflow.html.twig' with {
+            steps: [
+                { icon: 'map-pin', label: 'Google Maps' },
+                { icon: 'sparkles', label: 'SmartGPX' },
+                { icon: 'file-code', label: 'GPX' },
+                { icon: 'navigation', label: 'OsmAnd' },
+            ]
+        } %}
+
+        {% include 'guides/_how_to_steps.html.twig' with { i18n_prefix: 'guides.google_maps_to_osmand' } %}
+
+        <div class="prose prose-sm mt-10 max-w-none">
+            <h2>{{ 'guides.google_maps_to_osmand.osmand_specifics_title'|trans }}</h2>
+            {% if 'fr' == app.request.locale %}
+                <p>OsmAnd est l'application qui navigue elle-même, ce n'est pas un appareil séparé à
+                synchroniser : l'import est donc plus simple. Ouvrez le fichier GPX téléchargé et
+                choisissez « Ouvrir dans OsmAnd » depuis le menu de partage de votre téléphone, ou
+                ouvrez OsmAnd et allez dans « Mes Endroits » → « Traces » pour l'importer
+                manuellement. La trace atterrit dans votre dossier d'import. Vous pouvez ensuite lancer
+                la navigation directement depuis la trace, et si le GPX contient plusieurs segments,
+                OsmAnd vous laisse choisir lequel suivre.</p>
+
+                <h2>{{ 'guides.google_maps_to_osmand.limitations_title'|trans }}</h2>
+                <p>OsmAnd navigue avec son propre moteur de calcul d'itinéraire et le profil de
+                navigation choisi (marche, vélo, voiture…) : la fidélité avec laquelle il suit le
+                tracé importé dépend donc aussi de ce réglage, plutôt que de toujours reproduire le GPX
+                point par point.</p>
+            {% else %}
+                <p>OsmAnd is the app doing the navigating, not a separate device to sync, so importing
+                is simpler. Open the downloaded GPX file and choose "Open in OsmAnd" from your phone's
+                share menu, or open OsmAnd itself and go to My Places, then Tracks, to import it
+                manually. The track lands in your Import folder. From there you can start navigation
+                directly from the track, and if the GPX has multiple segments, OsmAnd lets you pick
+                which one to follow.</p>
+
+                <h2>{{ 'guides.google_maps_to_osmand.limitations_title'|trans }}</h2>
+                <p>OsmAnd navigates using its own routing engine and whichever navigation profile
+                you've selected (walking, cycling, driving, and so on), so how closely it follows the
+                exact imported line can vary with that setting rather than always tracing the GPX
+                point-for-point.</p>
+            {% endif %}
+        </div>
+
+        {% include 'tools/_cta.html.twig' with { variant: 'chrome_extension' } %}
+
+        {% include 'guides/_related.html.twig' with {
+            links: [
+                { route: 'app_guides_google_maps_to_gpx', icon: 'map-pin', label: 'guides.google_maps_to_gpx.title'|trans },
+                { route: 'app_gpx_viewer', icon: 'sparkles', label: 'home.free_tools.gpx_viewer'|trans },
+                { route: 'app_guides_google_maps_to_garmin', icon: 'route', label: 'guides.google_maps_to_garmin.title'|trans },
+                { route: 'app_guides_google_maps_to_wahoo', icon: 'bike', label: 'guides.google_maps_to_wahoo.title'|trans },
+            ]
+        } %}
+
+        {% include 'guides/_faq.html.twig' with {
+            namespace: 'guides.google_maps_to_osmand.faq',
+            keys: ['q_direct_export', 'q_convert', 'q_gpx_support', 'q_navigation', 'q_integration', 'q_multi_stop'],
+        } %}
+
+        <p class="mt-8 border-t border-border pt-6 text-xs text-muted-foreground">{{ 'guides.disclaimer'|trans }}</p>
+    </div>
+{% endblock %}

@@ -1,0 +1,105 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'guides.google_maps_to_garmin.meta_title'|trans }}{% endblock %}
+{% block meta_description %}{{ 'guides.google_maps_to_garmin.meta_description'|trans }}{% endblock %}
+{% block og_title %}{{ 'guides.google_maps_to_garmin.meta_title'|trans }}{% endblock %}
+{% block og_description %}{{ 'guides.google_maps_to_garmin.meta_description'|trans }}{% endblock %}
+
+{% block body %}
+    {% include '_partials/breadcrumb.html.twig' with {
+        trail: [
+            { label: 'layout.breadcrumb.home'|trans, route: 'app_home' },
+            { label: 'guides.index.title'|trans, route: 'app_guides_index' },
+            { label: 'guides.google_maps_to_garmin.title'|trans, route: null },
+        ]
+    } %}
+
+    {% include 'guides/_hero_header.html.twig' with { icon: 'route', i18n_prefix: 'guides.google_maps_to_garmin' } %}
+
+    <div id="guide-google-maps-to-garmin" class="mx-auto max-w-3xl px-4 py-8">
+        <p class="text-sm font-medium text-route">{{ 'guides.google_maps_to_garmin.convert_cta'|trans }}</p>
+        <div
+            id="convert-hero-root"
+            data-is-authenticated="{{ app.user ? '1' : '' }}"
+            data-is-verified="{{ app.user and app.user.verified ? '1' : '' }}"
+            data-csrf-token="{{ csrf_token('convert_google_maps') }}"
+            data-credit-balance="{{ creditBalance }}"
+            data-locale="{{ app.request.locale }}"
+            data-capabilities="{{ capabilities|json_encode }}"
+            data-landing-page="{{ landingPage }}"
+            class="mt-3"
+        ></div>
+    </div>
+
+    {{ vite_entry_script_tags('convertHero', { dependency: 'react' }) }}
+
+    <div class="mx-auto max-w-3xl px-4 pb-16">
+        {% include 'guides/_route_workflow.html.twig' with {
+            steps: [
+                { icon: 'map-pin', label: 'Google Maps' },
+                { icon: 'sparkles', label: 'SmartGPX' },
+                { icon: 'file-code', label: 'GPX' },
+                { icon: 'route', label: 'Garmin' },
+            ]
+        } %}
+
+        {% include 'guides/_how_to_steps.html.twig' with { i18n_prefix: 'guides.google_maps_to_garmin' } %}
+
+        <div class="prose prose-sm mt-10 max-w-none">
+            <h2>{{ 'guides.google_maps_to_garmin.garmin_specifics_title'|trans }}</h2>
+            {% if 'fr' == app.request.locale %}
+                <p>Garmin Connect traite un fichier GPX importé comme un <strong>parcours</strong>, pas
+                comme une simple trace. Sur le site de Garmin Connect, allez dans « Entraînement et
+                planification » puis « Parcours », et utilisez le bouton d'import pour charger le GPX
+                et choisir un type de parcours. Sur mobile, ouvrez le fichier GPX téléchargé et
+                choisissez de l'ouvrir avec l'application Garmin Connect. Dans les deux cas, une fois
+                le parcours créé dans Garmin Connect, utilisez son option « Envoyer vers l'appareil »
+                et synchronisez votre montre ou votre Edge pour le récupérer. Si votre appareil n'est
+                pas appairé pour une synchronisation sans fil, le relier en USB et copier le fichier
+                dans son dossier NewFiles fonctionne aussi.</p>
+
+                <h2>{{ 'guides.google_maps_to_garmin.limitations_title'|trans }}</h2>
+                <p>Un parcours importé de cette façon reste un tracé fixe : le calcul d'itinéraire de
+                l'appareil ne recalcule pas en fonction du trafic en direct comme le fait Google Maps,
+                puisqu'un GPX ne contient aucune donnée de trafic. Les itinéraires très longs ou très
+                détaillés peuvent prendre un instant à traiter dans Garmin Connect, et certains modèles
+                plus anciens gèrent les parcours différemment des montres et compteurs Edge actuels :
+                vérifiez la prise en charge des parcours sur votre modèle en cas de doute.</p>
+            {% else %}
+                <p>Garmin Connect treats an imported GPX file as a <strong>course</strong>, not a raw
+                track. On the Garmin Connect website, go to Training &amp; Planning, then Courses, and
+                use the Import button to upload the GPX and pick a course type. On mobile, open the
+                downloaded GPX file and choose to open it with the Garmin Connect app. Either way, once
+                the course exists in Garmin Connect, use its "Send to Device" option and sync your
+                watch or Edge to pull it down. If your device isn't paired for wireless sync,
+                connecting it by USB and copying the file into its NewFiles folder works as a
+                fallback.</p>
+
+                <h2>{{ 'guides.google_maps_to_garmin.limitations_title'|trans }}</h2>
+                <p>A course loaded this way is a fixed path: on-device routing won't reroute around
+                live traffic the way Google Maps does, since a GPX file carries no live traffic data.
+                Very long or highly detailed routes can take a moment to process in Garmin Connect, and
+                some older device models handle courses differently than current watches and Edge
+                computers, so check your model's own course-import support if you're unsure.</p>
+            {% endif %}
+        </div>
+
+        {% include 'tools/_cta.html.twig' with { variant: 'chrome_extension' } %}
+
+        {% include 'guides/_related.html.twig' with {
+            links: [
+                { route: 'app_guides_google_maps_to_gpx', icon: 'map-pin', label: 'guides.google_maps_to_gpx.title'|trans },
+                { route: 'app_gpx_viewer', icon: 'sparkles', label: 'home.free_tools.gpx_viewer'|trans },
+                { route: 'app_guides_google_maps_to_wahoo', icon: 'bike', label: 'guides.google_maps_to_wahoo.title'|trans },
+                { route: 'app_guides_google_maps_to_osmand', icon: 'navigation', label: 'guides.google_maps_to_osmand.title'|trans },
+            ]
+        } %}
+
+        {% include 'guides/_faq.html.twig' with {
+            namespace: 'guides.google_maps_to_garmin.faq',
+            keys: ['q_direct_export', 'q_convert', 'q_connect_import', 'q_edge', 'q_zumo', 'q_integration', 'q_multi_stop'],
+        } %}
+
+        <p class="mt-8 border-t border-border pt-6 text-xs text-muted-foreground">{{ 'guides.disclaimer'|trans }}</p>
+    </div>
+{% endblock %}

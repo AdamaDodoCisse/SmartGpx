@@ -189,7 +189,12 @@
             </div>
         </header>
 
-        {% for label, messages in app.flashes %}
+        {# Capturée une seule fois dans une variable : app.flashes consomme le flash-bag à la
+           lecture, donc la boucle d'affichage ci-dessous ET la détection de l'inscription réussie
+           plus bas (pour l'évènement GTM sign_up) doivent partager cette même lecture — un second
+           appel à app.flashes() renverrait un tableau vide. #}
+        {% set all_flashes = app.flashes %}
+        {% for label, messages in all_flashes %}
             {% for message in messages %}
                 {% set flash_classes = {
                     success: 'border-[var(--success-border)] bg-[var(--success-bg)] text-[var(--success-fg)]',
@@ -202,6 +207,25 @@
                 </div>
             {% endfor %}
         {% endfor %}
+
+        {% if all_flashes.success is defined and 'identity.flash.registration_success' in all_flashes.success %}
+            {# Un seul déclenchement possible : le flash "registration_success" n'existe que sur la
+               requête qui suit immédiatement l'inscription (flash bag à lecture unique), jamais sur
+               un rechargement de la page de login — voir documentation/technique/google-tag-manager.md.
+               L'inscription via Google Sign-In ne passe pas par ce flash et n'est donc pas encore
+               suivie ici (limitation documentée, pas un oubli). #}
+            <script>
+                (function () {
+                    var event = { event: 'sign_up', source: 'web' };
+                    var landingPage = localStorage.getItem('smartgpx_landing_page');
+                    if (landingPage) {
+                        event.landing_page = landingPage;
+                    }
+                    window.dataLayer = window.dataLayer || [];
+                    window.dataLayer.push(event);
+                })();
+            </script>
+        {% endif %}
 
         <main id="main-content">
             {% block body %}{% endblock %}
@@ -358,8 +382,7 @@
                     return;
                 }
 
-                window.dataLayer = window.dataLayer || [];
-                window.dataLayer.push({
+                var checkoutEvent = {
                     event: 'begin_checkout',
                     currency: form.dataset.currency,
                     value: Number.parseFloat(form.dataset.price),
@@ -372,7 +395,14 @@
                             quantity: 1,
                         },
                     ],
-                });
+                };
+                var checkoutLandingPage = localStorage.getItem('smartgpx_landing_page');
+                if (checkoutLandingPage) {
+                    checkoutEvent.landing_page = checkoutLandingPage;
+                }
+
+                window.dataLayer = window.dataLayer || [];
+                window.dataLayer.push(checkoutEvent);
 
                 var submitButton = form.querySelector('button[type="submit"]');
                 if (submitButton) {

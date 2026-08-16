@@ -198,8 +198,16 @@
             <h2 class="font-display text-2xl tracking-tight sm:text-3xl">{{ 'home.compatibility.title'|trans }}</h2>
             <p class="mx-auto mt-3 max-w-md text-muted-foreground">{{ 'home.compatibility.subtitle'|trans }}</p>
             <ul class="mt-8 flex flex-wrap items-center justify-center gap-3">
-                {% for device in ['Garmin', 'Wahoo', 'OsmAnd', 'Locus Map', 'Strava'] %}
-                    <li class="rounded-full border border-border px-4 py-1.5 font-mono text-sm">{{ device }}</li>
+                {# Garmin/Wahoo/OsmAnd link to their dedicated guide (Phase 12 cluster) ; Locus Map
+                   and Strava have no such guide yet, so they stay plain badges like before. #}
+                {% for device, route in { 'Garmin': 'app_guides_google_maps_to_garmin', 'Wahoo': 'app_guides_google_maps_to_wahoo', 'OsmAnd': 'app_guides_google_maps_to_osmand', 'Locus Map': null, 'Strava': null } %}
+                    <li>
+                        {% if route %}
+                            <a href="{{ path(route) }}" class="block rounded-full border border-border px-4 py-1.5 font-mono text-sm hover:border-route hover:text-route">{{ device }}</a>
+                        {% else %}
+                            <span class="block rounded-full border border-border px-4 py-1.5 font-mono text-sm">{{ device }}</span>
+                        {% endif %}
+                    </li>
                 {% endfor %}
                 <li class="rounded-full border border-dashed border-border px-4 py-1.5 font-mono text-sm text-muted-foreground">{{ 'home.compatibility.and_more'|trans }}</li>
             </ul>
@@ -340,7 +348,7 @@
     </div>
 
     {# ============================== FAQ ============================== #}
-    {% set faq_keys = ['q_gpx', 'q_convert', 'q_garmin', 'q_wahoo', 'q_gpx_to_maps', 'q_credits_expire', 'q_subscription', 'q_privacy', 'q_chrome'] %}
+    {% set faq_keys = ['q_gpx', 'q_convert', 'q_garmin', 'q_wahoo', 'q_osmand', 'q_gpx_to_maps', 'q_credits_expire', 'q_subscription', 'q_privacy', 'q_chrome'] %}
     <div id="faq" class="scroll-mt-8 border-b border-border">
         <div class="mx-auto max-w-3xl px-4 py-16 lg:py-20">
             <h2 class="text-center font-display text-2xl tracking-tight sm:text-3xl">{{ 'home.faq.title'|trans }}</h2>

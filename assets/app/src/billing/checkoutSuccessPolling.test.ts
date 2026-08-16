@@ -77,4 +77,16 @@ describe('buildPurchaseEvent', () => {
             expect(serialized).not.toContain(forbidden);
         }
     });
+
+    it('includes landing_page when attribution is present', () => {
+        const event = buildPurchaseEvent(ANALYTICS, 'guide_google_maps_garmin');
+
+        expect(event.landing_page).toBe('guide_google_maps_garmin');
+    });
+
+    it('omits landing_page entirely when there is no attribution', () => {
+        const event = buildPurchaseEvent(ANALYTICS);
+
+        expect(Object.keys(event)).not.toContain('landing_page');
+    });
 });

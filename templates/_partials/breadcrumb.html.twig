@@ -1,0 +1,38 @@
+{% import '_macros/icons.html.twig' as icons %}
+{# Fil d'Ariane partagé — première utilisation dans le repo (aucun autre gabarit n'en a un), donc
+   volontairement générique plutôt que couplé aux guides : variable attendue `trail`, une liste de
+   { label, route } où route vaut null pour le dernier élément (page courante, non cliquable).
+   Émet aussi le JSON-LD BreadcrumbList correspondant, à partir de la même liste — impossible que
+   le balisage structuré diverge du fil visible puisqu'ils partagent la même source. #}
+<nav aria-label="{{ 'layout.breadcrumb.label'|trans }}" class="mx-auto max-w-3xl px-4 pt-8 text-sm text-muted-foreground">
+    <ol class="flex flex-wrap items-center gap-1.5">
+        {% for item in trail %}
+            <li class="flex items-center gap-1.5">
+                {% if not loop.first %}
+                    {{ icons.icon('chevron-down', 'size-3.5 -rotate-90 text-muted-foreground/60') }}
+                {% endif %}
+                {% if item.route %}
+                    <a href="{{ path(item.route) }}" class="hover:text-foreground">{{ item.label }}</a>
+                {% else %}
+                    <span aria-current="page" class="text-foreground">{{ item.label }}</span>
+                {% endif %}
+            </li>
+        {% endfor %}
+    </ol>
+</nav>
+<script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+            {% for item in trail %}
+                {
+                    "@type": "ListItem",
+                    "position": {{ loop.index }},
+                    "name": {{ item.label|json_encode|raw }}{% if item.route %},
+                    "item": {{ url(item.route)|json_encode|raw }}{% endif %}
+                }{% if not loop.last %},{% endif %}
+            {% endfor %}
+        ]
+    }
+</script>

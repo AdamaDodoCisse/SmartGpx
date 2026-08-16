@@ -40,8 +40,11 @@ export function decidePollOutcome(response: ConfirmAnalyticsResponse, attempt: n
 /**
  * Le backend est l'unique source des champs envoyés (transactionId/value/currency/itemId/
  * itemName) — jamais générés côté client, jamais de donnée de paiement (carte, e-mail, nom).
+ * landing_page vient en revanche du client (localStorage, voir lib/attribution.ts) : c'est la
+ * seule façon de savoir, potentiellement plusieurs jours après coup, quel guide SEO a amené ce
+ * visiteur — le backend n'a jamais eu cette information à conserver.
  */
-export function buildPurchaseEvent(analytics: ConfirmAnalyticsAnalytics): Record<string, unknown> {
+export function buildPurchaseEvent(analytics: ConfirmAnalyticsAnalytics, landingPage?: string): Record<string, unknown> {
     return {
         event: 'purchase',
         transaction_id: analytics.transactionId,
@@ -56,5 +59,6 @@ export function buildPurchaseEvent(analytics: ConfirmAnalyticsAnalytics): Record
                 quantity: 1,
             },
         ],
+        ...(landingPage ? { landing_page: landingPage } : {}),
     };
 }

@@ -18,9 +18,11 @@ final class SitemapControllerTest extends WebTestCase
         self::assertStringStartsWith('application/xml', (string) $client->getResponse()->headers->get('Content-Type'));
 
         $content = (string) $client->getResponse()->getContent();
-        self::assertSame(54, substr_count($content, '<loc>'));
+        self::assertSame(60, substr_count($content, '<loc>'));
         self::assertStringContainsString('<loc>http://localhost/guides/what-is-kmz</loc>', $content);
         self::assertStringContainsString('<loc>http://localhost/fr/guides/fichier-kmz</loc>', $content);
+        self::assertStringContainsString('<loc>http://localhost/guides/google-maps-to-garmin</loc>', $content);
+        self::assertStringContainsString('<loc>http://localhost/fr/guides/convertir-google-maps-en-wahoo</loc>', $content);
         self::assertStringContainsString('<loc>http://localhost/tools/kmz-to-gpx</loc>', $content);
         self::assertStringContainsString('<loc>http://localhost/fr/</loc>', $content);
         self::assertStringContainsString('<loc>http://localhost/contact</loc>', $content);

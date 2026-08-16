@@ -52,6 +52,9 @@ layout:
         extensions: 'Extensions'
         logout: 'Log out'
         convert_cta: 'Convert a route'
+    breadcrumb:
+        label: 'Breadcrumb'
+        home: 'Home'
     footer:
         privacy: 'Privacy'
         terms: 'Terms'
@@ -160,6 +163,8 @@ home:
         q_garmin_body: 'Yes. GPX is a format Garmin devices and Garmin Connect support, so you can load a SmartGPX file directly onto compatible Garmin devices.'
         q_wahoo_title: 'Does SmartGPX work with Wahoo?'
         q_wahoo_body: 'Yes. Wahoo bike computers accept GPX route files.'
+        q_osmand_title: 'Can I use a Google Maps route in OsmAnd?'
+        q_osmand_body: 'Yes. OsmAnd navigates from GPX tracks, and that is exactly what SmartGPX generates from a Google Maps route.'
         q_gpx_to_maps_title: 'Can I convert GPX back to Google Maps?'
         q_gpx_to_maps_body: 'Yes. The free GPX → Google Maps tool turns a GPX track into a Google Maps directions link.'
         q_credits_expire_title: 'Do my credits expire?'
@@ -276,6 +281,13 @@ tools:
         link: 'Get the Chrome extension'
 
 guides:
+    eyebrow:
+        device_guide: 'Device guide'
+    disclaimer: 'SmartGPX is not affiliated with Garmin, Wahoo, OsmAnd, Strava, or Google; references to those names describe file format compatibility only.'
+    faq:
+        heading: 'Frequently asked questions'
+    related:
+        heading: 'Related resources'
     index:
         meta_title: 'Guides'
         meta_description: "Guides to help you choose the right GPS format and get the most out of SmartGPX's free conversion tools."
@@ -321,6 +333,101 @@ guides:
         meta_description: 'Combine several GPX files recorded across multiple days or segments into a single track or file, directly in your browser, no software needed.'
         title: 'How to Merge Multiple GPX Tracks Into One File'
         intro: "Recorded a multi-day trip as separate GPX files? Here's how to combine them into a single track, or a single file with separate segments."
+    google_maps_to_garmin:
+        meta_title: 'Google Maps to Garmin: Convert Your Route to GPX | SmartGPX'
+        meta_description: 'Convert a Google Maps route to GPX for Garmin. Paste your route into SmartGPX, download the GPX file, then import it as a course in Garmin Connect.'
+        title: 'How to Send a Google Maps Route to Garmin'
+        intro: "Google Maps doesn't export a route straight to Garmin. Convert it to GPX first, then load it as a course on your device."
+        convert_cta: 'Convert your route for Garmin'
+        step_1_title: 'Plan your route in Google Maps'
+        step_1_body: 'Set your start, destination, and any stops the way you normally would.'
+        step_2_title: 'Copy the directions link'
+        step_2_body: "Use Google Maps' Share button, or copy the URL from your browser's address bar."
+        step_3_title: 'Paste it into SmartGPX'
+        step_3_body: 'Drop the link into the converter below and run the conversion.'
+        step_4_title: 'Download the GPX file'
+        step_4_body: 'SmartGPX returns a standard GPX file built from the real, calculated route.'
+        step_5_title: 'Import it into Garmin Connect'
+        step_5_body: 'Upload the GPX as a course in Garmin Connect, then send it to your watch or Edge.'
+        garmin_specifics_title: 'Getting the file onto your Garmin'
+        limitations_title: 'Good to know'
+        faq:
+            q_direct_export_title: 'Can Google Maps export directly to Garmin?'
+            q_direct_export_body: "No. Google Maps has no built-in export to Garmin. You need to convert the route to a GPX file first, which is what SmartGPX does."
+            q_convert_title: 'How do I convert a Google Maps route to GPX for Garmin?'
+            q_convert_body: 'Paste the Google Maps route link into the converter on this page and download the resulting GPX file, then import it into Garmin Connect.'
+            q_connect_import_title: 'Can I import GPX files into Garmin Connect?'
+            q_connect_import_body: 'Yes. Garmin Connect lets you import a GPX file as a course, then send that course to a paired watch or Edge device.'
+            q_edge_title: 'Can I use the route with a Garmin Edge?'
+            q_edge_body: 'Yes. Edge cycling computers support courses synced from Garmin Connect, which is where the GPX you download here gets imported.'
+            q_zumo_title: 'Can I use it with a Garmin Zumo?'
+            q_zumo_body: "Most Garmin devices, including Zumo units, can load GPX or course files, but the exact import method varies by model and firmware. Check your device's manual if Garmin Connect sync isn't available on it."
+            q_integration_title: 'Does SmartGPX connect directly to Garmin?'
+            q_integration_body: "No. SmartGPX creates a standard GPX file that can be used with compatible Garmin workflows. There is no official integration or partnership with Garmin."
+            q_multi_stop_title: 'Can I convert a multi-stop Google Maps route?'
+            q_multi_stop_body: 'Yes. SmartGPX supports routes with multiple stops, not just a single origin and destination.'
+    google_maps_to_wahoo:
+        meta_title: 'Google Maps to Wahoo: Convert Your Route to GPX | SmartGPX'
+        meta_description: 'Turn a Google Maps route into a GPX file for Wahoo. Paste your route into SmartGPX, download the GPX, then import it with the Wahoo app.'
+        title: 'How to Send a Google Maps Route to Wahoo'
+        intro: "Google Maps doesn't hand a route to Wahoo directly. Convert it to GPX first, then import it with the Wahoo app."
+        convert_cta: 'Convert your route for Wahoo'
+        step_1_title: 'Plan your route in Google Maps'
+        step_1_body: 'Set your start, destination, and any stops the way you normally would.'
+        step_2_title: 'Copy the directions link'
+        step_2_body: "Use Google Maps' Share button, or copy the URL from your browser's address bar."
+        step_3_title: 'Paste it into SmartGPX'
+        step_3_body: 'Drop the link into the converter below and run the conversion.'
+        step_4_title: 'Download the GPX file'
+        step_4_body: 'SmartGPX returns a standard GPX file built from the real, calculated route.'
+        step_5_title: 'Import it with the Wahoo app'
+        step_5_body: 'Open the GPX file with the Wahoo app, or import it from the Explore tab, then sync it to your ELEMNT.'
+        wahoo_specifics_title: 'Getting the file onto your Wahoo'
+        limitations_title: 'Good to know'
+        faq:
+            q_direct_send_title: 'Can Google Maps send a route directly to Wahoo?'
+            q_direct_send_body: "No. Google Maps has no built-in export to Wahoo. Convert the route to a GPX file first, which is what SmartGPX does."
+            q_convert_title: 'How do I convert Google Maps to GPX for Wahoo?'
+            q_convert_body: 'Paste the Google Maps route link into the converter on this page and download the resulting GPX file, then import it with the Wahoo app.'
+            q_gpx_support_title: 'Can Wahoo use GPX files?'
+            q_gpx_support_body: 'Yes. The Wahoo app accepts GPX (as well as TCX and FIT) route files and syncs them to a paired ELEMNT device.'
+            q_elemnt_title: 'Can I use SmartGPX with Wahoo ELEMNT?'
+            q_elemnt_body: 'Yes, for the ELEMNT BOLT, ROAM and ACE line: the GPX file downloads here import through the Wahoo app the same way any other GPX route does.'
+            q_integration_title: 'Does SmartGPX connect directly to Wahoo?'
+            q_integration_body: "No. SmartGPX creates a standard GPX file that can be used with compatible Wahoo workflows. There is no official integration or partnership with Wahoo."
+            q_multi_stop_title: 'Can I preserve multiple stops?'
+            q_multi_stop_body: 'Yes. SmartGPX supports routes with multiple stops, not just a single origin and destination.'
+    google_maps_to_osmand:
+        meta_title: 'Google Maps to OsmAnd: Convert Routes to GPX | SmartGPX'
+        meta_description: 'Convert your Google Maps route to GPX and use it with OsmAnd. Paste the route into SmartGPX, download the GPX file, then open it in OsmAnd.'
+        title: 'How to Use a Google Maps Route in OsmAnd'
+        intro: "OsmAnd doesn't open a Google Maps link directly, but it navigates from GPX tracks, which is exactly what SmartGPX generates."
+        convert_cta: 'Convert your route for OsmAnd'
+        step_1_title: 'Plan your route in Google Maps'
+        step_1_body: 'Set your start, destination, and any stops the way you normally would.'
+        step_2_title: 'Copy the directions link'
+        step_2_body: "Use Google Maps' Share button, or copy the URL from your browser's address bar."
+        step_3_title: 'Paste it into SmartGPX'
+        step_3_body: 'Drop the link into the converter below and run the conversion.'
+        step_4_title: 'Download the GPX file'
+        step_4_body: 'SmartGPX returns a standard GPX file built from the real, calculated route.'
+        step_5_title: 'Open it in OsmAnd'
+        step_5_body: "Open the GPX with OsmAnd, or import it from My Places → Tracks, then start navigating from the track."
+        osmand_specifics_title: 'Getting the track into OsmAnd'
+        limitations_title: 'Good to know'
+        faq:
+            q_direct_export_title: 'Can Google Maps export directly to OsmAnd?'
+            q_direct_export_body: "No. Google Maps has no built-in export to OsmAnd. Convert the route to a GPX file first, which is what SmartGPX does."
+            q_convert_title: 'How do I get a Google Maps route into OsmAnd?'
+            q_convert_body: 'Paste the Google Maps route link into the converter on this page, download the resulting GPX file, then open it in OsmAnd.'
+            q_gpx_support_title: 'Does OsmAnd support GPX files?'
+            q_gpx_support_body: 'Yes, natively. GPX is the track format OsmAnd itself uses to store and display recorded and imported routes.'
+            q_navigation_title: 'Can I navigate using the imported route?'
+            q_navigation_body: "Yes. Once a GPX track is imported, OsmAnd can follow it for navigation, though the exact route followed also depends on your chosen navigation profile."
+            q_integration_title: 'Does SmartGPX integrate directly with OsmAnd?'
+            q_integration_body: "No. SmartGPX creates a standard GPX file that can be used with compatible OsmAnd workflows. There is no official integration or partnership with OsmAnd."
+            q_multi_stop_title: 'Can I convert a multi-stop Google Maps route?'
+            q_multi_stop_body: 'Yes. SmartGPX supports routes with multiple stops, not just a single origin and destination.'
 
 pricing:
     title: 'Pricing'

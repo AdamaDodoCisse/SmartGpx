@@ -1,5 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
+import { getLandingPage } from '@/lib/attribution';
+import { pushToDataLayer } from '@/lib/dataLayer';
 import { HeroCard } from './HeroCard';
 
 export interface ConversionResult {
@@ -129,7 +131,20 @@ export function ConvertResult({ result, onReset }: ConvertResultProps) {
             )}
 
             <div className="mt-6 flex gap-3">
-                <a href={result.downloadUrl}>
+                <a
+                    href={result.downloadUrl}
+                    onClick={() => {
+                        // Déclenché au clic, pas à la confirmation d'un téléchargement navigateur
+                        // réellement terminé — simplification documentée, voir
+                        // documentation/technique/google-tag-manager.md.
+                        const landingPage = getLandingPage();
+                        pushToDataLayer(
+                            landingPage
+                                ? { event: 'gpx_downloaded', source: 'web', landing_page: landingPage }
+                                : { event: 'gpx_downloaded', source: 'web' },
+                        );
+                    }}
+                >
                     <Button type="button">{t('convert.result.download')}</Button>
                 </a>
                 <Button type="button" variant="secondary" onClick={onReset}>

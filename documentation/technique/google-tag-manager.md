@@ -29,6 +29,9 @@ assets/app/src/
   billing/checkoutSuccessPolling.ts            # logique pure, testable sans mock réseau
   entries/billingCheckoutSuccess.ts            # collage DOM (fetch, boucle de sondage, bascule d'état)
   lib/dataLayer.ts                             # window.dataLayer.push, sans condition de consentement
+  lib/attribution.ts                           # landing_page (localStorage), Phase 12
+  components/conversion/ConvertHero.tsx        # conversion_started / conversion_completed, Phase 12
+  components/conversion/ConvertResult.tsx      # gpx_downloaded, Phase 12
 
 templates/
   billing/success.html.twig                    # 3 blocs pré-traduits : verifying / paid / unconfirmed
@@ -67,13 +70,39 @@ recevoir `claimed: true`.
 | Événement | Déclenché depuis | Champs |
 | --- | --- | --- |
 | `pricing_viewed` | `templates/pricing/index.html.twig` | — |
-| `begin_checkout` | écouteur délégué dans `base.html.twig`, sur la soumission d'un formulaire `[data-begin-checkout]` | `currency`, `value`, `items: [{item_id, item_name, item_category, price, quantity}]` |
-| `purchase` | `assets/app/src/entries/billingCheckoutSuccess.ts`, uniquement si `claimed: true` | `transaction_id`, `currency`, `value`, `items: [{item_id, item_name, item_category, price, quantity}]` |
+| `begin_checkout` | écouteur délégué dans `base.html.twig`, sur la soumission d'un formulaire `[data-begin-checkout]` | `currency`, `value`, `items: [{item_id, item_name, item_category, price, quantity}]`, `landing_page` (si posé) |
+| `purchase` | `assets/app/src/entries/billingCheckoutSuccess.ts`, uniquement si `claimed: true` | `transaction_id`, `currency`, `value`, `items: [{item_id, item_name, item_category, price, quantity}]`, `landing_page` (si posé) |
+| `sign_up` | `base.html.twig`, sur le flash `identity.flash.registration_success` (donc une seule fois, le flash bag est à lecture unique) | `source: 'web'`, `landing_page` (si posé) |
+| `conversion_started` | `ConvertHero.tsx`, juste avant l'appel réseau de conversion (une fois par tentative réelle, pas sur la seconde phase preview→export) | `source: 'web'`, `landing_page` (si posé) |
+| `conversion_completed` | `ConvertHero.tsx`, quand l'état passe à `success` (flux direct ou export d'une route prévisualisée) | `source: 'web'`, `landing_page` (si posé) |
+| `gpx_downloaded` | `ConvertResult.tsx`, au clic sur le lien de téléchargement (pas à la confirmation d'un téléchargement navigateur effectivement terminé — simplification assumée) | `source: 'web'`, `landing_page` (si posé) |
 
 `transaction_id` = `smartgpx_{CreditPurchase::publicId}` — dérivé côté serveur, stable, jamais
 généré côté client. `item_id` = `publicId` du `CreditPack` acheté ; `item_name` toujours en
 anglais (`"{credits} SmartGPX Credits"`), jamais traduit — un `item_name` différent par locale
-fragmenterait le reporting GA4 pour un même produit.
+fragmenterait le reporting GA4 pour un même produit. Les trois derniers événements
+(`conversion_started`/`conversion_completed`/`gpx_downloaded`) et `sign_up` ont été ajoutés en
+Phase 12 pour le cluster de guides Garmin/Wahoo/OsmAnd (voir
+`documentation/seo/google-maps-device-cluster.md`) — ils n'existaient pas avant cette phase.
+Aucun ne transporte jamais de donnée d'itinéraire (URL Google Maps, origine/destination,
+coordonnées, contenu du GPX) : uniquement la page et l'action.
+
+## Attribution `landing_page`
+
+Mécanisme volontairement minimal (`assets/app/src/lib/attribution.ts`) : une seule clé
+`localStorage` (`smartgpx_landing_page`), jamais expirée ni effacée. Seules les 3 pages du cluster
+Garmin/Wahoo/OsmAnd la posent (via `data-landing-page` sur le point de montage `#convert-hero-root`,
+lu par `assets/app/src/entries/convertHero.tsx`) — la page d'accueil ne la pose jamais, donc une
+visite homepage n'écrase jamais une attribution déjà posée par un guide. Un achat s'attribue donc
+toujours au dernier guide de ce cluster visité par le visiteur, aussi longtemps après que ce soit :
+suffisant pour comparer les trois niches entre elles (`landing_page` valant
+`guide_google_maps_garmin`, `guide_google_maps_wahoo` ou `guide_google_maps_osmand`), pas un
+véritable système d'attribution marketing multi-touch.
+
+**Limite connue** : l'inscription via Google Sign-In ne passe pas par le flash utilisé pour
+déclencher `sign_up` (propre à l'inscription classique par formulaire) — ce chemin d'inscription
+n'est donc pas encore suivi. Documenté ici plutôt que masqué ; à instrumenter séparément si
+nécessaire.
 
 ## Sécurité du payload
 

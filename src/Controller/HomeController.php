@@ -6,8 +6,7 @@ namespace App\Controller;
 
 use App\Billing\Repository\CreditPackRepository;
 use App\Identity\Entity\User;
-use App\Routing\Provider\RoutingProviderInterface;
-use App\Usage\Repository\CreditAccountRepository;
+use App\Shared\ConvertHero\ConvertHeroPropsProvider;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -15,9 +14,8 @@ use Symfony\Component\Routing\Attribute\Route;
 final class HomeController extends AbstractController
 {
     public function __construct(
-        private readonly CreditAccountRepository $creditAccountRepository,
         private readonly CreditPackRepository $creditPackRepository,
-        private readonly RoutingProviderInterface $routingProvider,
+        private readonly ConvertHeroPropsProvider $convertHeroPropsProvider,
     ) {
     }
 
@@ -25,20 +23,12 @@ final class HomeController extends AbstractController
     public function index(): Response
     {
         $user = $this->getUser();
-        $creditBalance = 0;
-
-        if ($user instanceof User) {
-            $account = $this->creditAccountRepository->findOneByUser($user);
-            $creditBalance = $account?->getBalance() ?? 0;
-        }
+        $convertHeroProps = $this->convertHeroPropsProvider->forUser($user instanceof User ? $user : null);
 
         return $this->render('home/index.html.twig', [
-            'creditBalance' => $creditBalance,
+            'creditBalance' => $convertHeroProps['creditBalance'],
             'packs' => $this->creditPackRepository->findActiveOrderedForDisplay(),
-            // Statique (pas propre à l'utilisateur) — évite un aller-retour réseau
-            // supplémentaire au montage de l'îlot pour connaître les capabilities du
-            // fournisseur actif (voir RoutingCapabilitiesController pour l'équivalent API).
-            'routingCapabilities' => $this->routingProvider->capabilities()->toArray(),
+            'routingCapabilities' => $convertHeroProps['capabilities'],
         ]);
     }
 }

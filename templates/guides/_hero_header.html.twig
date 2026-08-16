@@ -1,0 +1,17 @@
+{% import '_macros/icons.html.twig' as icons %}
+{# En-tête partagé par le cluster Garmin/Wahoo/OsmAnd — même langage visuel que
+   tools/_header.html.twig (bandeau contour-bg, badge d'icône accent route) mais sans son bandeau
+   de confiance "browser only / no signup / free" : ces 3 pages mènent au convertisseur payant
+   (compte + crédit requis), pas à un outil gratuit exécuté dans le navigateur, donc reprendre ce
+   bandeau tel quel aurait affirmé quelque chose de faux. Variables attendues : icon,
+   i18n_prefix (ex. 'guides.google_maps_to_garmin', résout .title et .intro). #}
+<div class="contour-bg border-b border-border bg-secondary/40">
+    <div class="mx-auto max-w-3xl px-4 py-10 lg:py-14">
+        <div class="flex size-14 items-center justify-center rounded-full border border-route/30 bg-route/10 text-route">
+            {{ icons.icon(icon, 'size-6') }}
+        </div>
+        <p class="mt-4 font-mono text-xs font-medium tracking-[0.2em] text-route">{{ 'guides.eyebrow.device_guide'|trans }}</p>
+        <h1 class="mt-2 font-display text-4xl tracking-tight">{{ (i18n_prefix ~ '.title')|trans }}</h1>
+        <p class="mt-3 max-w-xl text-muted-foreground">{{ (i18n_prefix ~ '.intro')|trans }}</p>
+    </div>
+</div>

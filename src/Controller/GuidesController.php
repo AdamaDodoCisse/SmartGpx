@@ -4,16 +4,24 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Identity\Entity\User;
+use App\Shared\ConvertHero\ConvertHeroPropsProvider;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
 /**
- * Pages de contenu SEO — prose statique uniquement, aucun îlot React (voir ADR-004).
- * Chaque route ne fait que rendre un gabarit Twig ; le corps EN/FR vit dans le template.
+ * Pages de contenu SEO — prose statique pour la plupart, aucun îlot React (voir ADR-004),
+ * sauf les 3 guides du cluster Google Maps → appareil (Garmin/Wahoo/OsmAnd, Phase 12) qui
+ * montent le vrai îlot ConvertHero (voir ConvertHeroPropsProvider) au lieu de renvoyer vers la
+ * page d'accueil : le convertisseur est lui-même le CTA de ces pages.
  */
 final class GuidesController extends AbstractController
 {
+    public function __construct(private readonly ConvertHeroPropsProvider $convertHeroPropsProvider)
+    {
+    }
+
     #[Route(['en' => '/guides', 'fr' => '/fr/guides'], name: 'app_guides_index')]
     public function index(): Response
     {
@@ -66,5 +74,36 @@ final class GuidesController extends AbstractController
     public function mergeTracks(): Response
     {
         return $this->render('guides/merge_tracks.html.twig');
+    }
+
+    #[Route(['en' => '/guides/google-maps-to-garmin', 'fr' => '/fr/guides/convertir-google-maps-en-garmin'], name: 'app_guides_google_maps_to_garmin')]
+    public function googleMapsToGarmin(): Response
+    {
+        return $this->render('guides/google_maps_to_garmin.html.twig', $this->convertHeroProps('guide_google_maps_garmin'));
+    }
+
+    #[Route(['en' => '/guides/google-maps-to-wahoo', 'fr' => '/fr/guides/convertir-google-maps-en-wahoo'], name: 'app_guides_google_maps_to_wahoo')]
+    public function googleMapsToWahoo(): Response
+    {
+        return $this->render('guides/google_maps_to_wahoo.html.twig', $this->convertHeroProps('guide_google_maps_wahoo'));
+    }
+
+    #[Route(['en' => '/guides/google-maps-to-osmand', 'fr' => '/fr/guides/convertir-google-maps-en-osmand'], name: 'app_guides_google_maps_to_osmand')]
+    public function googleMapsToOsmand(): Response
+    {
+        return $this->render('guides/google_maps_to_osmand.html.twig', $this->convertHeroProps('guide_google_maps_osmand'));
+    }
+
+    /**
+     * @return array{creditBalance: int, capabilities: array<string, mixed>, landingPage: string}
+     */
+    private function convertHeroProps(string $landingPage): array
+    {
+        $user = $this->getUser();
+
+        return [
+            ...$this->convertHeroPropsProvider->forUser($user instanceof User ? $user : null),
+            'landingPage' => $landingPage,
+        ];
     }
 }
