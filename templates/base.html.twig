@@ -369,13 +369,43 @@
             });
         </script>
 
-        {# Écouteur délégué unique (pas un par formulaire) : _pack_grid.html.twig est inclus à la
-           fois sur /pricing et sur la page d'accueil — voir
+        {# Écouteurs délégués uniques (pas un par formulaire) : _pack_grid.html.twig est inclus à
+           la fois sur /pricing et sur la page d'accueil — voir
            documentation/technique/google-tag-manager.md. dataLayer.push a lieu que le
            consentement GTM soit accordé ou non (tableau local inoffensif tant que rien n'est
-           chargé, voir plus haut). Désactive aussi le bouton pour éviter un double clic qui
-           créerait deux sessions Stripe Checkout. #}
+           chargé, voir plus haut). item_id utilise le slug stable (starter_10/popular_100/
+           power_500, voir CreditPackSlug), jamais l'UUID interne data-pack-id — plus lisible dans
+           un rapport GA4 et stable même si la ligne CreditPack est un jour recréée. #}
         <script>
+            function smartgpxLandingPage() {
+                return localStorage.getItem('smartgpx_landing_page');
+            }
+
+            document.addEventListener('click', function (event) {
+                var button = event.target.closest('[data-begin-checkout] button[type="submit"]');
+                if (!button) {
+                    return;
+                }
+                var form = button.closest('[data-begin-checkout]');
+
+                var selectedEvent = {
+                    event: 'pack_selected',
+                    pack_id: form.dataset.packSlug,
+                    value: Number.parseFloat(form.dataset.price),
+                    currency: form.dataset.currency,
+                };
+                var selectedLandingPage = smartgpxLandingPage();
+                if (selectedLandingPage) {
+                    selectedEvent.landing_page = selectedLandingPage;
+                }
+
+                window.dataLayer = window.dataLayer || [];
+                window.dataLayer.push(selectedEvent);
+            });
+
+            {# click précède toujours submit dans l'ordre des événements DOM, donc pack_selected
+               (ci-dessus) arrive systématiquement avant begin_checkout (ci-dessous) sans
+               coordination explicite entre les deux écouteurs. #}
             document.addEventListener('submit', function (event) {
                 var form = event.target.closest('[data-begin-checkout]');
                 if (!form) {
@@ -388,7 +418,7 @@
                     value: Number.parseFloat(form.dataset.price),
                     items: [
                         {
-                            item_id: form.dataset.packId,
+                            item_id: form.dataset.packSlug,
                             item_name: form.dataset.credits + ' SmartGPX Credits',
                             item_category: 'credits',
                             price: Number.parseFloat(form.dataset.price),
@@ -396,7 +426,7 @@
                         },
                     ],
                 };
-                var checkoutLandingPage = localStorage.getItem('smartgpx_landing_page');
+                var checkoutLandingPage = smartgpxLandingPage();
                 if (checkoutLandingPage) {
                     checkoutEvent.landing_page = checkoutLandingPage;
                 }

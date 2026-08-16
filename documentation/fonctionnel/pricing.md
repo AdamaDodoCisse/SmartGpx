@@ -18,18 +18,27 @@ données) et permet l'achat via Stripe Checkout — voir `documentation/techniqu
 
 ## Grille de lancement
 
+Pricing officiel de lancement (Phase 13) — aucun achat n'ayant eu lieu avant cette grille, elle
+n'a jamais eu besoin de coexister avec un pricing antérieur.
+
 | Pack | Prix | Crédits | Prix / conversion | Badge |
 |---|---|---|---|---|
 | Starter | 4,99 $ | 10 | 0,499 $ | |
 | Popular | 9,99 $ | 100 | 0,100 $ | Most Popular |
-| — | 16,99 $ | 200 | 0,085 $ | |
-| Value | 39,99 $ | 500 | 0,080 $ | Best Value |
-| — | 79,99 $ | 1 000 | 0,080 $ | |
-| — | 699,99 $ | 10 000 | 0,070 $ | |
+| Power | 29,99 $ | 500 | 0,060 $ | |
 
 ## Architecture
 
 La grille ci-dessus vit dans la table `credit_pack`
 (`credits`/`price_cents`/`badge`/`display_order`/`active`) — prix, nombre de crédits, statut
 actif/inactif et ordre d'affichage se modifient sans réécrire de code métier. Éditable depuis
-`/admin/credit-packs` (Phase 8) — voir `documentation/fonctionnel/admin.md`.
+`/admin/credit-packs` (Phase 8) — voir `documentation/fonctionnel/admin.md`. Chaque pack a
+également un identifiant stable pour l'analytics (`starter_10`/`popular_100`/`power_500`, dérivé
+du nombre de crédits — voir `App\Billing\CreditPackSlug` et
+`documentation/technique/google-tag-manager.md`), distinct de son `publicId` (UUID) utilisé pour
+le routing/checkout.
+
+Aucun `Price`/`Product` Stripe n'est pré-provisionné : le prix est recalculé à chaque session de
+paiement depuis cette table (`price_data` dynamique — voir
+[ADR-006](../decisions/ADR-006-billing-provider.md)). Changer la grille ne nécessite donc jamais
+d'action côté tableau de bord Stripe.

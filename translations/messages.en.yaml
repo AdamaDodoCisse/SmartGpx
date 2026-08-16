@@ -431,16 +431,23 @@ guides:
 
 pricing:
     title: 'Pricing'
-    subtitle: '1 credit = 1 Google Maps to GPX conversion. Credits never expire.'
+    subtitle: 'Simple, transparent pricing for Google Maps to GPX conversions.'
     badge:
         most_popular: 'Most Popular'
         best_value: 'Best Value'
-    credits_count: '{1}%count% credit|]1,Inf[%count% credits'
-    per_conversion: '/ conversion'
-    buy: 'Buy {1}%count% credit|]1,Inf[Buy %count% credits'
+    credits_count: '{1}%count% Route Conversion|]1,Inf[%count% Route Conversions'
+    per_conversion: '/ route'
+    buy: '{1}Get %count% conversion|]1,Inf[Get %count% conversions'
     sign_in_to_buy: 'Sign in to buy'
-    one_credit_equals: '1 credit = 1 Google Maps to GPX conversion.'
-    credits_never_expire: 'Credits never expire.'
+    tagline:
+        starter_10: 'For occasional trips'
+        popular_100: 'Best for most users'
+        power_500: 'For frequent routing'
+    message:
+        simple: 'Simple pricing. No subscription.'
+        buy_once: 'Buy once. Use anytime.'
+        never_expire: 'Your conversions never expire.'
+        one_conversion_one_credit: '1 conversion = 1 credit.'
 
 usage:
     credits:

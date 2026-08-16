@@ -21,10 +21,7 @@ final class SeedCreditPackLaunchGridAction
     private const array LAUNCH_GRID = [
         ['credits' => 10, 'priceCents' => 499, 'badge' => null, 'displayOrder' => 1],
         ['credits' => 100, 'priceCents' => 999, 'badge' => CreditPackBadge::MOST_POPULAR, 'displayOrder' => 2],
-        ['credits' => 200, 'priceCents' => 1699, 'badge' => null, 'displayOrder' => 3],
-        ['credits' => 500, 'priceCents' => 3999, 'badge' => CreditPackBadge::BEST_VALUE, 'displayOrder' => 4],
-        ['credits' => 1000, 'priceCents' => 7999, 'badge' => null, 'displayOrder' => 5],
-        ['credits' => 10000, 'priceCents' => 69999, 'badge' => null, 'displayOrder' => 6],
+        ['credits' => 500, 'priceCents' => 2999, 'badge' => null, 'displayOrder' => 3],
     ];
 
     public function __construct(

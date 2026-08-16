@@ -86,7 +86,8 @@ et n'agit que si son statut n'est pas déjà `COMPLETED`.
 
 - `STRIPE_SECRET_KEY=sk_live_...` dans le `.env.local` du serveur (jamais committé, jamais
   affiché dans un chat/log). Aucun objet Product/Price n'a été créé dans le catalogue Stripe —
-  le checkout utilise `price_data` inline depuis la table `credit_pack` (6 packs seedés).
+  le checkout utilise `price_data` inline depuis la table `credit_pack` (3 packs seedés, pricing
+  de lancement — voir `documentation/fonctionnel/pricing.md`).
 - Endpoint webhook live `we_1U4ngeAV88HZtMx1pCpOVgo5` →
   `https://smartgpx.com/billing/webhook/stripe`, abonné uniquement à
   `checkout.session.completed`, version d'API `2026-07-29.dahlia` (alignée sur stripe-php

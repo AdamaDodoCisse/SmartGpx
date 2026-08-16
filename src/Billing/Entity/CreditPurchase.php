@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Billing\Entity;
 
+use App\Billing\CreditPackSlug;
 use App\Billing\Enum\CreditPurchaseStatus;
 use App\Billing\Repository\CreditPurchaseRepository;
 use App\Identity\Entity\User;
@@ -108,6 +109,15 @@ class CreditPurchase
     public function getCredits(): int
     {
         return $this->credits;
+    }
+
+    /**
+     * Dérivé de credits (figé au moment de l'achat), pas de creditPack.getAnalyticsSlug() : reste
+     * correct même si le pack d'origine a depuis été modifié ou désactivé — voir CreditPackSlug.
+     */
+    public function getAnalyticsSlug(): string
+    {
+        return CreditPackSlug::forCredits($this->credits);
     }
 
     public function getAmountCents(): int

@@ -36,7 +36,7 @@ assets/app/src/
 templates/
   billing/success.html.twig                    # 3 blocs pré-traduits : verifying / paid / unconfirmed
   base.html.twig                                # bandeau de consentement + injection conditionnelle du script GTM
-  pricing/_pack_grid.html.twig                  # data-* pour begin_checkout
+  pricing/_pack_grid.html.twig                  # data-* pour pack_selected/begin_checkout
   pricing/index.html.twig                       # pricing_viewed
 ```
 
@@ -44,7 +44,10 @@ templates/
 
 ```
 /pricing → événement "pricing_viewed" (au chargement)
-  → clic "Buy" → événement "begin_checkout" (avant la soumission du formulaire, voir base.html.twig)
+  → clic sur le bouton d'un pack → événement "pack_selected" (écouteur click, voir base.html.twig)
+      → même clic → soumission du formulaire → événement "begin_checkout" (écouteur submit, même
+        fichier — click précède toujours submit dans l'ordre DOM, donc pack_selected précède
+        systématiquement begin_checkout sans coordination explicite entre les deux écouteurs)
       → redirection Stripe Checkout hébergé
   → paiement
   → webhook Stripe signé → crédit accordé (voir documentation/technique/stripe.md, inchangé par ce travail)
@@ -70,6 +73,7 @@ recevoir `claimed: true`.
 | Événement | Déclenché depuis | Champs |
 | --- | --- | --- |
 | `pricing_viewed` | `templates/pricing/index.html.twig` | — |
+| `pack_selected` | écouteur délégué dans `base.html.twig`, sur le `click` du bouton d'achat d'un pack | `pack_id` (slug, voir plus bas), `value`, `currency`, `landing_page` (si posé) |
 | `begin_checkout` | écouteur délégué dans `base.html.twig`, sur la soumission d'un formulaire `[data-begin-checkout]` | `currency`, `value`, `items: [{item_id, item_name, item_category, price, quantity}]`, `landing_page` (si posé) |
 | `purchase` | `assets/app/src/entries/billingCheckoutSuccess.ts`, uniquement si `claimed: true` | `transaction_id`, `currency`, `value`, `items: [{item_id, item_name, item_category, price, quantity}]`, `landing_page` (si posé) |
 | `sign_up` | `base.html.twig`, sur le flash `identity.flash.registration_success` (donc une seule fois, le flash bag est à lecture unique) | `source: 'web'`, `landing_page` (si posé) |
@@ -78,7 +82,11 @@ recevoir `claimed: true`.
 | `gpx_downloaded` | `ConvertResult.tsx`, au clic sur le lien de téléchargement (pas à la confirmation d'un téléchargement navigateur effectivement terminé — simplification assumée) | `source: 'web'`, `landing_page` (si posé) |
 
 `transaction_id` = `smartgpx_{CreditPurchase::publicId}` — dérivé côté serveur, stable, jamais
-généré côté client. `item_id` = `publicId` du `CreditPack` acheté ; `item_name` toujours en
+généré côté client. `item_id`/`pack_id` (`pack_selected`) = le **slug analytics** du pack
+(`starter_10`/`popular_100`/`power_500`, voir `App\Billing\CreditPackSlug`) — plus lisible dans un
+rapport GA4 que le `publicId` (UUID) utilisé pour le routing/checkout, et stable même si la ligne
+`CreditPack` est un jour recréée (`CreditPurchase::getAnalyticsSlug()` le recalcule depuis
+`credits`, figé au moment de l'achat, jamais relu depuis `CreditPack`). `item_name` toujours en
 anglais (`"{credits} SmartGPX Credits"`), jamais traduit — un `item_name` différent par locale
 fragmenterait le reporting GA4 pour un même produit. Les trois derniers événements
 (`conversion_started`/`conversion_completed`/`gpx_downloaded`) et `sign_up` ont été ajoutés en
@@ -132,8 +140,8 @@ consentement, donc GTM ne doit pas non plus se charger inconditionnellement dans
 2. Créer un tag **GA4 Event**, nom d'événement `purchase`, associé au déclencheur `CE - purchase`
    ci-dessus, avec les variables de la couche de données (`transaction_id`, `currency`, `value`,
    `items`) mappées aux champs standard e-commerce GA4.
-3. Même principe pour `begin_checkout` (déclencheur Custom Event `CE - begin_checkout`) et
-   `pricing_viewed` si un tag dédié est souhaité.
+3. Même principe pour `begin_checkout` (déclencheur Custom Event `CE - begin_checkout`),
+   `pack_selected` et `pricing_viewed` si un tag dédié est souhaité pour chacun.
 
 ## Configurer les identifiants
 

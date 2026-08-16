@@ -65,6 +65,20 @@ final class CreditPurchaseTest extends TestCase
         self::assertSame($firstTrackedAt, $purchase->getAnalyticsTrackedAt());
     }
 
+    public function testAnalyticsSlugIsDerivedFromTheFrozenCreditsCountNotTheLivePack(): void
+    {
+        $pack = new CreditPack(credits: 100, priceCents: 999, currency: 'usd', badge: null, displayOrder: 1);
+        $purchase = new CreditPurchase(new User('buyer@example.com'), $pack, 'cs_test_123');
+
+        self::assertSame('popular_100', $purchase->getAnalyticsSlug());
+
+        // Le pack d'origine change ensuite (édité depuis l'admin) : l'achat déjà réalisé garde
+        // son propre slug, dérivé de credits figé, jamais recalculé depuis creditPack.
+        $pack->update(credits: 500, priceCents: 2999, currency: 'usd', badge: null, displayOrder: 1, active: true);
+
+        self::assertSame('popular_100', $purchase->getAnalyticsSlug());
+    }
+
     public function testStripePaymentIntentIdCanBeSetAfterConstruction(): void
     {
         $pack = new CreditPack(credits: 100, priceCents: 999, currency: 'usd', badge: null, displayOrder: 1);

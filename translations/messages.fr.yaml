@@ -431,16 +431,23 @@ guides:
 
 pricing:
     title: 'Tarifs'
-    subtitle: '1 crédit = 1 conversion Google Maps vers GPX. Les crédits n’expirent jamais.'
+    subtitle: 'Des tarifs simples et transparents pour la conversion Google Maps vers GPX.'
     badge:
         most_popular: 'Le plus populaire'
         best_value: 'Meilleure offre'
-    credits_count: '{1}%count% crédit|]1,Inf[%count% crédits'
-    per_conversion: '/ conversion'
-    buy: 'Acheter {1}%count% crédit|]1,Inf[Acheter %count% crédits'
+    credits_count: '{1}%count% itinéraire converti|]1,Inf[%count% itinéraires convertis'
+    per_conversion: '/ itinéraire'
+    buy: '{1}Obtenir %count% conversion|]1,Inf[Obtenir %count% conversions'
     sign_in_to_buy: 'Connectez-vous pour acheter'
-    one_credit_equals: '1 crédit = 1 conversion Google Maps vers GPX.'
-    credits_never_expire: 'Les crédits n’expirent jamais.'
+    tagline:
+        starter_10: 'Pour un usage occasionnel'
+        popular_100: 'Idéal pour la plupart des usages'
+        power_500: 'Pour un usage fréquent'
+    message:
+        simple: 'Tarification simple. Sans abonnement.'
+        buy_once: 'Achetez une fois. Utilisez quand vous voulez.'
+        never_expire: 'Vos conversions n’expirent jamais.'
+        one_conversion_one_credit: '1 conversion = 1 crédit.'
 
 usage:
     credits:

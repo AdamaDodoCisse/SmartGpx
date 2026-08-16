@@ -19,11 +19,11 @@ final class CreditPackRepositoryTest extends KernelTestCase
 
         $packs = $repository->findActiveOrderedForDisplay();
 
-        self::assertCount(6, $packs);
-        self::assertSame([10, 100, 200, 500, 1000, 10000], array_map(static fn (CreditPack $pack) => $pack->getCredits(), $packs));
+        self::assertCount(3, $packs);
+        self::assertSame([10, 100, 500], array_map(static fn (CreditPack $pack) => $pack->getCredits(), $packs));
         self::assertSame(CreditPackBadge::MOST_POPULAR, $packs[1]->getBadge());
-        self::assertSame(CreditPackBadge::BEST_VALUE, $packs[3]->getBadge());
         self::assertNull($packs[0]->getBadge());
+        self::assertNull($packs[2]->getBadge());
     }
 
     public function testFindActiveOrderedForDisplayExcludesInactivePacks(): void

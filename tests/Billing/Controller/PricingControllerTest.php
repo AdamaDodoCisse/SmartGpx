@@ -26,7 +26,7 @@ final class PricingControllerTest extends WebTestCase
         self::assertStringNotContainsString('$5.00', $body);
 
         $prices = $crawler->filter('.text-2xl.font-semibold')->each(static fn ($node) => $node->text());
-        self::assertSame(['$4.99', '$9.99', '$16.99', '$39.99', '$79.99', '$699.99'], $prices);
+        self::assertSame(['$4.99', '$9.99', '$29.99'], $prices);
 
         $entityManager->remove($inactive);
         $entityManager->flush();

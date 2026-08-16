@@ -44,6 +44,41 @@ final class BillingCheckoutControllerTest extends WebTestCase
         self::assertSame($user->getId(), $purchase->getUser()->getId());
     }
 
+    public function testTamperedPriceAndCreditsFieldsInTheRequestAreIgnored(): void
+    {
+        $client = static::createClient();
+        $client->disableReboot();
+        $user = $this->createUser();
+        $client->loginUser($user);
+
+        static::getContainer()->get(FakeBillingProvider::class)->reset();
+        static::getContainer()->get(FakeBillingProvider::class)->queue(
+            new CheckoutSession(id: 'cs_test_tamper', redirectUrl: 'https://checkout.stripe.com/c/pay/cs_test_tamper'),
+        );
+
+        $pack = static::getContainer()->get(CreditPackRepository::class)->findActiveOrderedForDisplay()[0];
+        $crawler = $client->request('GET', '/pricing');
+        $token = $this->extractCsrfToken($crawler, $pack);
+
+        // Le formulaire réel ne soumet qu'un CSRF token (voir _pack_grid.html.twig) — ces champs
+        // n'existent nulle part côté client, mais rien n'empêche une requête forgée de les
+        // envoyer. Le contrôleur ne lit price/credits que depuis sa propre lecture DB du pack
+        // (publicId dans l'URL), jamais depuis le corps de la requête.
+        $client->request('POST', "/billing/checkout/{$pack->getPublicId()}", [
+            '_token' => $token,
+            'price' => '0.01',
+            'credits' => '999999',
+            'priceCents' => 1,
+        ]);
+
+        self::assertResponseRedirects('https://checkout.stripe.com/c/pay/cs_test_tamper');
+
+        $purchase = static::getContainer()->get(CreditPurchaseRepository::class)->findOneByStripeCheckoutSessionId('cs_test_tamper');
+        self::assertNotNull($purchase);
+        self::assertSame($pack->getPriceCents(), $purchase->getAmountCents());
+        self::assertSame($pack->getCredits(), $purchase->getCredits());
+    }
+
     public function testAnUnknownPackReturnsNotFound(): void
     {
         $client = static::createClient();

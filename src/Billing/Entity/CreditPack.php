@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Billing\Entity;
 
+use App\Billing\CreditPackSlug;
 use App\Billing\Enum\CreditPackBadge;
 use App\Billing\Repository\CreditPackRepository;
 use App\Shared\Doctrine\TimestampableTrait;
@@ -103,6 +104,11 @@ class CreditPack
     public function isActive(): bool
     {
         return $this->active;
+    }
+
+    public function getAnalyticsSlug(): string
+    {
+        return CreditPackSlug::forCredits($this->credits);
     }
 
     public function update(

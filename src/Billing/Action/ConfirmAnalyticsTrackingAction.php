@@ -63,7 +63,7 @@ final class ConfirmAnalyticsTrackingAction
                 value: $purchase->getAmountCents() / 100,
                 currency: $purchase->getCurrency(),
                 credits: $purchase->getCredits(),
-                itemId: (string) $purchase->getCreditPack()->getPublicId(),
+                itemId: $purchase->getAnalyticsSlug(),
                 itemName: $purchase->getCredits().' SmartGPX Credits',
             );
         } catch (\Throwable $exception) {
