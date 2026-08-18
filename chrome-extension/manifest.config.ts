@@ -21,7 +21,7 @@ export default defineManifest(({ mode }) => {
     return {
         manifest_version: 3,
         name: 'SmartGPX – Google Maps to GPX',
-        description: 'Convert any Google Maps route to a GPX file in one click: works with Garmin, Wahoo, OsmAnd, Strava, and more.',
+        description: 'Convert any Google Maps route to a GPX file in one click, ready for your GPS device or app.',
         version: '1.0.0',
         icons: ICONS,
         action: {

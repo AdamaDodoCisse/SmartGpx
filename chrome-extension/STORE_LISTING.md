@@ -19,31 +19,36 @@ the installed extension's name should always be identical, so nothing to transla
 
 ### Summary (132 characters max — shown in search results, the single highest-leverage SEO field)
 
-**English** (109 characters):
+**English** (93 characters):
 ```
-Convert any Google Maps route to a GPX file in one click: works with Garmin, Wahoo, OsmAnd, Strava, and more.
+Convert any Google Maps route to a GPX file in one click, ready for your GPS device or app.
 ```
 
-**French** (113 characters):
+**French** (112 characters):
 ```
-Convertissez un itinéraire Google Maps en fichier GPX en un clic : compatible Garmin, Wahoo, OsmAnd, Strava, etc.
+Convertissez un itinéraire Google Maps en fichier GPX en un clic, prêt pour votre appareil ou application GPS.
 ```
 
 The English text also matches `manifest.config.ts`'s `description` field exactly (kept in sync
 after the two were first found to differ — the manifest field is what shows in `chrome://extensions`,
 so it should never say something different from what the Store listing promises).
 
-Both name every device/app people actually search for ("garmin gpx export", "google maps to
-wahoo", "osmand import route") rather than generic phrasing — Chrome Web Store's search ranks
-heavily on exact-term matches in the summary and name, more than in the long description.
+**Revision history — rejected twice for keyword stuffing (2026-08-16, "Yellow Argon" policy
+reference)**: an earlier version named every device/app in a row ("works with Garmin, Wahoo,
+OsmAnd, Strava, and more") on the theory that Chrome Web Store's search ranks on exact-term
+matches in the summary. Chrome's spam/keyword-stuffing policy flagged that exact pattern — a dense
+list of third-party brand names reads as keyword stuffing to their review system, even split
+across only 4-6 names in one sentence. **Do not reintroduce a brand-name list in this field** —
+the site's own SEO content (`documentation/seo/google-maps-device-cluster.md`) already carries
+that search-term weight; the Store listing doesn't need to duplicate it and risks a third
+rejection on the same policy if it does.
 
 ### Detailed description (16,000 characters max — supports plain-text line breaks, no markdown/HTML rendering)
 
 **English:**
 ```
-Turn any Google Maps route into a GPX file you can load onto a Garmin, Wahoo, OsmAnd, Locus Map,
-Strava, or any GPS device or hiking/cycling app that reads GPX, directly from the Google Maps
-tab you're already on.
+Turn any Google Maps route into a GPX file you can load onto your GPS device or app, directly
+from the Google Maps tab you're already on.
 
 HOW IT WORKS
 1. Open a route on Google Maps (directions between two or more points).
@@ -52,9 +57,10 @@ HOW IT WORKS
 
 No copying links, no pasting into a separate website, no redrawing the route by hand.
 
-WORKS WITH YOUR GPS DEVICES AND APPS
-GPX is the standard format read by Garmin Connect, Wahoo ELEMNT, OsmAnd, Locus Map, Strava,
-Komoot, and most GPS devices and outdoor apps. Export once from Google Maps, import anywhere.
+WORKS WITH YOUR GPS DEVICE OR APP
+GPX is a standard, widely supported format for GPS routes and tracks, read by most GPS devices,
+bike computers, GPS watches, and outdoor navigation apps. Export once from Google Maps, import
+anywhere GPX is supported.
 
 SIMPLE, TRANSPARENT PRICING
 Your first conversion is free, no credit card required. After that, conversions use credits from
@@ -77,9 +83,8 @@ Questions or feedback? Visit smartgpx.com or reach us from the extension's popup
 
 **French:**
 ```
-Transformez n'importe quel itinéraire Google Maps en fichier GPX utilisable sur un Garmin, un
-Wahoo, OsmAnd, Locus Map, Strava, ou toute application ou appareil GPS qui lit le format GPX,
-directement depuis l'onglet Google Maps que vous avez déjà ouvert.
+Transformez n'importe quel itinéraire Google Maps en fichier GPX utilisable sur votre appareil ou
+application GPS, directement depuis l'onglet Google Maps que vous avez déjà ouvert.
 
 COMMENT ÇA MARCHE
 1. Ouvrez un itinéraire sur Google Maps (calcul d'itinéraire entre deux points ou plus).
@@ -88,10 +93,10 @@ COMMENT ÇA MARCHE
 
 Pas de lien à copier, pas de site tiers où le coller, pas de tracé à redessiner à la main.
 
-COMPATIBLE AVEC VOS APPAREILS ET APPLICATIONS GPS
-Le GPX est le format standard lu par Garmin Connect, Wahoo ELEMNT, OsmAnd, Locus Map, Strava,
-Komoot, et la plupart des appareils GPS et applications outdoor. Exportez une fois depuis Google
-Maps, importez partout.
+COMPATIBLE AVEC VOTRE APPAREIL OU APPLICATION GPS
+Le GPX est un format standard et largement pris en charge pour les itinéraires et traces GPS, lu
+par la plupart des appareils GPS, compteurs de vélo, montres GPS et applications de navigation
+outdoor. Exportez une fois depuis Google Maps, importez partout où le GPX est pris en charge.
 
 TARIFICATION SIMPLE ET TRANSPARENTE
 Votre première conversion est gratuite, sans carte bancaire. Ensuite, les conversions utilisent
@@ -142,10 +147,21 @@ placements and any editorial featuring:
 - `promo-small-tile-440x280.png` — logo + wordmark, the "GOOGLE MAPS → GPX" eyebrow badge, and a
   one-line tagline, on the hero's dark pine gradient with the terrain silhouette anchored at the
   bottom.
-- `promo-marquee-1400x560.png` — same left-column branding plus a headline and the compatible-app
-  list (Garmin/Wahoo/OsmAnd/Locus Map/Strava/Komoot), paired on the right with a light "map panel"
-  card reusing the homepage hero's exact route-line SVG path/waypoints — the same visual the site
-  itself uses to represent "a route becomes a real GPX track."
+
+  **Regenerated 2026-08-17** — same reason as the marquee below: the original tagline read "for
+  Garmin, Wahoo, OsmAnd, and more," the same brand-list pattern that got the description text
+  rejected for keyword stuffing. Now "Export any Google Maps route to GPX in one click, for your
+  GPS device or app." — no brand names.
+- `promo-marquee-1400x560.png` — same left-column branding plus headline, paired on the right with
+  a light "map panel" card reusing the homepage hero's exact route-line SVG path/waypoints — the
+  same visual the site itself uses to represent "a route becomes a real GPX track."
+
+  **Regenerated 2026-08-17** — the original version baked the same 6-brand list
+  (Garmin/Wahoo/OsmAnd/Locus Map/Strava/Komoot) into the image as a row of chips, the same pattern
+  that got the text description rejected for keyword stuffing (see Summary section above). Replaced
+  with a single generic compatibility line ("Works with any GPS device or app that reads the
+  standard GPX format") — no third-party brand names anywhere in the image. Everything else
+  (gradient, terrain silhouette, logo, route-line panel) unchanged from the original design.
 
 ## Privacy practices tab
 
